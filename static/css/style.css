@@ -1,0 +1,36 @@
+p {margin:auto;
+   font-size : 20pt;
+
+}
+
+td {text-align:left;
+
+
+}
+
+th {text-align:left;
+
+
+}
+
+/* .float-right {
+  overflow: hidden;
+} */
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(66, 243, 66);
+  color: black;
+  text-align: center;
+  font-size: 9pt;
+}
+
+.vert{
+  vertical-align:bottom;
+  display:inline-block;
+}
+
+.vert:first { font-size: 60%; }
