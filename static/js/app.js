@@ -1,4 +1,4 @@
-var tableData = data;
+var tableData = scrape_data;
 var search_button = d3.select("#button");
 var i = 0;
 var no_results = d3.select(".no_results");
@@ -10,97 +10,29 @@ var dropdown_value = "";
 var input = "";
 
 //Get Data Function
-function get_date_results(date) {
+function get_data_results(artist_name) {
     var search_results = [];
-    for(i=0;i<data.length;i++)
+    for(i=0;i<scrape_data.length;i++)
 
     {
-        if (date === data[i]["datetime"])
+        if (artist_name.toUpperCase() === scrape_data[i]["Artist"].toUpperCase())
         {
-            search_results.push(data[i]);
+            search_results.push(scrape_data[i]);
         }
     }
      return search_results;
   }
 
-  //Get State Function
-function get_state_results(state) {
-    var search_results = [];
-    for(i=0;i<data.length;i++)
+// Clear Rows before returning search results
+  function deleteRows(rows){
 
-    {
-        if (state === data[i]["state"])
-        {
-            search_results.push(data[i]);
-        }
-    }
-     return search_results;
-  }
-
-  //Get Country Function
-function get_country_results(country) {
-    var search_results = [];
-    for(i=0;i<data.length;i++)
-
-    {
-        if (country === data[i]["country"])
-        {
-            search_results.push(data[i]);
-        }
-    }
-     return search_results;
-  }
-
-//Delete Function
-function deleteRows(rows){
     if (rows!=0)
     {
         for(counter=0;counter<rows;counter++)
         {
-            document.getElementById("UFO-table").deleteRow(rows-counter);
+            document.getElementById("table_results").deleteRow(rows-counter);
         }
     }
-}
-
-//Convert Date Function
-function format(date)
-{
-    var slashes = 0;
-    for(var i = 0;i<date.length;i++)
-    {
-        if (date[i] === "/")
-        {
-            slashes = slashes + 1;
-            if (slashes === 1)
-            {         
-                month = date.slice(0,i);
-                month_orig = month;
-                if (month_orig[0] === "0")
-                {
-                    month = month_orig[1];
-                }
-            }
-            else if (slashes === 2)
-            {
-                day = date.slice(month_orig.length+1,i)
-                day_orig = day;
-                if (day_orig[0] === "0")
-                {
-                    day = day_orig[1];
-                }       
-            }
-        }
-    }
-    if (slashes > 0)
-    {
-    year = date.slice(date.length-4,date.length);
-    }
-    else
-    {
-        return date_convert = "null";
-    }
-    date_convert = month + "/" + day + "/" + year;
-    input = date_convert;
 }
 
 //Search function
@@ -108,26 +40,29 @@ function search() {
     deleteRows(row_count);
     
     input = d3.event.target.value;
-    dropdown_value = document.getElementById("dropdown").value;
+    //dropdown_value = document.getElementById("dropdown").value;
 
-    if(dropdown_value === "Date")
+    var search_results = get_data_results(input);
 
-    {
-        format(input);
-        var search_results = get_date_results(input);
-    }
+
+    // if(dropdown_value === "Artist")
+
+    // {
+    //     format(input);
+    //     var search_results = get_date_results(input);
+    // }
     
-    else if(dropdown_value === "State")
+    // else if(dropdown_value === "State")
 
-    {
-        var search_results = get_state_results(input);
-    }
+    // {
+    //     var search_results = get_state_results(input);
+    // }
 
-    else if(dropdown_value === "Country")
+    // else if(dropdown_value === "Country")
 
-    {
-        var search_results = get_country_results(input);
-    }
+    // {
+    //     var search_results = get_country_results(input);
+    // }
 
     
     var counter = 0;
@@ -155,7 +90,7 @@ function search() {
 
         {
             
-            var table = document.getElementById("UFO-table");
+            var table = document.getElementById("table_results");
             var row = table.insertRow(counter+1);
             
             var cell1 = row.insertCell(0);
@@ -164,15 +99,23 @@ function search() {
             var cell4 = row.insertCell(3)
             var cell5 = row.insertCell(4);
             var cell6 = row.insertCell(5);          
-            var cell7 = row.insertCell(6);   
+            var cell7 = row.insertCell(6); 
+            var cell8 = row.insertCell(7);
+            var cell9 = row.insertCell(8);
+            var cell10 = row.insertCell(9);
+            var cell11 = row.insertCell(10);  
             
-            cell1.innerHTML = search_results[counter]["datetime"];
-            cell2.innerHTML = search_results[counter]["city"];
-            cell3.innerHTML = search_results[counter]["state"];
-            cell4.innerHTML = search_results[counter]["country"];
-            cell5.innerHTML = search_results[counter]["shape"];
-            cell6.innerHTML = search_results[counter]["durationMinutes"];
-            cell7.innerHTML = search_results[counter]["comments"];
+            cell1.innerHTML = search_results[counter]["Artist"];
+            cell2.innerHTML = search_results[counter]["Joined"];
+            cell3.innerHTML = search_results[counter]["Subscribers"];
+            cell4.innerHTML = search_results[counter]["Total Views"];
+            cell5.innerHTML = search_results[counter]["Date"];
+            cell6.innerHTML = search_results[counter]["Category"];
+            cell7.innerHTML = search_results[counter]["Title"];
+            cell8.innerHTML = search_results[counter]["Views"];
+            cell9.innerHTML = search_results[counter]["Likes"];
+            cell10.innerHTML = search_results[counter]["Dislikes"];
+            cell11.innerHTML = search_results[counter]["URL"];
 
             no_results.text("");
         }
@@ -197,10 +140,10 @@ function state()
 
 }
 
-function date()
+function artist()
 {
 
-    search_button.attr("placeholder","Enter Date (MM/DD/YYYY)");
+    search_button.attr("placeholder","Enter Artist");
     // search_button.transition().placeholder("Country");
     console.log("Date value selected");
 
@@ -216,7 +159,7 @@ function checked()
         state();
     }
 
-    else if (dropdown_value === "Date")
+    else if (dropdown_value === "Artist")
     {
         console.log("dropdown is Date");
         date();
@@ -230,7 +173,7 @@ function checked()
 
 }
 
-search_button.on("keyup", search);
+search_button.on("change", search);
 dropdown.on("change", checked);
 // country_dropdown.on("keyup", country);
 // state_dropdown.on("keyup", state);
