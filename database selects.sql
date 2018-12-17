@@ -11,6 +11,8 @@ ON artists.artist = Gibi_ASMR.artist;
 
 SELECT * FROM artists;
 
+SELECT * FROM gibi_asmr;
+
 SELECT * FROM tingting_asmr;
 
 SELECT * FROM mars_phobos;
@@ -23,7 +25,9 @@ SELECT * FROM diddly_asmr;
 
 
 
+DROP TABLE video_data;
 
+DROP TABLE artist_info;
 
 DROP TABLE artists;
 
