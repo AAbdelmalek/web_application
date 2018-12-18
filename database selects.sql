@@ -21,9 +21,11 @@ SELECT * FROM asmr_glow;
 
 SELECT * FROM diddly_asmr;
 
+SELECT * FROM Ariana_Grande;
 
 
 
+SELECT * FROM Michael_Vongsa;
 
 DROP TABLE video_data;
 
@@ -40,3 +42,11 @@ DROP TABLE diddly_asmr;
 DROP TABLE gibi_asmr;
 
 DROP TABLE tingting_asmr;
+
+DROP TABLE Ariana_Grande;
+
+DROP TABLE MIchael_Vongsa;
+
+DROP TABLE tingting_asmr;
+
+DROP DATABASE web_app_dev;
