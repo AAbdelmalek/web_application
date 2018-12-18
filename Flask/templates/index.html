@@ -68,6 +68,14 @@
             </th> 
 
             <th>       
+                    <h6>Scrape Date</h6>           
+            </th>
+
+            <th>       
+                    <h6>Search Name</h6>           
+            </th>
+
+            <th>       
                     <h6>Joined</h6>           
             </th>
 
@@ -76,16 +84,16 @@
             </th>  
 
             <th>
-                <h6>Total Views</h6>  
+                    <h6>Total Views</h6>  
 
             </th>
             
             <th>
-                    <h6>Date</h6>       
+                    <h6>Published</h6>       
             </th>
 
             <th>
-                <h6>Title</h6>       
+                    <h6>Title</h6>       
             </th>
 
             <th>   
@@ -93,8 +101,12 @@
             </th>
 
             <th>
-                    <h6>Views</h6>       
+                    <h6>Duration</h6>       
             </th> 
+
+            <th>       
+                    <h6>Views</h6>           
+            </th>
 
             <th>
                     <h6>Likes</h6> 
@@ -103,7 +115,15 @@
             <th>
                     <h6>Dislikes</h6> 
             </th>
-            
+
+             <th>       
+                    <h6>Paid</h6>           
+            </th>
+
+            <th>       
+                    <h6>Family Friendly</h6>           
+            </th>
+
             <th>
                     <h6>URL</h6> 
              </th>
@@ -118,6 +138,12 @@
                 <td class="Artist">             
                 </td>
 
+                <td class="Scrape_Date">             
+                </td>
+
+                <td class="Search_Name">             
+                </td>
+
                 <td class="Joined">     
                 </td>
                 
@@ -127,13 +153,16 @@
                 <td class="Total Views">
                 </td>   
 
-                <td class="Date">
+                <td class="Published">
                 </td>
                 
                 <td class="Title">
                 </td>
 
                 <td class="Category">
+                </td>
+
+                <td class="Duration">             
                 </td>
 
                 <td class="Views">
@@ -145,9 +174,14 @@
                 <td class="Dislikes">
                 </td>
 
-                <td class="URL">
+                <td class="Paid">             
                 </td>
 
+                <td class="Family_Friendly">             
+                </td>
+
+                <td class="URL">
+                </td>
             
             </tr>
         </tbody>
@@ -170,6 +204,6 @@
 
 </footer>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
-<script>myVar = myFunc({{data|tojson}})</script>
+<script>myVar = getData({{data|tojson}})</script>
 </html>
 

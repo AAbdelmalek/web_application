@@ -10,9 +10,13 @@ var input = "";
 var scrape_data = ""
 
 // Get JSON Data from Flask
-function myFunc(data) {
-    scrape_data = JSON.parse(data)
+function getData(data) {
+    if (scrape_data.length > 0 ){
+    scrape_data = JSON.parse(data);
+    }
 }
+
+
 
 //Get Data Function
 function get_data_results(artist_name) {
@@ -108,36 +112,29 @@ function search() {
             var cell8 = row.insertCell(7);
             var cell9 = row.insertCell(8);
             var cell10 = row.insertCell(9);
-            var cell11 = row.insertCell(10);  
-
-            // ARTIST: "Mars Phobos"
-            // CATEGORY: "Music"
-            // DISLIKES: 0
-            // DURATION: 3.76667
-            // FAMILY_FRIENDLY: "True"
-            // JOINED: 1155513600000
-            // LIKES: 2
-            // PAID: "False"
-            // PUBLISHED: 1477180800000
-            // SCRAPE_DATE: 1545153119000
-            // SEARCH_NAME: "mars phobos remix"
-            // SUBSCRIBERS: 37
-            // TITLE: "Everything But The Girl - Missing (Mars Phobos Remix)"
-            // TOTAL_VIEWS: 50965
-            // URL: "https://www.youtube.com/watch?v=Qu0zMoJt8Q4"
-            // VIEWS: 174
+            var cell11 = row.insertCell(10);
+            var cell12 = row.insertCell(11);  
+            var cell13 = row.insertCell(12);  
+            var cell14 = row.insertCell(13);  
+            var cell15 = row.insertCell(14);    
+            var cell16 = row.insertCell(15);
             
             cell1.innerHTML = search_results[counter]["ARTIST"];
-            cell2.innerHTML = search_results[counter]["JOINED"];
-            cell3.innerHTML = search_results[counter]["SUBSCRIBERS"];
-            cell4.innerHTML = search_results[counter]["TOTAL_VIEWS"];
-            cell5.innerHTML = search_results[counter]["PUBLISHED"];
-            cell6.innerHTML = search_results[counter]["CATEGORY"];
-            cell7.innerHTML = search_results[counter]["TITLE"];
-            cell8.innerHTML = search_results[counter]["VIEWS"];
-            cell9.innerHTML = search_results[counter]["LIKES"];
-            cell10.innerHTML = search_results[counter]["DISLIKES"];
-            cell11.innerHTML = search_results[counter]["URL"];
+            cell2.innerHTML = search_results[counter]["SCRAPE_DATE"];
+            cell3.innerHTML = search_results[counter]["SEARCH_NAME"];
+            cell4.innerHTML = search_results[counter]["JOINED"];
+            cell5.innerHTML = search_results[counter]["SUBSCRIBERS"];
+            cell6.innerHTML = search_results[counter]["TOTAL_VIEWS"];
+            cell7.innerHTML = search_results[counter]["PUBLISHED"];
+            cell8.innerHTML = search_results[counter]["TITLE"];
+            cell9.innerHTML = search_results[counter]["CATEGORY"];
+            cell10.innerHTML = search_results[counter]["DURATION"];
+            cell11.innerHTML = search_results[counter]["VIEWS"];
+            cell12.innerHTML = search_results[counter]["LIKES"];
+            cell13.innerHTML = search_results[counter]["DISLIKES"];
+            cell14.innerHTML = search_results[counter]["PAID"];
+            cell15.innerHTML = search_results[counter]["FAMILY_FRIENDLY"];
+            cell16.innerHTML = search_results[counter]["URL"];
 
             no_results.text("");
         }

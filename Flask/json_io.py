@@ -2,6 +2,7 @@
 from flask import Flask
 from flask import render_template
 from flask import url_for
+from flask import request
 from bs4 import BeautifulSoup as bs
 import requests
 import numpy as np
@@ -11,11 +12,21 @@ import time
 from sqlalchemy import create_engine
 import pymysql
 pymysql.install_as_MySQLdb()
-
+json_data = []
+#https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 @app.route("/")
-def output():
+def home():
+	return render_template("index.html", data = json_data)
+
+
+@app.route("/query")
+def search():
+
+	name_key = request.args.get('name')
+	input_name = '''{}'''.format(name_key)
 
 	# Get Scrape Date
 	scrape_date = datetime.now().strftime("%Y-%m-%d")
@@ -47,8 +58,8 @@ def output():
 			print(f"{raw_date} Convert function date is not valid.")
 
 	# Get Youtuber's Name
-	input_name = input("Enter Youtuber's Name: ")
-	print(input_name)
+	# input_name = input("Enter Youtuber's Name: ")
+	# print(input_name)
 
 	input_date_range = input("How far back in time do you want to go? (YYYY-MM-DD) or (all-time): ")
 	print(input_date_range)
