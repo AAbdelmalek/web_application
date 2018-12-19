@@ -7,7 +7,7 @@ var date_convert = "";
 var dropdown = d3.select("#dropdown");
 var dropdown_value = "";
 var input = "";
-var scrape_data = ""
+var scrape_data = "";
 
 // Get JSON Data from Flask
 function getData(data) {
@@ -15,8 +15,6 @@ function getData(data) {
     scrape_data = JSON.parse(data);
     }
 }
-
-
 
 //Get Data Function
 function get_data_results(artist_name) {
@@ -45,10 +43,9 @@ function get_data_results(artist_name) {
 }
 
 //Search function
-function search() {
+function search(input) {
     deleteRows(row_count);
-    
-    input = d3.event.target.value;
+
     //dropdown_value = document.getElementById("dropdown").value;
 
     var search_results = get_data_results(input);
@@ -192,7 +189,20 @@ function checked()
 
 }
 
-search_button.on("change", search);
+function generateURL(){
+    input = d3.event.target.value;
+    url = "/query?name=" + input;
+    document.getElementById("link_button").href=url; 
+}
+
+
+search_button.on("keyup", generateURL);
+
+if (d3.event !== null){
+input = d3.event.target.value;    
+search_button.on("change", search(input));
+}
+
 dropdown.on("change", checked);
 // country_dropdown.on("keyup", country);
 // state_dropdown.on("keyup", state);

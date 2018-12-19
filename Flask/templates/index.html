@@ -34,7 +34,7 @@
                 <div class="input-group">
                     <input id="button" type="text" class="form-control" placeholder="Enter Artist">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Search</button>
+                            <button class="btn btn-default" type="button"><a href="#" id="link_button">Search</a></button>
                         </span>
                 </div>
  
@@ -204,6 +204,6 @@
 
 </footer>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
-<script>myVar = getData({{data|tojson}})</script>
+<script>getData({{data|tojson}})</script>
 </html>
 
