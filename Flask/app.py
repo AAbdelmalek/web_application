@@ -12,20 +12,28 @@ import time
 from sqlalchemy import create_engine
 import pymysql
 pymysql.install_as_MySQLdb()
-json_data = []
+
+
 #https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route("/")
 def home():
-	return render_template("index.html", data = json_data)
+	percent_complete_str = "0"	
+	json_data = []
+
+	return render_template("index.html", data = json_data,\
+	progress = percent_complete_str)
 
 
 @app.route("/query")
 def search():
+	json_data = []
+	cache = ""
+	percent_complete_str = "0"
 
-	name_key = request.args.get('name')
+	name_key = request.args.get('cc')
 	input_name = '''{}'''.format(name_key)
 
 	# Get Scrape Date
@@ -61,20 +69,22 @@ def search():
 	# input_name = input("Enter Youtuber's Name: ")
 	# print(input_name)
 
-	input_date_range = input("How far back in time do you want to go? (YYYY-MM-DD) or (all-time): ")
-	print(input_date_range)
+	# input_date_range = input("How far back in time do you want to go? (YYYY-MM-DD) or (all-time): ")
+	# print(input_date_range)
 
-	if input_date_range == "all-time":
-		converted_input_date = datetime.strptime("1950-01-01", '%Y-%m-%d')
+	# if input_date_range == "all-time":
+	# 	converted_input_date = datetime.strptime("1950-01-01", '%Y-%m-%d')
 		
-	else:
-		try:
-			converted_input_date = datetime.strptime(input_date_range, '%Y-%m-%d')
+	# else:
+	# 	try:
+	# 		converted_input_date = datetime.strptime(input_date_range, '%Y-%m-%d')
 			
-		except:
-			print("Input date is not valid.")
-			exit()
-
+	# 	except:
+	# 		print("Input date is not valid.")
+	# 		exit()
+	
+	converted_input_date = datetime.strptime("1950-01-01", '%Y-%m-%d')
+	
 	list_name = input_name.split()
 	converted_name = input_name
 
@@ -143,11 +153,15 @@ def search():
 		print("Not found in database")
 
 	if len(df_cache) != 0:
+		percent_complete_str = "100"
 		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
 		print(f"A cached scrape ({scrape_date} UTC) has been found...")
+		cache = f"Scrape Datetime: {scrape_date}"
 		json_data = df_cache.to_json(orient="records")
-		#return render_template("../static/app.js", name=json_data)
-		return render_template("index.html", data=json_data)		
+		
+		return render_template("index.html", data=json_data, cache=cache,\
+		progress=percent_complete_str)	
+			
 		
 	else:
 		# Convert User Name to UU Format
@@ -296,7 +310,7 @@ def search():
 				duration = video_soup.find("meta", itemprop="duration").get("content").replace("PT","").split("M")
 				duration_mins = int(video_soup.find("meta", itemprop="duration").get("content").replace("PT","").split("M")[0])
 				duration_secs = int(duration[1].replace("S",""))
-				total_duration = duration_mins + duration_secs/60
+				total_duration = round(duration_mins + duration_secs/60,2)
 				duration_videos.append(total_duration)
 
 				# Likes
@@ -327,9 +341,14 @@ def search():
 				family = video_soup.find("meta", itemprop="isFamilyFriendly").get("content")
 				family_friendly.append(family)
 
-				percent_complete = round(((i+1) / (len(urls_all)))*100,2)
+				percent_complete = round(((i+1) / (len(urls_all)))*100,0)
+
+				percent_complete_str = str(percent_complete)
 
 				print(f"{percent_complete}% complete...")
+
+				# return render_template("index.html", data=json_data, cache = cache,\
+				# progress = percent_complete_str)
 			
 			# Remove any data apended to lists during an exception, account for smaller list size after removal vs. i
 			except:
@@ -388,28 +407,28 @@ def search():
 		urls_to_date = urls_all[0:len(published_on)]
 
 		# Create DataFrame
-		df = pd.DataFrame({"Artist" : artist_name,
-						"Scrape_Date" : scrape_datetime,
-						"Search_Name" : input_name,
-						"Joined" : joined_convert,
-						"Subscribers" : subscribers_int,
-						"Total_Views" : total_views_int,
-						"Published": published_on,
-						"Title" : title_videos,
-						"Category" : categories,
-						"Duration" : duration_videos,
-						"Views" : views,
-						"Likes" : likes,
-						"Dislikes" : dislikes,
-						"Paid" : paid_list,
-						"Family_Friendly" : family_friendly,
+		df = pd.DataFrame({"ARTIST" : artist_name,
+						"SCRAPE_DATE" : scrape_datetime,
+						"SEARCH_NAME" : input_name,
+						"JOINED" : joined_convert,
+						"SUBSCRIBERS" : subscribers_int,
+						"TOTAL_VIEWS" : total_views_int,
+						"PUBLISHED": published_on,
+						"TITLE" : title_videos,
+						"CATEGORY" : categories,
+						"DURATION" : duration_videos,
+						"VIEWS" : views,
+						"LIKES" : likes,
+						"DISLIKES" : dislikes,
+						"PAID" : paid_list,
+						"FAMILY_FRIENDLY" : family_friendly,
 						"URL" : urls_to_date,
 						})
 
-		df = df.sort_values("Published",ascending=False)
+		df = df.sort_values("PUBLISHED",ascending=False)
 		
 		# Saving to CSV
-		df.to_csv(f"{artist_name}_scrape.csv")
+		#df.to_csv(f"{artist_name}_scrape.csv")
 
 		# Saving to JSON
 		json_data = df.to_json(orient="records")
@@ -451,23 +470,23 @@ def search():
 
 		# Getting df values and inserting into appropriate tables
 		for i in range(len(df)):
-			scrape_date = df.loc[i,"Scrape_Date"]
-			search_name = df.loc[i,"Search_Name"]
+			scrape_date = df.loc[i,"SCRAPE_DATE"]
+			search_name = df.loc[i,"SEARCH_NAME"]
 			table_name = artist_db_name
-			artist = df.loc[i,"Artist"].replace("`","")
-			joined = df.loc[i,"Joined"]
-			subscribers = df.loc[i,"Subscribers"]
-			total_views = df.loc[i,"Total_Views"]
-			published = df.loc[i,"Published"]
-			title = df.loc[i,"Title"].replace("'","").replace('"',"").replace(']',"")\
+			artist = df.loc[i,"ARTIST"].replace("`","")
+			joined = df.loc[i,"JOINED"]
+			subscribers = df.loc[i,"SUBSCRIBERS"]
+			total_views = df.loc[i,"TOTAL_VIEWS"]
+			published = df.loc[i,"PUBLISHED"]
+			title = df.loc[i,"TITLE"].replace("'","").replace('"',"").replace(']',"")\
 			.replace('[',"").replace('\\',"").replace("%","").replace("`","")
-			category = df.loc[i,"Category"]
-			duration = df.loc[i,"Duration"]
-			views = df.loc[i,"Views"]
-			likes = df.loc[i,"Likes"]
-			dislikes = df.loc[i,"Dislikes"]
-			paid = df.loc[i,"Paid"]
-			family_friendly = df.loc[i,"Family_Friendly"]
+			category = df.loc[i,"CATEGORY"]
+			duration = df.loc[i,"DURATION"]
+			views = df.loc[i,"VIEWS"]
+			likes = df.loc[i,"LIKES"]
+			dislikes = df.loc[i,"DISLIKES"]
+			paid = df.loc[i,"PAID"]
+			family_friendly = df.loc[i,"FAMILY_FRIENDLY"]
 			url =  df.loc[i,"URL"]
 
 			connection.execute(f"INSERT INTO {artist_db_name}\
@@ -483,11 +502,10 @@ def search():
 		'{total_views}')")
 
 		print("Inserted data into database successfully...")
-
-		#return render_template("../static/app.js", name=json_data)
 		
-		return render_template("index.html", data=json_data)
-
+		return render_template("index.html", data=json_data, cache = cache,\
+		progress = percent_complete_str)
+		
 if __name__ == "__main__":
 	app.run()
 

@@ -51,3 +51,7 @@ DROP TABLE MIchael_Vongsa;
 DROP TABLE tingting_asmr;
 
 DROP DATABASE web_app_dev;
+
+SELECT * from artists 
+INNER JOIN Mars_Phobos
+ON artists.artist = Mars_Phobos.artist;

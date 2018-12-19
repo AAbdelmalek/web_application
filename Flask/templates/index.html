@@ -1,3 +1,18 @@
+<!-- To Do
+- Artist info in header, not table --
+- Published Date format --
+- Load Bar progress --
+- Fix table pretty
+- Exit proceedure for large scrapes --
+- Make scrape date pretty -- 
+- Plotly -- 
+- Export raw data file -- 
+
+
+
+
+ -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,12 +32,13 @@
 
         <div class="col-9">
             <!-- <img src="static/images/ufo.png" height="40" width="auto">     -->
-            <h3>Database</h3>     
+            <h4>YouTube Scraper</h4>   
+          
         </div>
-        <div class="col-3">
+        <!-- <div class="col-3">
 
-                <h3>Filter:</h3>
-        </div>
+                <h4>Filter:</h4>
+        </div> -->
     </div>
 
 </div>
@@ -30,48 +46,68 @@
  <!-- Search Button -->
  <div class="container">
     <div class="row">
-            <div class="col-9">
+            <div class="col">
                 <div class="input-group">
-                    <input id="button" type="text" class="form-control" placeholder="Enter Artist">
+                    <input id="button" type="text" class="form-control" placeholder="Content Creator">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"><a href="#" id="link_button">Search</a></button>
+                            <a class="btn btn-danger" href="#" role="button" id="link_button">Search</a>
                         </span>
                 </div>
  
             </div>
-            <div class="col-3">
+            <!-- Filter Dropdown -->
+            <!-- <div class="col-3">
                     <select id = "dropdown" class="form-control">
                             <option>Artist</option>
                             <option>Date</option>
                             <option>Category</option>
                     </select>
-            </div>
+            </div> -->
             
-        </div><br>
+        </div>
+        <br>
+        <!-- Progress Bar -->
         <div class="row">
-            <div class="col">
+        <div class="col">
+        <div class="progress">
+                <div class="progress-bar progress-bar-animated bg-success" role="progressbar" style="width: {{progress}}%" 
+                aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        </div>
+        </div>
+        <!-- Results row count from search -->
+        <div class="row">
+            <div class="col-2">
+                <!-- <h6>{{cache}}</h6> -->
+            <br>   
                 <h6 class="results"></h6>
                 <br>
-            </div>  
+            </div>   
 
+            <div class="col-5">
+            <br>
+            <h6>{{cache}}</h6>
+            </div>  
+            <br>
         </div>
 </div>
 
 <!-- Table -->
- 
+
+
         <!-- Header -->
-    <table id="table_results" class="table table-striped">
+    <table id="table_results" class="table table-striped table-fixed">
     <thead>
         <tr>
-            <th> 
+            <!-- <th> 
                     <h6>Artist</h6>     
             </th> 
 
             <th>       
                     <h6>Scrape Date</h6>           
-            </th>
+            </th> -->
 
-            <th>       
+            <!-- <th>       
                     <h6>Search Name</h6>           
             </th>
 
@@ -86,7 +122,7 @@
             <th>
                     <h6>Total Views</h6>  
 
-            </th>
+            </th> -->
             
             <th>
                     <h6>Published</h6>       
@@ -101,7 +137,7 @@
             </th>
 
             <th>
-                    <h6>Duration</h6>       
+                    <h6>Duration (mins)</h6>       
             </th> 
 
             <th>       
@@ -116,13 +152,13 @@
                     <h6>Dislikes</h6> 
             </th>
 
-             <th>       
+             <!-- <th>       
                     <h6>Paid</h6>           
             </th>
 
             <th>       
                     <h6>Family Friendly</h6>           
-            </th>
+            </th> -->
 
             <th>
                     <h6>URL</h6> 
@@ -135,22 +171,22 @@
         <tbody>
        
             <tr>       
-                <td class="Artist">             
-                </td>
+                <!-- <td class="Artist">             
+                </td> -->
 
-                <td class="Scrape_Date">             
-                </td>
+                <!-- <td class="Scrape_Date">             
+                </td> -->
 
-                <td class="Search_Name">             
-                </td>
+                <!-- <td class="Search_Name">             
+                </td> -->
 
-                <td class="Joined">     
+                <!-- <td class="Joined">     
                 </td>
                 
                 <td class="Subscribers">
                 </td>
                 
-                <td class="Total Views">
+                <td class="Total Views"> -->
                 </td>   
 
                 <td class="Published">
@@ -174,11 +210,11 @@
                 <td class="Dislikes">
                 </td>
 
-                <td class="Paid">             
+                <!-- <td class="Paid">             
                 </td>
 
                 <td class="Family_Friendly">             
-                </td>
+                </td> -->
 
                 <td class="URL">
                 </td>
@@ -187,8 +223,8 @@
         </tbody>
  
     </table>
-  
- 
+
+
     <!-- Null Results -->
     <div class="container">     
         <br>

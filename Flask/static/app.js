@@ -11,24 +11,27 @@ var scrape_data = "";
 
 // Get JSON Data from Flask
 function getData(data) {
-    if (scrape_data.length > 0 ){
+    if (data.length > 0 ){
     scrape_data = JSON.parse(data);
+    search(scrape_data)
+
     }
+
 }
 
 //Get Data Function
-function get_data_results(artist_name) {
-    var search_results = [];
-    for(i=0;i<scrape_data.length;i++)
+// function get_data_results(artist_name) {
+//     var search_results = [];
+//     for(i=0;i<scrape_data.length;i++)
 
-    {
-        if (artist_name.toUpperCase() === scrape_data[i]["ARTIST"].toUpperCase())
-        {
-            search_results.push(scrape_data[i]);
-        }
-    }
-     return search_results;
-  }
+//     {
+//         if (artist_name.toUpperCase() === scrape_data[i]["ARTIST"].toUpperCase())
+//         {
+//             search_results.push(scrape_data[i]);
+//         }
+//     }
+//      return search_results;
+//   }
 
 // Clear Rows before returning search results
   function deleteRows(rows){
@@ -48,7 +51,7 @@ function search(input) {
 
     //dropdown_value = document.getElementById("dropdown").value;
 
-    var search_results = get_data_results(input);
+    var search_results = input;
 
 
     // if(dropdown_value === "Artist")
@@ -70,19 +73,18 @@ function search(input) {
     //     var search_results = get_country_results(input);
     // }
 
-    
     var counter = 0;
     row_count = search_results.length;
 
     if (row_count === 1)
 
     {
-        results.text(`Returned ${row_count} row`);
+        results.text(`Returned: ${row_count} videos`);
     }
 
     else
     {
-        results.text(`Returned ${row_count} rows`);
+        results.text(`Returned: ${row_count} videos`);
     }
 
     if (search_results.length === 0)
@@ -99,39 +101,39 @@ function search(input) {
             var table = document.getElementById("table_results");
             var row = table.insertRow(counter+1);
             
-            var cell1 = row.insertCell(0);
+            // var cell1 = row.insertCell(0);
+            // var cell2 = row.insertCell(1);
+            // var cell3 = row.insertCell(2);
+            // var cell4 = row.insertCell(3)
+            // var cell5 = row.insertCell(4);
+            // var cell6 = row.insertCell(5);          
+            var cell1 = row.insertCell(0); 
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3)
+            var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
-            var cell6 = row.insertCell(5);          
-            var cell7 = row.insertCell(6); 
-            var cell8 = row.insertCell(7);
-            var cell9 = row.insertCell(8);
-            var cell10 = row.insertCell(9);
-            var cell11 = row.insertCell(10);
-            var cell12 = row.insertCell(11);  
-            var cell13 = row.insertCell(12);  
-            var cell14 = row.insertCell(13);  
-            var cell15 = row.insertCell(14);    
-            var cell16 = row.insertCell(15);
+            var cell6 = row.insertCell(5);  
+            var cell7 = row.insertCell(6);  
+            // var cell14 = row.insertCell(13);  
+            // var cell15 = row.insertCell(14);    
+            var cell18 = row.insertCell(7);
             
-            cell1.innerHTML = search_results[counter]["ARTIST"];
-            cell2.innerHTML = search_results[counter]["SCRAPE_DATE"];
-            cell3.innerHTML = search_results[counter]["SEARCH_NAME"];
-            cell4.innerHTML = search_results[counter]["JOINED"];
-            cell5.innerHTML = search_results[counter]["SUBSCRIBERS"];
-            cell6.innerHTML = search_results[counter]["TOTAL_VIEWS"];
-            cell7.innerHTML = search_results[counter]["PUBLISHED"];
-            cell8.innerHTML = search_results[counter]["TITLE"];
-            cell9.innerHTML = search_results[counter]["CATEGORY"];
-            cell10.innerHTML = search_results[counter]["DURATION"];
-            cell11.innerHTML = search_results[counter]["VIEWS"];
-            cell12.innerHTML = search_results[counter]["LIKES"];
-            cell13.innerHTML = search_results[counter]["DISLIKES"];
-            cell14.innerHTML = search_results[counter]["PAID"];
-            cell15.innerHTML = search_results[counter]["FAMILY_FRIENDLY"];
-            cell16.innerHTML = search_results[counter]["URL"];
+            // cell1.innerHTML = search_results[counter]["ARTIST"];
+            // cell2.innerHTML = search_results[counter]["SCRAPE_DATE"];
+            // cell3.innerHTML = search_results[counter]["SEARCH_NAME"];
+            // cell4.innerHTML = search_results[counter]["JOINED"];
+            // cell5.innerHTML = search_results[counter]["SUBSCRIBERS"];
+            // cell6.innerHTML = search_results[counter]["TOTAL_VIEWS"];
+            cell1.innerHTML = search_results[counter]["PUBLISHED"];
+            cell2.innerHTML = search_results[counter]["TITLE"];
+            cell3.innerHTML = search_results[counter]["CATEGORY"];
+            cell4.innerHTML = search_results[counter]["DURATION"];
+            cell5.innerHTML = search_results[counter]["VIEWS"];
+            cell6.innerHTML = search_results[counter]["LIKES"];
+            cell7.innerHTML = search_results[counter]["DISLIKES"];
+            // cell14.innerHTML = search_results[counter]["PAID"];
+            // cell15.innerHTML = search_results[counter]["FAMILY_FRIENDLY"];
+            cell18.innerHTML = search_results[counter]["URL"];
 
             no_results.text("");
         }
@@ -191,8 +193,12 @@ function checked()
 
 function generateURL(){
     input = d3.event.target.value;
-    url = "/query?name=" + input;
+    url = "/query?cc=" + input;
     document.getElementById("link_button").href=url; 
+
+    if (event.keyCode === 13) {
+        window.location.href = url;
+    }
 }
 
 
