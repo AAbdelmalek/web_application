@@ -11,6 +11,33 @@
   position:auto
 } */
 
+#load-bar{
+  vertical-align: super;
+}
+
+.pic{
+vertical-align: sub;
+}
+
+.button:hover{ 
+color: white;
+}
+
+.button{
+color:white;
+background-color: rgb(243, 85, 85);
+}
+
+
+.header{
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.header2{
+  font-size: 14pt;
+}
+
 td{
   position: auto;
   top: 140px;

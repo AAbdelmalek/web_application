@@ -1,4 +1,6 @@
 var search_button = d3.select("#button");
+var progress_bar = document.getElementById("load-bar")
+var link_button = document.getElementById("link-button")
 var i = 0;
 var no_results = d3.select(".no_results");
 var row_count =0;
@@ -8,6 +10,7 @@ var dropdown = d3.select("#dropdown");
 var dropdown_value = "";
 var input = "";
 var scrape_data = "";
+progress_bar.style.visibility = "hidden";
 
 // Get JSON Data from Flask
 function getData(data) {
@@ -47,6 +50,7 @@ function getData(data) {
 
 //Search function
 function search(input) {
+   
     deleteRows(row_count);
 
     //dropdown_value = document.getElementById("dropdown").value;
@@ -79,12 +83,12 @@ function search(input) {
     if (row_count === 1)
 
     {
-        results.text(`Returned: ${row_count} videos`);
+        results.text(`${row_count} videos`);
     }
 
     else
     {
-        results.text(`Returned: ${row_count} videos`);
+        results.text(`${row_count} videos`);
     }
 
     if (search_results.length === 0)
@@ -136,60 +140,65 @@ function search(input) {
             cell18.innerHTML = search_results[counter]["URL"];
 
             no_results.text("");
+
+            
         }
+           
     }
+
   }
 
-function country()
-{
 
-    search_button.attr("placeholder","Enter Country");
-    // search_button.transition().placeholder("Country");
-    console.log("Country value selected");
+// function country()
+// {
 
-}
+//     search_button.attr("placeholder","Enter Country");
+//     // search_button.transition().placeholder("Country");
+//     console.log("Country value selected");
 
-function state()
-{
+// }
 
-    search_button.attr("placeholder","Enter State");
-    // search_button.transition().placeholder("Country");
-    console.log("State value selected");
+// function state()
+// {
 
-}
+//     search_button.attr("placeholder","Enter State");
+//     // search_button.transition().placeholder("Country");
+//     console.log("State value selected");
 
-function artist()
-{
+// }
 
-    search_button.attr("placeholder","Enter Artist");
-    // search_button.transition().placeholder("Country");
-    console.log("Date value selected");
+// function artist()
+// {
 
-}
+//     search_button.attr("placeholder","Enter Artist");
+//     // search_button.transition().placeholder("Country");
+//     console.log("Date value selected");
 
-function checked()
-{
+// }
 
-    dropdown_value = document.getElementById("dropdown").value;
-    if (dropdown_value === "State")
-    {
-        console.log("dropdown is State");
-        state();
-    }
+// function checked()
+// {
 
-    else if (dropdown_value === "Artist")
-    {
-        console.log("dropdown is Date");
-        date();
-    }
+//     dropdown_value = document.getElementById("dropdown").value;
+//     if (dropdown_value === "State")
+//     {
+//         console.log("dropdown is State");
+//         state();
+//     }
 
-    else if (dropdown_value === "Country")
-    {
-        console.log("dropdown is Country");
-        country();
-    }
+//     else if (dropdown_value === "Artist")
+//     {
+//         console.log("dropdown is Date");
+//         date();
+//     }
 
-}
+//     else if (dropdown_value === "Country")
+//     {
+//         console.log("dropdown is Country");
+//         country();
+//     }
+
+// }
 
 function generateURL(){
     input = d3.event.target.value;
@@ -197,19 +206,22 @@ function generateURL(){
     document.getElementById("link_button").href=url; 
 
     if (event.keyCode === 13) {
+        progress_bar.style.visibility = "visible"; 
         window.location.href = url;
     }
-}
 
+}
 
 search_button.on("keyup", generateURL);
 
 if (d3.event !== null){
-input = d3.event.target.value;    
+input = d3.event.target.value;   
 search_button.on("change", search(input));
 }
 
-dropdown.on("change", checked);
+//dropdown.on("change", checked);
 // country_dropdown.on("keyup", country);
 // state_dropdown.on("keyup", state);
 // date_dropdown.on("change", date);
+
+

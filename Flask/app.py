@@ -13,8 +13,6 @@ from sqlalchemy import create_engine
 import pymysql
 pymysql.install_as_MySQLdb()
 
-
-#https://scotch.io/bar-talk/processing-incoming-request-data-in-flask
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
@@ -83,7 +81,7 @@ def search():
 	# 		print("Input date is not valid.")
 	# 		exit()
 	
-	converted_input_date = datetime.strptime("1950-01-01", '%Y-%m-%d')
+	converted_input_date = datetime.strptime("1944-06-06", '%Y-%m-%d')
 	
 	list_name = input_name.split()
 	converted_name = input_name
@@ -121,14 +119,17 @@ def search():
 	artist_name = about_soup.find("meta", property="og:title").get("content")
 
 	subscribers = about_soup.find_all("span", class_="about-stat")[0].text
+	subscribers_str = subscribers.split(" ")[0]
 	subscribers_int = int(subscribers.split(" ")[0].replace(",",""))
 
 	total_views = about_soup.find_all("span", class_="about-stat")[1].text
+	total_views_str = total_views[3:len(total_views)].split(" ")[0]
 	total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
 
 	joined = about_soup.find_all("span", class_="about-stat")[2].text
 	joined_temp = joined.split(" ")[1:4]
 	joined_convert = convertDate(joined_temp)
+	joined_str = str(joined_convert).split(" ")[0]
 
 	print(f"Artist: {artist_name}")
 	print(f"Subscribers: {subscribers_int}")
@@ -156,11 +157,15 @@ def search():
 		percent_complete_str = "100"
 		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
 		print(f"A cached scrape ({scrape_date} UTC) has been found...")
-		cache = f"Scrape Datetime: {scrape_date}"
+		cache = f"{scrape_date} scrape"
 		json_data = df_cache.to_json(orient="records")
-		
-		return render_template("index.html", data=json_data, cache=cache,\
-		progress=percent_complete_str)	
+
+		scrape_date_str = "Scraped " + str(scrape_date).split(" ")[0]
+
+		return render_template("index.html", data=json_data, cache=scrape_date_str,\
+		progress=percent_complete_str, artist_name=artist_name,\
+		subscribers = f"{subscribers_str} subscribers",\
+		total_views=f"{total_views_str} all-time views", joined=f"Joined {joined_str}")
 			
 		
 	else:
@@ -502,9 +507,14 @@ def search():
 		'{total_views}')")
 
 		print("Inserted data into database successfully...")
-		
-		return render_template("index.html", data=json_data, cache = cache,\
-		progress = percent_complete_str)
+
+		scrape_date_str = "As of: " + str(scrape_date).split(" ")[0] + " UTC"
+		cache = f"As of: {scrape_date} UTC"
+
+		return render_template("index.html", data=json_data, cache = scrape_date_str,\
+		progress = percent_complete_str, artist_name = artist_name,\
+		subscribers = f"Subscribers: {subscribers_str}",\
+		total_views=f"Total Views: {total_views_str}")
 		
 if __name__ == "__main__":
 	app.run()
