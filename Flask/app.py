@@ -31,8 +31,13 @@ def search():
 	cache = ""
 	percent_complete_str = "0"
 
-	name_key = request.args.get('cc')
+	# Get Search Key Value
+	name_key = request.args['cc']
 	input_name = '''{}'''.format(name_key)
+
+	# Get Data Key Value
+	data_key = request.args.get('analysis')
+	data_name = '''{}'''.format(name_key)
 
 	# Get Scrape Date
 	scrape_date = datetime.now().strftime("%Y-%m-%d")
@@ -264,6 +269,7 @@ def search():
 
 		# Going to Each Video and Extracting Data
 		published_on = []
+		published_on_str = []
 		raw_published_on = []
 		views = []
 		date = []
@@ -301,6 +307,7 @@ def search():
 
 				else:
 					published_on.append(publish_date_convert)
+					published_on_str.append(str(publish_date_convert).split(" ")[0])
 
 				# Title
 				title = video_soup.find("title").text.replace(" - YouTube", "")
@@ -419,6 +426,7 @@ def search():
 						"SUBSCRIBERS" : subscribers_int,
 						"TOTAL_VIEWS" : total_views_int,
 						"PUBLISHED": published_on,
+						"PUBLISHED_STR" : published_on_str,
 						"TITLE" : title_videos,
 						"CATEGORY" : categories,
 						"DURATION" : duration_videos,
@@ -508,13 +516,14 @@ def search():
 
 		print("Inserted data into database successfully...")
 
-		scrape_date_str = "As of: " + str(scrape_date).split(" ")[0] + " UTC"
+		scrape_date_str = "Scraped " + str(scrape_date).split(" ")[0]
 		cache = f"As of: {scrape_date} UTC"
 
 		return render_template("index.html", data=json_data, cache = scrape_date_str,\
 		progress = percent_complete_str, artist_name = artist_name,\
-		subscribers = f"Subscribers: {subscribers_str}",\
-		total_views=f"Total Views: {total_views_str}")
+		subscribers = f"{subscribers_str} subscribers",\
+		total_views=f"{total_views_str} total views",\
+		joined=f"Joined {joined_str}")
 		
 if __name__ == "__main__":
 	app.run()

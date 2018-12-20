@@ -1,6 +1,6 @@
 var search_button = d3.select("#button");
 var progress_bar = document.getElementById("load-bar")
-var link_button = document.getElementById("link-button")
+var link_button = document.getElementById("#search")
 var i = 0;
 var no_results = d3.select(".no_results");
 var row_count =0;
@@ -10,6 +10,8 @@ var dropdown = d3.select("#dropdown");
 var dropdown_value = "";
 var input = "";
 var scrape_data = "";
+var url = "";
+
 progress_bar.style.visibility = "hidden";
 
 // Get JSON Data from Flask
@@ -19,7 +21,6 @@ function getData(data) {
     search(scrape_data)
 
     }
-
 }
 
 //Get Data Function
@@ -128,7 +129,7 @@ function search(input) {
             // cell4.innerHTML = search_results[counter]["JOINED"];
             // cell5.innerHTML = search_results[counter]["SUBSCRIBERS"];
             // cell6.innerHTML = search_results[counter]["TOTAL_VIEWS"];
-            cell1.innerHTML = search_results[counter]["PUBLISHED"];
+            cell1.innerHTML = search_results[counter]["PUBLISHED_STR"];
             cell2.innerHTML = search_results[counter]["TITLE"];
             cell3.innerHTML = search_results[counter]["CATEGORY"];
             cell4.innerHTML = search_results[counter]["DURATION"];
@@ -200,24 +201,43 @@ function search(input) {
 
 // }
 
-function generateURL(){
-    input = d3.event.target.value;
-    url = "/query?cc=" + input;
-    document.getElementById("link_button").href=url; 
+function load_bar(){
 
-    if (event.keyCode === 13) {
-        progress_bar.style.visibility = "visible"; 
-        window.location.href = url;
-    }
+    progress_bar.style.visibility = "visible"; 
+    window.location.href = url;
+
+
 
 }
 
+
+function generateURL(){
+    input = d3.event.target.value;
+    url = "/query?cc=" + input;
+    document.getElementById("link_button").href=url;
+    if (event.keyCode === 13) {
+        load_bar();
+    }
+}
+
 search_button.on("keyup", generateURL);
+
+
+// link_button.on("click", load_bar));
 
 if (d3.event !== null){
 input = d3.event.target.value;   
 search_button.on("change", search(input));
 }
+
+
+// function load_bar_url(){
+//     if (event.keyCode === 13){
+//     progress_bar.style.visibility = "visible";
+//     }
+// }
+
+// window.addEventListener('hashchange', load_bar_url);
 
 //dropdown.on("change", checked);
 // country_dropdown.on("keyup", country);
