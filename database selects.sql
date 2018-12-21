@@ -9,6 +9,12 @@ Gibi_ASMR.LIKES, Gibi_ASMR.DISLIKES, Gibi_ASMR.PAID, Gibi_ASMR.FAMILY_FRIENDLY, 
 INNER JOIN Gibi_ASMR
 ON artists.artist = Gibi_ASMR.artist;
 
+ALTER TABLE artists
+ADD ARTIST_IMAGE VARCHAR(255) CHARACTER SET UTF8MB4;
+
+ALTER TABLE artists
+ADD TOTAL_VIDEOS INT;
+
 SELECT * FROM artists;
 
 SELECT * FROM gibi_asmr;
@@ -28,6 +34,18 @@ SELECT * FROM RaffyTaphyASMR;
 SELECT * FROM Avicii;
 
 SELECT * FROM Michael_Vongsa;
+
+
+SELECT artists.artist, Ariana_Grande.URL;
+
+
+
+
+DELETE  FROM artists 
+WHERE Artist = "Mars Phobos";
+
+
+
 
 DROP TABLE Avicii;
 

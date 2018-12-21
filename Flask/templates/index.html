@@ -2,24 +2,26 @@
 - Artist info in header, not table -- OK
 - Published Date format -- OK
 - Load Bar progress -- get click search to work -- OK
-- Fix table pretty -- 
-- Exit proceedure for large scrapes --
+- Exit proceedure for large scrapes -- OK -- timeout
 - Make scrape date pretty -- OK
-- Regression (plotly) --
-- Export raw data file -- 
 - Favicon -- OK
-- Terminate if page is refreshed/closed/stopped --
-- Block Redesign -- 
-- Database SQL String issue -- 
 - Load "this may take a while" -- OK
 - Get artist image -- OK
 - Hit enter and Search bug -- OK 
-- # of videos bug -- 
-- sortable table -- 
+- # of videos bug -- OK
+- # of Scraped Videos -- OK
 - logo hyperlink bug -- OK
-- analytics button resize -- 
-- have an unknown card that populates with search,
-then have others displayed from previous scrapes
+- analytics button resize -- OK
+- Block redesign:
+        have an unknown card that populates with search,
+        then have others displayed from previous scrapes
+- sortable table -- 
+- Terminate if page is refreshed/closed/stopped --
+- Regression (plotly) --
+- Export raw data file -- 
+- Fix table pretty -- 
+- Database SQL String issue -- 
+
  -->
 
 <!DOCTYPE html>
@@ -36,10 +38,13 @@ then have others displayed from previous scrapes
 </head>
 <body>
      
+<!-- Load Bar -->
 <div id="load-bar" class="progress">
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 </div>      
 <br>
+
+<!-- Logo -->
 <div class="container">
 
     <div class="row">     
@@ -77,11 +82,10 @@ then have others displayed from previous scrapes
 
 
 <!-- Cards -->
+<div class="row">
+<div class="col">
 
 <!-- Card 1 -->
-<div row>
-<div col>
-
 <div class="card-deck">
                 <div class="card">
                   <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
@@ -98,32 +102,33 @@ then have others displayed from previous scrapes
                         </div>
                   </div>
                   <div class="card-footer">
-                    <small class="text-muted">Last Retrieved</small>
+                    <small class="text-muted">Last retrieved</small>
                   </div>
                 </div>
+
 <!-- Card 2 -->
                 <div class="card">
                 <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
                 <div class="card-body">
                   <h5 class="card-title">{{artist_name}}</h5>
                   <p class="card-text">
-                              <h6 class="results h6-font"></h6>
+                              <h6 class="h6-font">{{total_videos}}</h6>
                               <h6 class="h6-font">{{subscribers}}</h6>
                               <h6 class="h6-font">{{total_views}}</h6>
                               <h6 class="h6-font">{{joined}}</h6>
                       </p>
                       <div class="text-center">
-                      <a href="#" class="btn btn-sm btn-primary">Analytics</a>
+                      <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
                       </div>
                 </div>
                 <div class="card-footer">
-                  <small class="text-muted">Last Retrieved: {{cache}}</small>
+                  <small class="text-muted">Last retrieved {{cache}}</small>
                 </div>
               </div>
 
 <!-- Card 3 -->
                 <div class="card">
-                  <img class="card-img-top" src="..." alt="Card image cap">
+                  <img class="card-img-top" src="" alt="Card image cap">
                   <div class="card-body">
                     <h5 class="card-title">Card title</h5>
                     <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
@@ -137,7 +142,7 @@ then have others displayed from previous scrapes
                 </div>
 <!-- Card 4 -->
                 <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
+                <img class="card-img-top" src="" alt="Card image cap">
                 <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>

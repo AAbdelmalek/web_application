@@ -1,6 +1,7 @@
 // Setting up variables
 var search_button = d3.select("#button");
 var progress_bar = document.getElementById("load-bar");
+var analytics_loader = document.getElementById("analytics_load_button");
 var link_button = document.getElementById("search");
 var i = 0;
 var no_results = d3.select(".no_results");
@@ -15,6 +16,7 @@ var url = "";
 var var_url = "";
 var loading_warning = document.getElementById("loading");
 var search_results = "";
+var button_url = ""
 
 progress_bar.style.visibility = "hidden";
 loading_warning.style.visibility = "hidden";
@@ -62,7 +64,7 @@ function search(json) {
         row_count = 0;
     }
 
-    else
+    else if (document.getElementById("table_results") !== null)
     {
         for(counter=0;counter<search_results.length;counter++)
 
@@ -109,6 +111,13 @@ function search(json) {
     }
   }
 
+function analytics_load(){
+    if (analytics_loader.getAttribute("href") !== "#"){
+
+        progress_bar.style.visibility = "visible";   
+    }
+}
+
 function load_bar(){
     if (d3.event !== null){
             input = d3.event.target.value;   
@@ -117,6 +126,7 @@ function load_bar(){
 
             progress_bar.style.visibility = "visible"; 
             loading_warning.style.visibility = "visible";
+
             window.location.href = url;
     }
 }
@@ -124,14 +134,17 @@ function load_bar(){
 function generateURL(){
     input = d3.event.target.value;
     url = "/query?name=" + input.trim();
-
+    // button_url = url + "&analytics=home";
+    
     if(url === "/query?name="){
-        url = "#";
+        url = "/";
      
     }
 
     document.getElementById("link_button").href=url;
-    if (event.keyCode === 13) {
+    // document.getElementById("analytics_home_link").href =  button_url;
+
+    if (event.keyCode === 13 && input !== "") {
         load_bar();
     }
 }
