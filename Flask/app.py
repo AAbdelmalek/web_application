@@ -24,7 +24,6 @@ def home():
 	return render_template("index.html", data = json_data,\
 	progress = percent_complete_str)
 
-
 @app.route("/query")
 def search():
 	json_data = []
@@ -32,7 +31,7 @@ def search():
 	percent_complete_str = "0"
 
 	# Get Search Key Value
-	name_key = request.args['cc']
+	name_key = request.args['name']
 	input_name = '''{}'''.format(name_key)
 
 	# Get Data Key Value
@@ -123,32 +122,50 @@ def search():
 	# Artist Information
 	artist_name = about_soup.find("meta", property="og:title").get("content")
 
+	artist_image = about_soup.find("img", class_="channel-header-profile-image").get("src")
+
 	subscribers = about_soup.find_all("span", class_="about-stat")[0].text
 	subscribers_str = subscribers.split(" ")[0]
-	subscribers_int = int(subscribers.split(" ")[0].replace(",",""))
+	
+	try:
+		subscribers_int = int(subscribers.split(" ")[0].replace(",",""))
+
+	except:
+		subscribers_int = "Not available"
 
 	total_views = about_soup.find_all("span", class_="about-stat")[1].text
 	total_views_str = total_views[3:len(total_views)].split(" ")[0]
-	total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
+	
+	try:
+		total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
+		joined = about_soup.find_all("span", class_="about-stat")[2].text
+		joined_temp = joined.split(" ")[1:4]
+		joined_convert = convertDate(joined_temp)
+		joined_str = str(joined_convert).split(" ")[0]
 
-	joined = about_soup.find_all("span", class_="about-stat")[2].text
-	joined_temp = joined.split(" ")[1:4]
-	joined_convert = convertDate(joined_temp)
-	joined_str = str(joined_convert).split(" ")[0]
+	except:
+		total_views = about_soup.find_all("span", class_="about-stat")[0].text
+		total_views_str = total_views[3:len(total_views)].split(" ")[0]
+		total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
+		
+		joined = about_soup.find_all("span", class_="about-stat")[1].text
+		joined_temp = joined.split(" ")[1:4]
+		joined_convert = convertDate(joined_temp)
+		joined_str = str(joined_convert).split(" ")[0]
 
 	print(f"Artist: {artist_name}")
 	print(f"Subscribers: {subscribers_int}")
 	print(f"Views: {total_views_int}")
 	print(f"Joined: {joined_convert}")
 
-	# Replacing spaces withunderscores for new table name
+	# Replacing spaces with underscores for new table name
 	artist_db_name = artist_name.replace(" ","_").replace("`","")
 
 	# Checking Database to See if Data was Previously Scraped
 	df_cache = []
 	try:
 		df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
-		{artist_db_name}.PUBLISHED, \
+		{artist_db_name}.PUBLISHED_STR, \
 		{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 		{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 		{artist_db_name}.URL FROM artists \
@@ -165,14 +182,15 @@ def search():
 		cache = f"{scrape_date} scrape"
 		json_data = df_cache.to_json(orient="records")
 
-		scrape_date_str = "Scraped " + str(scrape_date).split(" ")[0]
+		scrape_date_str = str(scrape_date).split(" ")[0]\
+		#  + " " + str(scrape_date).split(" ")[1] + " UTC"
 
 		return render_template("index.html", data=json_data, cache=scrape_date_str,\
 		progress=percent_complete_str, artist_name=artist_name,\
-		subscribers = f"{subscribers_str} subscribers",\
-		total_views=f"{total_views_str} all-time views", joined=f"Joined {joined_str}")
+		subscribers = f"{subscribers_str} Subscribers",\
+		total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+		artist_image=artist_image)
 			
-		
 	else:
 		# Convert User Name to UU Format
 		youtube_code = raw_youtube_name_link.split("/")[2]
@@ -413,6 +431,10 @@ def search():
 					urls_all.pop(i-bump)
 				except:
 					pass
+				try:
+					published_on_str.pop(i-bump)
+				except:
+					pass
 				bump = bump + 1
 				continue
 				
@@ -456,6 +478,7 @@ def search():
 		SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
 		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 		PUBLISHED DATE,\
+		PUBLISHED_STR VARCHAR(255),\
 		TITLE VARCHAR(255) CHARACTER SET UTF8MB4,\
 		CATEGORY VARCHAR(255) CHARACTER SET UTF8MB4,\
 		DURATION FLOAT,\
@@ -491,6 +514,7 @@ def search():
 			subscribers = df.loc[i,"SUBSCRIBERS"]
 			total_views = df.loc[i,"TOTAL_VIEWS"]
 			published = df.loc[i,"PUBLISHED"]
+			published_str = df.loc[i,"PUBLISHED_STR"]
 			title = df.loc[i,"TITLE"].replace("'","").replace('"',"").replace(']',"")\
 			.replace('[',"").replace('\\',"").replace("%","").replace("`","")
 			category = df.loc[i,"CATEGORY"]
@@ -503,27 +527,37 @@ def search():
 			url =  df.loc[i,"URL"]
 
 			connection.execute(f"INSERT INTO {artist_db_name}\
-			(SCRAPE_DATE, SEARCH_NAME, ARTIST, PUBLISHED, TITLE, CATEGORY , DURATION,\
+			(SCRAPE_DATE, SEARCH_NAME, ARTIST, PUBLISHED, PUBLISHED_STR, TITLE, CATEGORY , DURATION,\
 			VIEWS, LIKES, DISLIKES, PAID, FAMILY_FRIENDLY, URL)\
-			VALUES ('{scrape_date}','{search_name}', '{artist}', '{published}', '{title}', '{category}',\
+			VALUES ('{scrape_date}','{search_name}', '{artist}', '{published}', \
+			'{published_str}','{title}', '{category}',\
 			'{duration}', '{views}', '{likes}', '{dislikes}', '{paid}',\
 			'{family_friendly}', '{url}')")
 
-		connection.execute(f"INSERT INTO artists \
-		(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, JOINED, SUBSCRIBERS, TOTAL_VIEWS)\
-		VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}', '{joined}', '{subscribers}',\
-		'{total_views}')")
+		if subscribers == "Not available":
+			connection.execute(f"INSERT INTO artists \
+			(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, JOINED, SUBSCRIBERS, TOTAL_VIEWS)\
+			VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}', '{joined}', NULL,\
+			'{total_views}')")
+		
+		else:
+			connection.execute(f"INSERT INTO artists \
+			(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, JOINED, SUBSCRIBERS, TOTAL_VIEWS)\
+			VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}', '{joined}', '{subscribers}',\
+			'{total_views}')")
 
 		print("Inserted data into database successfully...")
 
-		scrape_date_str = "Scraped " + str(scrape_date).split(" ")[0]
+		scrape_date_str = str(scrape_date).split(" ")[0]\
+		#  + " " + str(scrape_date).split(" ")[1] + " UTC"
+
 		cache = f"As of: {scrape_date} UTC"
 
 		return render_template("index.html", data=json_data, cache = scrape_date_str,\
 		progress = percent_complete_str, artist_name = artist_name,\
-		subscribers = f"{subscribers_str} subscribers",\
-		total_views=f"{total_views_str} total views",\
-		joined=f"Joined {joined_str}")
+		subscribers = f"{subscribers_str} Subscribers",\
+		total_views=f"{total_views_str} All-Time Views",\
+		joined=f"Joined {joined_str}", artist_image=artist_image)
 		
 if __name__ == "__main__":
 	app.run()

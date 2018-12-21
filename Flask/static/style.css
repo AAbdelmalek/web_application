@@ -1,15 +1,37 @@
-/* th {
-  position:fixed;
-} */
+/* Styles */
 
-/* table{
-  top: 1000px;
-  
+.card{
+  height: 15%;
+}
 
-} */
-/* tbody{
-  position:auto
-} */
+.link_color{
+  color:black;
+  text-decoration: none;
+}
+
+.link_color:hover{
+  text-decoration: none;
+  color:black;
+}
+
+.alert {
+  height:5%;   
+  width:285px; 
+  line-height: 0;
+  text-align: left;
+}
+
+.width{
+  width:100%;
+}
+
+#loading{
+  font-size: 10pt;
+}
+
+.h6-font{
+font-size: 9pt;
+}
 
 #load-bar{
   vertical-align: super;
@@ -28,7 +50,6 @@ color:white;
 background-color: rgb(243, 85, 85);
 }
 
-
 .header{
   font-size: 14pt;
   font-weight: bold;
@@ -36,13 +57,13 @@ background-color: rgb(243, 85, 85);
 
 .header2{
   font-size: 14pt;
+  color:black;
 }
 
 td{
   position: auto;
   top: 140px;
   /* background:white; */
-
 
 }
 .table-fixed {
@@ -71,30 +92,7 @@ p {margin:auto;
    font-size : 20pt;
 }
 
-/* td {text-align:left;
-}
-
-th {text-align:left;
-} */
-
-/* .float-right {
-  overflow: hidden;
-} */
-
-/* .footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: rgb(66, 243, 66);
-  color: black;
-  text-align: center;
-  font-size: 9pt;
-} */
-
 .vert{
   vertical-align:bottom;
   display:inline-block;
 }
-
-/* .vert:first { font-size: 60%; } */

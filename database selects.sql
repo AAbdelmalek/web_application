@@ -25,8 +25,11 @@ SELECT * FROM Ariana_Grande;
 
 SELECT * FROM RaffyTaphyASMR;
 
+SELECT * FROM Avicii;
 
 SELECT * FROM Michael_Vongsa;
+
+DROP TABLE Avicii;
 
 DROP TABLE video_data;
 
