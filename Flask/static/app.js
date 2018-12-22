@@ -2,6 +2,7 @@
 var search_button = d3.select("#button");
 var progress_bar = document.getElementById("load-bar");
 var analytics_loader = document.getElementById("analytics_load_button");
+var search_loader = document.getElementById("loader_search")
 var link_button = document.getElementById("search");
 var i = 0;
 var no_results = d3.select(".no_results");
@@ -118,17 +119,21 @@ function analytics_load(){
     }
 }
 
+function search_progress_bar(){
+    if (search_loader.getAttribute("href") !== "#"){
+
+        progress_bar.style.visibility = "visible";   
+    }
+}
+
 function load_bar(){
-    if (d3.event !== null){
-            input = d3.event.target.value;   
-    
-            search_button.on("change", search(input));
+  if (loader_search.getAttribute("href") !== "#"){
 
             progress_bar.style.visibility = "visible"; 
             loading_warning.style.visibility = "visible";
 
             window.location.href = url;
-    }
+  }   
 }
 
 function generateURL(){
@@ -137,11 +142,11 @@ function generateURL(){
     // button_url = url + "&analytics=home";
     
     if(url === "/query?name="){
-        url = "/";
+        url = "#";
      
     }
 
-    document.getElementById("link_button").href=url;
+    search_loader.href=url;
     // document.getElementById("analytics_home_link").href =  button_url;
 
     if (event.keyCode === 13 && input !== "") {

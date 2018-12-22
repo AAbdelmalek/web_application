@@ -17,6 +17,8 @@ ADD TOTAL_VIDEOS INT;
 
 SELECT * FROM artists;
 
+SELECT * FROM requests;
+
 SELECT * FROM gibi_asmr;
 
 SELECT * FROM tingting_asmr;
@@ -38,14 +40,19 @@ SELECT * FROM Michael_Vongsa;
 
 SELECT artists.artist, Ariana_Grande.URL;
 
+SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 3;
 
+SELECT * FROM requests;
+
+SELECT * FROM bad_requests;
 
 
 DELETE  FROM artists 
 WHERE Artist = "Mars Phobos";
 
+DROP TABLE bad_requests;
 
-
+DROP TABLE requests;
 
 DROP TABLE Avicii;
 

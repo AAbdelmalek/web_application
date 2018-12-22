@@ -21,6 +21,9 @@
 - Export raw data file -- 
 - Fix table pretty -- 
 - Database SQL String issue -- 
+- Remove Request from DB if request is canceled (or handle some other way)
+                e.g. insert request after successfull pull
+                may be OK 
 
  -->
 
@@ -62,7 +65,7 @@
                         <div class="input-group center-block">
                                 <input id="button" type="text" class="form-control" placeholder="Content Creator">
                                         <span class="input-group-btn">
-                                        <a onclick="load_bar()" class="btn button btn-danger" href="#" role="button" id="link_button">Search</a>
+                                        <a onclick="load_bar()" class="btn button btn-danger" href="#" role="button" id="loader_search">Search</a>
                                         </span>
                         </div>
                 </div>
@@ -128,60 +131,45 @@
 
 <!-- Card 3 -->
                 <div class="card">
-                  <img class="card-img-top" src="" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                    <div class="text-center">
-                        <a href="#" class="btn btn-primary">Analytics</a>
-                        </div> 
+                <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
+                <div class="card-body">
+                <h5 class="card-title">{{artist_name_1}}</h5>
+                <p class="card-text">
+                        <h6 class="h6-font">{{total_videos_1}}</h6>
+                        <h6 class="h6-font">{{subscribers_1}}</h6>
+                        <h6 class="h6-font">{{total_views_1}}</h6>
+                        <h6 class="h6-font">{{joined_1}}</h6>
+                </p>
+                <div class="text-center">
+                <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
                 </div>
-                  <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                  </div>
+                </div>
+                <div class="card-footer">
+                <small class="text-muted">Last retrieved {{cache_1}}</small>
+                </div>
                 </div>
 <!-- Card 4 -->
                 <div class="card">
-                <img class="card-img-top" src="" alt="Card image cap">
+                <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap">
                 <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                        <div class="text-center">
-                        <a href="#" class="btn btn-primary">Analytics</a>
-                        </div>  
+                <h5 class="card-title">{{artist_name_2}}</h5>
+                <p class="card-text">
+                        <h6 class="h6-font">{{total_videos_2}}</h6>
+                        <h6 class="h6-font">{{subscribers_2}}</h6>
+                        <h6 class="h6-font">{{total_views_2}}</h6>
+                        <h6 class="h6-font">{{joined_2}}</h6>
+                </p>
+                <div class="text-center">
+                <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
+                </div>
                 </div>
                 <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
+                <small class="text-muted">Last retrieved {{cache_2}}</small>
                 </div>
                 </div>
-              </div>
 
 </div>
 </div>
-
-<!-- Artist Image -->
-        <!-- <div class="row"> 
-                <div class="col-2">
-                 
-                        <img class="img-responsive width" src="{{artist_image}}" height="auto">
-                </div>
-
-                <div class="col-8">
-       
-                                <h6>{{artist_name}}</h6>
-                                <h6 class="results h6-font"></h6>
-                                <h6 class="h6-font">{{subscribers}}</h6>
-                                <h6 class="h6-font">{{total_views}}</h6>
-                                <h6 class="h6-font">{{joined}}</h6>
-                                <h6 class="h6-font">{{cache}}</h6>
-
-                </div>  
-
-        </div> -->
-
-<!-- Table -->
-
-        <!-- Header -->
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         <br><br><br><br><br><br><br><br><br>
     <table id="table_results" class="table table-striped table-responsive">
