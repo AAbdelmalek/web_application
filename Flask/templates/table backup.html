@@ -21,15 +21,10 @@
 - Export raw data file -- 
 - Fix table pretty -- 
 - Database SQL String issue -- 
-- Fix Analytics Button to not generate another scrape --
-- JSON data is available upon search screen returning (want just analytics page)
-- Analytics page 
-        - Artist info
-        - Return to search results/home screen
-        - Regression
-        - Income Estimate
-        - Raw Data
-- Fix bug where scrape is terminated
+- Remove Request from DB if request is canceled (or handle some other way)
+                e.g. insert request after successfull pull
+                may be OK 
+
  -->
 
 <!DOCTYPE html>
@@ -175,11 +170,151 @@
 
 </div>
 </div>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br>
+    <table id="table_results" class="table table-striped table-responsive">
+    <thead>
+        <tr>
+            <!-- <th> 
+                    <h6>Artist</h6>     
+            </th> 
+
+            <th>       
+                    <h6>Scrape Date</h6>           
+            </th> -->
+
+            <!-- <th>       
+                    <h6>Search Name</h6>           
+            </th>
+
+            <th>       
+                    <h6>Joined</h6>           
+            </th>
+
+            <th>  
+                    <h6>Subscribers</h6>       
+            </th>  
+
+            <th>
+                    <h6>Total Views</h6>  
+
+            </th> -->
+            
+            <th>
+                    <h6>Published</h6>       
+            </th>
+
+            <th>
+                    <h6>Title</h6>       
+            </th>
+
+            <th>   
+                    <h6>Category</h6>       
+            </th>
+
+            <th>
+                    <h6>Duration (mins)</h6>       
+            </th> 
+
+            <th>       
+                    <h6>Views</h6>           
+            </th>
+
+            <th>
+                    <h6>Likes</h6> 
+            </th>
+
+            <th>
+                    <h6>Dislikes</h6> 
+            </th>
+
+             <!-- <th>       
+                    <h6>Paid</h6>           
+            </th>
+
+            <th>       
+                    <h6>Family Friendly</h6>           
+            </th> -->
+
+            <th>
+                    <h6>URL</h6> 
+             </th>
+
+        </tr>
+    </thead>
+    
+        <!-- Search Results -->
+        <tbody>
+       
+            <tr>       
+                <!-- <td class="Artist">             
+                </td> -->
+
+                <!-- <td class="Scrape_Date">             
+                </td> -->
+
+                <!-- <td class="Search_Name">             
+                </td> -->
+
+                <!-- <td class="Joined">     
+                </td>
+                
+                <td class="Subscribers">
+                </td>
+                
+                <td class="Total Views"> -->
+                </td>   
+
+                <td class="Published">
+                </td>
+                
+                <td class="Title">
+                </td>
+
+                <td class="Category">
+                </td>
+
+                <td class="Duration">             
+                </td>
+
+                <td class="Views">
+                </td>
+
+                <td class="Likes">
+                </td>     
+
+                <td class="Dislikes">
+                </td>
+
+                <!-- <td class="Paid">             
+                </td>
+
+                <td class="Family_Friendly">             
+                </td> -->
+
+                <td class="URL">
+                </td>
+            
+            </tr>
+        </tbody>
+ 
+    </table>
+
+
+    <!-- Null Results -->
+
+        <br>
+        <div class = "row">
+            <p class = "no_results"></p>
+        </div>
     
 </div>
     
 </body>
 
+<footer class="footer">
+
+</footer>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 <script>getData({{data|tojson}})</script>
 </html>

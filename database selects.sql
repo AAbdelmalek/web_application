@@ -25,6 +25,8 @@ SELECT * FROM tingting_asmr;
 
 SELECT * FROM mars_phobos;
 
+SELECT * FROM Die_Antwoord;
+
 SELECT * FROM asmr_glow;
 
 SELECT * FROM diddly_asmr;
@@ -45,6 +47,8 @@ SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 3;
 SELECT * FROM requests;
 
 SELECT * FROM bad_requests;
+
+SELECT * FROM Nitiphon_Singhasiri;
 
 
 DELETE  FROM artists 
