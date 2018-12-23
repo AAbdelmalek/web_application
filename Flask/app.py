@@ -101,7 +101,7 @@ def home():
 	total_videos_str_1 = str(artist_1_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
 	number_scraped_1 = int(len(artist_1_table))
 	artist_1_name = artist_1_table.loc[0,"ARTIST"]
-	analytics_base_url_1 = "/query?name=" + artist_1_name + "&analytics=base"
+	analytics_base_url_1 = "/query?name=" + artist_1 + "&analytics=base"
 	subscribers_1 = artist_1_table.loc[0,"SUBSCRIBERS"]
 	joined_1 = artist_1_table.loc[0,"JOINED"]
 	total_views_1 = artist_1_table.loc[0,"TOTAL_VIEWS"]
@@ -115,7 +115,7 @@ def home():
 	total_videos_str_2 = str(artist_2_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
 	number_scraped_2 = int(len(artist_2_table))
 	artist_2_name = artist_2_table.loc[0,"ARTIST"]
-	analytics_base_url_2 = "/query?name=" + artist_2_name + "&analytics=base"
+	analytics_base_url_2 = "/query?name=" + artist_2 + "&analytics=base"
 	subscribers_2 = artist_2_table.loc[0,"SUBSCRIBERS"]
 	joined_2 = artist_2_table.loc[0,"JOINED"]
 	total_views_2 = artist_2_table.loc[0,"TOTAL_VIEWS"]
@@ -159,8 +159,8 @@ def search():
 		input_name = '''{}'''.format(name_key)
 
 		# Get Analytics Key Value
-		name_key = request.args.get('analytics')
-		input_analytics = '''{}'''.format(name_key)
+		analytics_key = request.args.get('analytics')
+		input_analytics = '''{}'''.format(analytics_key)
 
 		# Get Scrape Date
 		scrape_date = datetime.now().strftime("%Y-%m-%d")
@@ -172,6 +172,43 @@ def search():
 		# Creating database if not exists
 		connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
 		connection.execute("USE web_app_dev")
+		
+		if input_analytics == "base":
+
+			artist_db_name = input_name
+
+			# Get Artist Info
+			df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.TABLE_NAME, \
+			{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
+			{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
+			{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
+			INNER JOIN {artist_db_name} \
+			ON artists.artist = {artist_db_name}.artist", connection)
+
+			# Artist Information
+			scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+			cache = f"{scrape_date} scrape"
+			json_data = df_cache.to_json(orient="records")
+			scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+			scrape_date_str = str(scrape_date).split(" ")[0]
+			total_videos_str = str(df_cache.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+			number_scraped = int(len(df_cache))
+			artist_name = df_cache.loc[0,"ARTIST"]
+			analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
+			subscribers_str = df_cache.loc[0,"SUBSCRIBERS"]
+			joined_str = df_cache.loc[0,"JOINED"]
+			total_views_str = df_cache.loc[0,"TOTAL_VIEWS"]
+			artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
+
+			# Return HTML
+			return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
+			artist_name=artist_name,\
+			subscribers = f"{subscribers_str} Subscribers",\
+			total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+			artist_image=artist_image,\
+			total_videos = total_videos_str,\
+			analytics_base_url=analytics_base_url, number_scraped=number_scraped)
 
 		# Convert Date from Jan 1, 1999 format to datetime object
 		converted_date = ""
@@ -322,7 +359,7 @@ def search():
 			scrape_date_str = str(scrape_date).split(" ")[0]
 			total_videos_str = str(df_cache.loc[0,"TOTAL_VIDEOS"]) + " Videos"
 			number_scraped = int(len(df_cache))
-			analytics_base_url = "/query?name=" + input_name + "&analytics=base"
+			analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
 			table_name_search = df_cache.loc[0,"TABLE_NAME"]
 			search_table_name = df_cache.loc[0, "SEARCH_NAME"]
 			original_name = df_cache.loc[0,"ARTIST"]
@@ -335,7 +372,7 @@ def search():
 			total_videos_str_1 = str(artist_1_table.loc[1,"TOTAL_VIDEOS"]) + " Videos"
 			number_scraped_1 = int(len(artist_1_table))
 			artist_1_name = artist_1_table.loc[0,"ARTIST"]
-			analytics_base_url_1 = "/query?name=" + artist_1_name + "&analytics=base"
+			analytics_base_url_1 = "/query?name=" + artist_1 + "&analytics=base"
 			subscribers_1 = artist_1_table.loc[0,"SUBSCRIBERS"]
 			joined_1 = artist_1_table.loc[0,"JOINED"]
 			total_views_1 = artist_1_table.loc[0,"TOTAL_VIEWS"]
@@ -349,47 +386,47 @@ def search():
 			total_videos_str_2 = str(artist_2_table.loc[1,"TOTAL_VIDEOS"]) + " Videos"
 			number_scraped_2 = int(len(artist_2_table))
 			artist_2_name = artist_2_table.loc[0,"ARTIST"]
-			analytics_base_url_2 = "/query?name=" + artist_2_name + "&analytics=base"
+			analytics_base_url_2 = "/query?name=" + artist_2 + "&analytics=base"
 			subscribers_2 = artist_2_table.loc[0,"SUBSCRIBERS"]
 			joined_2 = artist_2_table.loc[0,"JOINED"]
 			total_views_2 = artist_2_table.loc[0,"TOTAL_VIEWS"]
 			artist_image_2 = artist_2_table.loc[0,"ARTIST_IMAGE"]
 
-			if input_analytics == "base":
-				return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
-				progress=percent_complete_str, artist_name=artist_name,\
-				subscribers = f"{subscribers_str} Subscribers",\
-				total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
-				artist_image=artist_image,\
-				total_videos = total_videos_str, number_scraped=number_scraped)
+			# if input_analytics == "base":
+			# 	return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
+			# 	progress=percent_complete_str, artist_name=artist_name,\
+			# 	subscribers = f"{subscribers_str} Subscribers",\
+			# 	total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+			# 	artist_image=artist_image,\
+			# 	total_videos = total_videos_str, number_scraped=number_scraped)
 			
-			else:
-				# Inserting Request into Database
-				connection.execute(f"INSERT INTO requests \
-				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
-				VALUES ('{scrape_date}', '{table_name_search}','{search_table_name}', '{original_name}')")
-				
-				return render_template("index.html", data=json_data, cache=scrape_date_str,\
-				artist_name=artist_name,\
-				subscribers = f"{subscribers_str} Subscribers",\
-				total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
-				artist_image=artist_image,\
-				total_videos = total_videos_str,\
-				analytics_base_url=analytics_base_url,\
-				data_1=json_data_1, cache_1=scrape_date_str_1,\
-				artist_name_1=artist_1_name,\
-				subscribers_1 = f"{subscribers_1} Subscribers",\
-				total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
-				artist_image_1 = artist_image_1,\
-				total_videos_1 = total_videos_str_1,\
-				analytics_base_url_1=analytics_base_url_1,\
-				data_2=json_data_2, cache_2=scrape_date_str_2,\
-				artist_name_2=artist_2_name,\
-				subscribers_2 = f"{subscribers_2} Subscribers",\
-				total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
-				artist_image_2 = artist_image_2,\
-				total_videos_2 = total_videos_str_2,\
-				analytics_base_url_2=analytics_base_url_2)
+		# else:
+			# Inserting Request into Database
+			connection.execute(f"INSERT INTO requests \
+			(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
+			VALUES ('{scrape_date}', '{table_name_search}','{search_table_name}', '{original_name}')")
+			
+			return render_template("index.html", data=json_data, cache=scrape_date_str,\
+			artist_name=artist_name,\
+			subscribers = f"{subscribers_str} Subscribers",\
+			total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+			artist_image=artist_image,\
+			total_videos = total_videos_str,\
+			analytics_base_url=analytics_base_url,\
+			data_1=json_data_1, cache_1=scrape_date_str_1,\
+			artist_name_1=artist_1_name,\
+			subscribers_1 = f"{subscribers_1} Subscribers",\
+			total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
+			artist_image_1 = artist_image_1,\
+			total_videos_1 = total_videos_str_1,\
+			analytics_base_url_1=analytics_base_url_1,\
+			data_2=json_data_2, cache_2=scrape_date_str_2,\
+			artist_name_2=artist_2_name,\
+			subscribers_2 = f"{subscribers_2} Subscribers",\
+			total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
+			artist_image_2 = artist_image_2,\
+			total_videos_2 = total_videos_str_2,\
+			analytics_base_url_2=analytics_base_url_2)
 				
 		else:
 
@@ -859,7 +896,7 @@ def search():
 			total_videos_str_1 = str(artist_1_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
 			number_scraped_1 = int(len(artist_1_table))
 			artist_1_name = artist_1_table.loc[0,"ARTIST"]
-			analytics_base_url_1 = "/query?name=" + artist_1_name + "&analytics=base"
+			analytics_base_url_1 = "/query?name=" + artist_1 + "&analytics=base"
 			subscribers_1 = artist_1_table.loc[0,"SUBSCRIBERS"]
 			joined_1 = artist_1_table.loc[0,"JOINED"]
 			total_views_1 = artist_1_table.loc[0,"TOTAL_VIEWS"]
@@ -873,7 +910,7 @@ def search():
 			total_videos_str_2 = str(artist_2_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
 			number_scraped_2 = int(len(artist_2_table))
 			artist_2_name = artist_2_table.loc[0,"ARTIST"]
-			analytics_base_url_2 = "/query?name=" + artist_2_name + "&analytics=base"
+			analytics_base_url_2 = "/query?name=" + artist_2 + "&analytics=base"
 			subscribers_2 = artist_2_table.loc[0,"SUBSCRIBERS"]
 			joined_2 = artist_2_table.loc[0,"JOINED"]
 			total_views_2 = artist_2_table.loc[0,"TOTAL_VIEWS"]

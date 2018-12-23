@@ -23,7 +23,7 @@
 - Export raw data file -- 
 - Fix table pretty -- 
 - Database SQL String issue -- 
-- Fix Analytics Button to not generate another scrape -- 
+- Fix Analytics Button generating another scrape -- OK
 - JSON data is available upon search screen returning (want just analytics page)
 - Analytics page 
         - Artist info
@@ -31,9 +31,9 @@
         - Regression
         - Income Estimate
         - Raw Data
-- Fix bug where scrape is terminated --
+- Fix bug where scrape is terminated -- ??
 - Instagram NavBar -- 
-- Redirect back to home page after a search --
+- Redirect back to home page after a search -- Not neccessary
 - Table for IP addresses and site visited -- 
 - Integer to commas on cards -- 
  -->
@@ -83,7 +83,7 @@
                                 <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="23" width="auto"></a>  
+                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" width="auto"></a>  
                         <span class="header"><a class="link_color" href="/">YouTube </a></span> 
                         <span class="header2"><a class="link_color" href="/">DS</a></span>
                        
@@ -181,7 +181,7 @@
                               <h6 class="h6-font">{{joined}}</h6>
                       </p>
                       <div class="text-center">
-                      <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
+                      <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
                       </div>
                 </div>
                 <div class="card-footer text-center">
@@ -234,7 +234,13 @@
 
 </body>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
-<script>getData({{data|tojson}})</script>
+<script>
+// var person_1 = document.getElementById("data_1");
+// if (person_1 !== null){
+// person_1.addEventListener("click", getData({{data_1|tojson}}))
+// }
+getData({{data|tojson}})
+</script>
 </div>
 </html>
 
