@@ -17,7 +17,15 @@ var url = "";
 var var_url = "";
 // var loading_warning = document.getElementById("loading");
 var search_results = "";
-var button_url = ""
+var button_url = "";
+var deck_2 = document.getElementById("deck-2");
+var deck_3 = document.getElementById("deck-3");
+
+//window.scrollTo(0,document.body.scrollHeight);
+
+if (deck_3 !== null){
+    deck_3.style.display = "none";  
+    }
 
 progress_bar.style.visibility = "hidden";
 // loading_warning.style.visibility = "hidden";
@@ -154,6 +162,14 @@ function generateURL(){
     }
 }
 
+window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        setInterval(function(){
+            deck_3.style.display = "block";},250);
+    }
+};
+
+
 search_button.on("keyup", generateURL);
 
 if (d3.event !== null){
@@ -161,6 +177,6 @@ input = d3.event.target.value;
 search_button.on("change", search(input));
 }
 
-if (window.history.replaceState) {
-    window.history.replaceState( null, null, window.location.href);
-}
+// if (window.history.replaceState) {
+//     window.history.replaceState( null, null, window.location.href);
+// }

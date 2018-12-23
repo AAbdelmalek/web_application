@@ -84,13 +84,13 @@ def home():
 	json_data = df_cache.to_json(orient="records")
 	scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
 	scrape_date_str = str(scrape_date).split(" ")[0]
-	total_videos_str = str(df_cache.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+	total_videos_str = format(df_cache.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 	number_scraped = int(len(df_cache))
 	artist_name = df_cache.loc[0,"ARTIST"]
 	analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
-	subscribers_str = df_cache.loc[0,"SUBSCRIBERS"]
+	subscribers_str = format(df_cache.loc[0,"SUBSCRIBERS"],",")
 	joined_str = df_cache.loc[0,"JOINED"]
-	total_views_str = df_cache.loc[0,"TOTAL_VIEWS"]
+	total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
 	artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 
 	# Artist 1 Information
@@ -98,13 +98,13 @@ def home():
 	cache_1 = f"{scrape_date_1} scrape"
 	json_data_1 = artist_1_table.to_json(orient="records")
 	scrape_date_str_1 = str(scrape_date_1).split(" ")[0]
-	total_videos_str_1 = str(artist_1_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+	total_videos_str_1 = format(artist_1_table.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 	number_scraped_1 = int(len(artist_1_table))
 	artist_1_name = artist_1_table.loc[0,"ARTIST"]
 	analytics_base_url_1 = "/query?name=" + artist_1 + "&analytics=base"
-	subscribers_1 = artist_1_table.loc[0,"SUBSCRIBERS"]
+	subscribers_1 = format(artist_1_table.loc[0,"SUBSCRIBERS"],",")
 	joined_1 = artist_1_table.loc[0,"JOINED"]
-	total_views_1 = artist_1_table.loc[0,"TOTAL_VIEWS"]
+	total_views_1 = format(artist_1_table.loc[0,"TOTAL_VIEWS"],",")
 	artist_image_1 = artist_1_table.loc[0,"ARTIST_IMAGE"]
 
 	# Artist 2 Information
@@ -112,13 +112,13 @@ def home():
 	cache_2 = f"{scrape_date_2} scrape"
 	json_data_2 = artist_2_table.to_json(orient="records")
 	scrape_date_str_2 = str(scrape_date_2).split(" ")[0]
-	total_videos_str_2 = str(artist_2_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+	total_videos_str_2 = format(artist_2_table.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 	number_scraped_2 = int(len(artist_2_table))
 	artist_2_name = artist_2_table.loc[0,"ARTIST"]
 	analytics_base_url_2 = "/query?name=" + artist_2 + "&analytics=base"
-	subscribers_2 = artist_2_table.loc[0,"SUBSCRIBERS"]
+	subscribers_2 = format(artist_2_table.loc[0,"SUBSCRIBERS"],",")
 	joined_2 = artist_2_table.loc[0,"JOINED"]
-	total_views_2 = artist_2_table.loc[0,"TOTAL_VIEWS"]
+	total_views_2 = format(artist_2_table.loc[0,"TOTAL_VIEWS"],",")
 	artist_image_2 = artist_2_table.loc[0,"ARTIST_IMAGE"]
 	
 	return render_template("index.html", data=json_data, cache=scrape_date_str,\
@@ -175,6 +175,7 @@ def search():
 		
 		if input_analytics == "base":
 
+			print("SELECT data from database...")
 			artist_db_name = input_name
 
 			# Get Artist Info
@@ -201,6 +202,8 @@ def search():
 			total_views_str = df_cache.loc[0,"TOTAL_VIEWS"]
 			artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 
+			print("Got artist data from database...")
+			
 			# Return HTML
 			return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\
@@ -359,23 +362,27 @@ def search():
 			scrape_date_str = str(scrape_date).split(" ")[0]
 			total_videos_str = str(df_cache.loc[0,"TOTAL_VIDEOS"]) + " Videos"
 			number_scraped = int(len(df_cache))
+			original_name = df_cache.loc[0,"ARTIST"]
 			analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
+			subscribers = format(df_cache.loc[0,"SUBSCRIBERS"],",")
+			joined = df_cache.loc[0,"JOINED"]
 			table_name_search = df_cache.loc[0,"TABLE_NAME"]
 			search_table_name = df_cache.loc[0, "SEARCH_NAME"]
-			original_name = df_cache.loc[0,"ARTIST"]
+			total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
+			artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 
 			# Artist 1 Information
 			scrape_date_1 = artist_1_table.loc[0,"SCRAPE_DATE"]
 			cache_1 = f"{scrape_date_1} scrape"
 			json_data_1 = artist_1_table.to_json(orient="records")
 			scrape_date_str_1 = str(scrape_date_1).split(" ")[0]
-			total_videos_str_1 = str(artist_1_table.loc[1,"TOTAL_VIDEOS"]) + " Videos"
+			total_videos_str_1 = format(artist_1_table.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 			number_scraped_1 = int(len(artist_1_table))
 			artist_1_name = artist_1_table.loc[0,"ARTIST"]
 			analytics_base_url_1 = "/query?name=" + artist_1 + "&analytics=base"
-			subscribers_1 = artist_1_table.loc[0,"SUBSCRIBERS"]
+			subscribers_1 = format(artist_1_table.loc[0,"SUBSCRIBERS"],",")
 			joined_1 = artist_1_table.loc[0,"JOINED"]
-			total_views_1 = artist_1_table.loc[0,"TOTAL_VIEWS"]
+			total_views_1 = format(artist_1_table.loc[0,"TOTAL_VIEWS"],",")
 			artist_image_1 = artist_1_table.loc[0,"ARTIST_IMAGE"]
 
 			# Artist 2 Information
@@ -383,13 +390,13 @@ def search():
 			cache_2 = f"{scrape_date_2} scrape"
 			json_data_2 = artist_2_table.to_json(orient="records")
 			scrape_date_str_2 = str(scrape_date_2).split(" ")[0]
-			total_videos_str_2 = str(artist_2_table.loc[1,"TOTAL_VIDEOS"]) + " Videos"
+			total_videos_str_2 = format(artist_2_table.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 			number_scraped_2 = int(len(artist_2_table))
 			artist_2_name = artist_2_table.loc[0,"ARTIST"]
 			analytics_base_url_2 = "/query?name=" + artist_2 + "&analytics=base"
-			subscribers_2 = artist_2_table.loc[0,"SUBSCRIBERS"]
+			subscribers_2 = format(artist_2_table.loc[0,"SUBSCRIBERS"],",")
 			joined_2 = artist_2_table.loc[0,"JOINED"]
-			total_views_2 = artist_2_table.loc[0,"TOTAL_VIEWS"]
+			total_views_2 = format(artist_2_table.loc[0,"TOTAL_VIEWS"],",")
 			artist_image_2 = artist_2_table.loc[0,"ARTIST_IMAGE"]
 
 			# if input_analytics == "base":
@@ -879,13 +886,13 @@ def search():
 			json_data = df_cache.to_json(orient="records")
 			scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
 			scrape_date_str = str(scrape_date).split(" ")[0]
-			total_videos_str = str(df_cache.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+			total_videos_str = format(df_cache.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 			number_scraped = int(len(df_cache))
 			artist_name = df_cache.loc[0,"ARTIST"]
 			analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
-			subscribers_str = df_cache.loc[0,"SUBSCRIBERS"]
+			subscribers_str = format(df_cache.loc[0,"SUBSCRIBERS"],",")
 			joined_str = df_cache.loc[0,"JOINED"]
-			total_views_str = df_cache.loc[0,"TOTAL_VIEWS"]
+			total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
 			artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 
 			# Artist 1 Information
@@ -893,13 +900,13 @@ def search():
 			cache_1 = f"{scrape_date_1} scrape"
 			json_data_1 = artist_1_table.to_json(orient="records")
 			scrape_date_str_1 = str(scrape_date_1).split(" ")[0]
-			total_videos_str_1 = str(artist_1_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+			total_videos_str_1 = format(artist_1_table.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 			number_scraped_1 = int(len(artist_1_table))
 			artist_1_name = artist_1_table.loc[0,"ARTIST"]
 			analytics_base_url_1 = "/query?name=" + artist_1 + "&analytics=base"
-			subscribers_1 = artist_1_table.loc[0,"SUBSCRIBERS"]
+			subscribers_1 = format(artist_1_table.loc[0,"SUBSCRIBERS"],",")
 			joined_1 = artist_1_table.loc[0,"JOINED"]
-			total_views_1 = artist_1_table.loc[0,"TOTAL_VIEWS"]
+			total_views_1 = format(artist_1_table.loc[0,"TOTAL_VIEWS"],",")
 			artist_image_1 = artist_1_table.loc[0,"ARTIST_IMAGE"]
 
 			# Artist 2 Information
@@ -907,13 +914,13 @@ def search():
 			cache_2 = f"{scrape_date_2} scrape"
 			json_data_2 = artist_2_table.to_json(orient="records")
 			scrape_date_str_2 = str(scrape_date_2).split(" ")[0]
-			total_videos_str_2 = str(artist_2_table.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+			total_videos_str_2 = format(artist_2_table.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
 			number_scraped_2 = int(len(artist_2_table))
 			artist_2_name = artist_2_table.loc[0,"ARTIST"]
 			analytics_base_url_2 = "/query?name=" + artist_2 + "&analytics=base"
-			subscribers_2 = artist_2_table.loc[0,"SUBSCRIBERS"]
+			subscribers_2 = format(artist_2_table.loc[0,"SUBSCRIBERS"],",")
 			joined_2 = artist_2_table.loc[0,"JOINED"]
-			total_views_2 = artist_2_table.loc[0,"TOTAL_VIEWS"]
+			total_views_2 = format(artist_2_table.loc[0,"TOTAL_VIEWS"],",")
 			artist_image_2 = artist_2_table.loc[0,"ARTIST_IMAGE"]
 			
 			return render_template("index.html", data=json_data, cache=scrape_date_str,\
