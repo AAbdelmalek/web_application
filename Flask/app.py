@@ -912,7 +912,7 @@ def search():
 
 		connection.execute(f"INSERT INTO bad_requests \
 		(SCRAPE_DATE, SEARCH_NAME) \
-		VALUES ('{scrape_date}','{search_name}')")
+		VALUES ('{scrape_datetime}','{search_name}')")
 
 		# Generating Error Reason
 		json_data = []

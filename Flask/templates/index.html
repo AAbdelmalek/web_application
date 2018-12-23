@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html id="bg">
 <!-- To Do
 - Artist info in header, not table -- OK
 - Published Date format -- OK
@@ -21,7 +23,7 @@
 - Export raw data file -- 
 - Fix table pretty -- 
 - Database SQL String issue -- 
-- Fix Analytics Button to not generate another scrape --
+- Fix Analytics Button to not generate another scrape -- 
 - JSON data is available upon search screen returning (want just analytics page)
 - Analytics page 
         - Artist info
@@ -29,11 +31,12 @@
         - Regression
         - Income Estimate
         - Raw Data
-- Fix bug where scrape is terminated
+- Fix bug where scrape is terminated --
+- Instagram NavBar -- 
+- Redirect back to home page after a search --
+- Table for IP addresses and site visited -- 
+- Integer to commas on cards -- 
  -->
-
-<!DOCTYPE html>
-<html>
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,16 +47,10 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>  
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
 </head>
+<div id="bg">
 <body>
-     
-<!-- Load Bar -->
-<div id="load-bar" class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-</div>      
-<br>
-
 <!-- Logo -->
-<div class="container">
+<!-- <div class="container">
 
     <div class="row">     
         <div class="col">
@@ -61,11 +58,11 @@
             <span class="header"><a class="link_color" href="/">YouTube </a></span> 
             <span class="header2"><a class="link_color" href="/">DS</a></span>
         </div>
-    </div>
+    </div> -->
 
  <!-- Search Button -->
 
-        <div class="row">
+        <!-- <div class="row">
                 <div class="col">
                         <div class="input-group center-block">
                                 <input id="button" type="text" class="form-control" placeholder="Content Creator">
@@ -74,11 +71,69 @@
                                         </span>
                         </div>
                 </div>
-        </div>
+        </div> -->
+<div class="container-fluid">
+<!-- Nav Bar -->
+<div class="row">
+        <div class="col">
+        <nav class="navbar justify-content-between">
+        
+                <div class="col-3">    
+                        <div class="navbar-brand">
+                                <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="23" width="auto"></a>  
+                        <span class="header"><a class="link_color" href="/">YouTube </a></span> 
+                        <span class="header2"><a class="link_color" href="/">DS</a></span>
+                       
+                        </div>
+                </div>
+     
+        <!-- Load Bar -->
 
+                <!-- <div class="mx-auto"> -->
+
+                <div class="col-4">
+                        <div class="input-group">
+                                <input id="button" type="text" class="form-control" placeholder="Content Creator">
+                                <span class="input-group-btn">
+                                        <a onclick="load_bar()" class="btn button btn-danger" href="#" role="button" id="loader_search">Search</a>
+                                        </span>
+                        </div>
+
+        <!-- </div> -->
+                </div>
+         
+   <!-- Progress Warning -->
+                <!-- <div class="col-3">
+                <div class="center-block"> -->
+                <!-- <div class="alert alert-info" role="alert" id="loading">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span>
+                                Getting data...this will take a moment...
+                </div> -->
+                <!-- </div>
+                </div> -->
+        
+
+                <!-- <div class="col-1 img-responsive">
+                <img id = "info" src="{{ url_for('static', filename='inof.png') }}" height="30px">
+                </div> -->
+              </nav>
+
+        </div> 
+</div>
+</div>
+
+<!-- Load Bar -->
+<div id="load-bar" class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+</div>      
+<br>
  <!-- Load Alert -->       
 
-        <div class="row">
+        <!-- <div class="row">
         <div class="col">
                 <div class="alert alert-info" role="alert" id="loading">
                         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -86,12 +141,12 @@
                         Getting data...this will take a moment...
                 </div>
         </div>
-        </div>
+        </div> -->
 
-
+<div class="container-fluid"> 
 <!-- Cards -->
 <div class="row">
-<div class="col">
+<div class="col-8 mx-auto">
 
 <!-- Card 1 -->
 <div class="card-deck">
@@ -109,7 +164,7 @@
                         <a href="#" class="btn btn-sm btn-primary">Shuffle</a>
                         </div>
                   </div>
-                  <div class="card-footer">
+                  <div class="card-footer text-center">
                     <small class="text-muted">Last retrieved</small>
                   </div>
                 </div>
@@ -129,8 +184,8 @@
                       <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
                       </div>
                 </div>
-                <div class="card-footer">
-                  <small class="text-muted">Last retrieved {{cache}}</small>
+                <div class="card-footer text-center">
+                  <small class="text-muted">Last retrieved <br> {{cache}}</small>
                 </div>
               </div>
 
@@ -149,8 +204,8 @@
                 <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
                 </div>
                 </div>
-                <div class="card-footer">
-                <small class="text-muted">Last retrieved {{cache_1}}</small>
+                <div class="card-footer text-center">
+                <small class="text-muted">Last retrieved <br> {{cache_1}}</small>
                 </div>
                 </div>
 <!-- Card 4 -->
@@ -168,19 +223,18 @@
                 <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
                 </div>
                 </div>
-                <div class="card-footer">
-                <small class="text-muted">Last retrieved {{cache_2}}</small>
+                <div class="card-footer text-center">
+                <small class="text-muted">Last retrieved <br> {{cache_2}}</small>
                 </div>
                 </div>
 
 </div>
 </div>
-    
 </div>
-    
+
 </body>
-
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 <script>getData({{data|tojson}})</script>
+</div>
 </html>
 

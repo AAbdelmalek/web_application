@@ -1,7 +1,59 @@
 /* Styles */
 
-.card{
-  height: 15%;
+/* .form-inline{
+  width: 800px;
+} */
+
+/* div{
+  background-color: lightgray;
+  overflow:auto;
+} */
+
+input.form-control{
+  background-color:#F8F8F8;
+}
+
+nav{
+  border-style: solid;
+  border-color: white white #E0E0E0 white;
+  border-width: thin;
+  height: 75px;
+  text-align:right;
+  background-color:white;
+}
+
+#info{
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* 
+.card-img-top{
+  border-style: solid;
+  border-color: #D3D3D3 #D3D3D3 #D3D3D3 #D3D3D3;
+  border-width: 1px;
+}
+
+.card-body{
+  border-style: solid;
+  border-color: #D3D3D3 #D3D3D3 #D3D3D3 #D3D3D3;
+  border-width: 1px;
+} */
+
+#bg{
+  background-color:#F8F8F8;
+}
+
+/* .navbar-brand{
+  float:left;
+} */
+
+/* .card{
+  height: 50%;
+} */
+
+.form-inline{
+  text-align:left;
 }
 
 .link_color{
@@ -47,16 +99,16 @@ color: white;
 
 .button{
 color:white;
-background-color: rgb(243, 85, 85);
+background-color: white;
 }
 
 .header{
-  font-size: 14pt;
+  font-size: 15pt;
   font-weight: bold;
 }
 
 .header2{
-  font-size: 14pt;
+  font-size: 15pt;
   color:black;
 }
 

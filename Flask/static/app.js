@@ -15,12 +15,12 @@ var input = "";
 var scrape_data = "";
 var url = "";
 var var_url = "";
-var loading_warning = document.getElementById("loading");
+// var loading_warning = document.getElementById("loading");
 var search_results = "";
 var button_url = ""
 
 progress_bar.style.visibility = "hidden";
-loading_warning.style.visibility = "hidden";
+// loading_warning.style.visibility = "hidden";
 
 // Get JSON Data from Flask
 function getData(data) {
@@ -130,7 +130,7 @@ function load_bar(){
   if (loader_search.getAttribute("href") !== "#"){
 
             progress_bar.style.visibility = "visible"; 
-            loading_warning.style.visibility = "visible";
+            // loading_warning.style.visibility = "visible";
 
             window.location.href = url;
   }   
