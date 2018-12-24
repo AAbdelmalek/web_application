@@ -83,17 +83,16 @@ asking to pull latest data - implementation - add to existing data or do full sc
         <nav class="navbar justify-content-between fixed-top">
                         
         
-                <div class="col-5 text-left">    
+                <div class="col-3">    
                         <div class="navbar-brand">
                                 <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
                         <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" width="auto"></a>  
-                        
                         <span class="header"><a class="link_color" href="/">YouTube </a></span> 
-                        <span class="header2"><a class="link_color" onmouseover="logo()" id="DS" href="/">DS</a></span>
+                        <span class="header2"><a class="link_color" href="/">DS</a></span>
+                       
                         </div>
-
                 </div>
      
         <!-- Load Bar -->
@@ -151,12 +150,12 @@ asking to pull latest data - implementation - add to existing data or do full sc
                 </div>
         </div>
         </div> -->
-<div id=infinite_scroll>
+
 <div class="container-fluid" id="bg"> 
 <!-- Cards -->
 <div class="row">
-<div class="col-7 mx-auto">
-<!-- Deck 1 -->
+<div class="col-8 mx-auto">
+
 <!-- Card 1 -->
 <div class="card-deck">
                 <div class="card">
@@ -239,199 +238,13 @@ asking to pull latest data - implementation - add to existing data or do full sc
 
 </div>
 </div>
-</div>
 
 <div id="deck-2">
 <div class="container-fluid">
 <br><br>
 <!-- Deck 2 -->
 <div class="row">
-        <div class="col-7 mx-auto">
-        
-        <!-- Card 1 -->
-        <div class="card-deck">
-                        <div class="card">
-                                <img class="card-img-top" src="{{artist_image_3}}" alt="Card image cap">
-                                <div class="card-body">
-                                <h5 class="card-title">{{artist_name_3}}</h5>
-                                <p class="card-text">
-                                        <h6 class="h6-font">{{total_videos_3}}</h6>
-                                        <h6 class="h6-font">{{subscribers_3}}</h6>
-                                        <h6 class="h6-font">{{total_views_3}}</h6>
-                                        <h6 class="h6-font">{{joined_3}}</h6>
-                                </p>
-                                <div class="text-center">
-                                <a href="{{analytics_base_url_3}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
-                                </div>
-                                </div>
-                                <div class="card-footer text-center">
-                                <small class="text-muted">Last retrieved <br> {{cache_3}}</small>
-                                </div>
-                        </div>
-        
-        <!-- Card 2 -->
-        <div class="card">
-                        <img class="card-img-top" src="{{artist_image_4}}" alt="Card image cap">
-                        <div class="card-body">
-                        <h5 class="card-title">{{artist_name_4}}</h5>
-                        <p class="card-text">
-                                <h6 class="h6-font">{{total_videos_4}}</h6>
-                                <h6 class="h6-font">{{subscribers_4}}</h6>
-                                <h6 class="h6-font">{{total_views_4}}</h6>
-                                <h6 class="h6-font">{{joined_4}}</h6>
-                        </p>
-                        <div class="text-center">
-                        <a href="{{analytics_base_url_4}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
-                        </div>
-                        </div>
-                        <div class="card-footer text-center">
-                        <small class="text-muted">Last retrieved <br> {{cache_4}}</small>
-                        </div>
-                </div>
-        
-        <!-- Card 3 -->
-        <div class="card">
-                        <img class="card-img-top" src="{{artist_image_5}}" alt="Card image cap">
-                        <div class="card-body">
-                        <h5 class="card-title">{{artist_name_5}}</h5>
-                        <p class="card-text">
-                                <h6 class="h6-font">{{total_videos_5}}</h6>
-                                <h6 class="h6-font">{{subscribers_5}}</h6>
-                                <h6 class="h6-font">{{total_views_5}}</h6>
-                                <h6 class="h6-font">{{joined_5}}</h6>
-                        </p>
-                        <div class="text-center">
-                        <a href="{{analytics_base_url_5}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
-                        </div>
-                        </div>
-                        <div class="card-footer text-center">
-                        <small class="text-muted">Last retrieved <br> {{cache_5}}</small>
-                        </div>
-                </div>
-        <!-- Card 4 -->
-                        <div class="card">
-                        <img class="card-img-top" src="{{artist_image_6}}" alt="Card image cap">
-                        <div class="card-body">
-                        <h5 class="card-title">{{artist_name_6}}</h5>
-                        <p class="card-text">
-                                <h6 class="h6-font">{{total_videos_6}}</h6>
-                                <h6 class="h6-font">{{subscribers_6}}</h6>
-                                <h6 class="h6-font">{{total_views_6}}</h6>
-                                <h6 class="h6-font">{{joined_6}}</h6>
-                        </p>
-                        <div class="text-center">
-                        <a href="{{analytics_base_url_6}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
-                        </div>
-                        </div>
-                        <div class="card-footer text-center">
-                        <small class="text-muted">Last retrieved <br> {{cache_2}}</small>
-                        </div>
-                        </div>
-        
-        </div>
-        </div>
-</div>
-
-</div>
-<div id="deck-3">
-<div class="container-fluid">
-                <br><br>
-<!-- Deck 3 -->
-
-<div class="row">
-        <div class="col-7 mx-auto">
-        
-        <!-- Card 1 -->
-        <div class="card-deck">
-                        <div class="card">
-                                <img class="card-img-top" src="{{artist_image_7}}" alt="Card image cap">
-                                <div class="card-body">
-                                <h5 class="card-title">{{artist_name_7}}</h5>
-                                <p class="card-text">
-                                        <h6 class="h6-font">{{total_videos_7}}</h6>
-                                        <h6 class="h6-font">{{subscribers_7}}</h6>
-                                        <h6 class="h6-font">{{total_views_7}}</h6>
-                                        <h6 class="h6-font">{{joined_7}}</h6>
-                                </p>
-                                <div class="text-center">
-                                <a href="{{analytics_base_url_7}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
-                                        </div>
-                                </div>
-                                <div class="card-footer text-center">
-                                <small class="text-muted">Last retrieved <br> {{cache_7}}</small>
-                                </div>
-                        </div>
-        
-        <!-- Card 2 -->
-                        <div class="card">
-                        <img class="card-img-top" src="{{artist_image_8}}" alt="Card image cap">
-                        <div class="card-body">
-                                <h5 class="card-title">{{artist_name_8}}</h5>
-                                <p class="card-text">
-                                        <h6 class="h6-font">{{total_videos_8}}</h6>
-                                        <h6 class="h6-font">{{subscribers_8}}</h6>
-                                        <h6 class="h6-font">{{total_views_8}}</h6>
-                                        <h6 class="h6-font">{{joined_8}}</h6>
-                                </p>
-                                <div class="text-center">
-                                <a href="{{analytics_base_url_8}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
-                                </div>
-                        </div>
-                        <div class="card-footer text-center">
-                                <small class="text-muted">Last retrieved <br> {{cache_8}}</small>
-                        </div>
-                        </div>
-        
-        <!-- Card 3 -->
-                        <div class="card">
-                        <img class="card-img-top" src="{{artist_image_9}}" alt="Card image cap">
-                        <div class="card-body">
-                        <h5 class="card-title">{{artist_name_9}}</h5>
-                        <p class="card-text">
-                                <h6 class="h6-font">{{total_videos_9}}</h6>
-                                <h6 class="h6-font">{{subscribers_9}}</h6>
-                                <h6 class="h6-font">{{total_views_9}}</h6>
-                                <h6 class="h6-font">{{joined_9}}</h6>
-                        </p>
-                        <div class="text-center">
-                        <a href="{{analytics_base_url_9}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
-                        </div>
-                        </div>
-                        <div class="card-footer text-center">
-                        <small class="text-muted">Last retrieved <br> {{cache_9}}</small>
-                        </div>
-                        </div>
-        <!-- Card 4 -->
-                        <div class="card">
-                        <img class="card-img-top" src="{{artist_image_10}}" alt="Card image cap">
-                        <div class="card-body">
-                        <h5 class="card-title">{{artist_name_10}}</h5>
-                        <p class="card-text">
-                                <h6 class="h6-font">{{total_videos_10}}</h6>
-                                <h6 class="h6-font">{{subscribers_10}}</h6>
-                                <h6 class="h6-font">{{total_views_10}}</h6>
-                                <h6 class="h6-font">{{joined_10}}</h6>
-                        </p>
-                        <div class="text-center">
-                        <a href="{{analytics_base_url_10}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
-                        </div>
-                        </div>
-                        <div class="card-footer text-center">
-                        <small class="text-muted">Last retrieved <br> {{cache_10}}</small>
-                        </div>
-                        </div>
-        
-        </div>
-        </div>
-
-
-
-<div id="deck-4">
-<div class="container-fluid">
-<br><br>
-<!-- Deck 4 -->
-<div class="row">
-        <div class="col-7 mx-auto">
+        <div class="col-8 mx-auto">
         
         <!-- Card 1 -->
         <div class="card-deck">
@@ -474,7 +287,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                         </div>
                         </div>
         
-        <!--Card 3-->
+        <!-- Card 3 -->
                         <div class="card">
                         <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
                         <div class="card-body">
@@ -514,27 +327,200 @@ asking to pull latest data - implementation - add to existing data or do full sc
                         </div>
         
         </div>
-        </div> 
+        </div>
 </div>
-<!-- </div> -->
+</div>
+</div>
+<div id="deck-3">
+<div class="container-fluid">
+                <br><br>
+<!-- Deck 3 -->
 
-
-<div id="deck-5">
-
+<div class="row">
+        <div class="col-8 mx-auto">
+        
+        <!-- Card 1 -->
+        <div class="card-deck">
+                        <div class="card">
+                                <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
+                                <div class="card-body">
+                                <h5 class="card-title">Content Creator</h5>
+                                <p class="card-text">
+                                        <h6 class="h6-font">Videos</h6>
+                                        <h6 class="h6-font">Subscribers</h6>
+                                        <h6 class="h6-font">All-Time Views</h6>
+                                        <h6 class="h6-font">Joined</h6>
+                                </p>
+                                <div class="text-center">
+                                <a href="#" class="btn btn-sm btn-primary">Shuffle</a>
+                                </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                <small class="text-muted">Last retrieved</small>
+                                </div>
+                        </div>
+        
+        <!-- Card 2 -->
+                        <div class="card">
+                        <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
+                        <div class="card-body">
+                                <h5 class="card-title">{{artist_name}}</h5>
+                                <p class="card-text">
+                                        <h6 class="h6-font">{{total_videos}}</h6>
+                                        <h6 class="h6-font">{{subscribers}}</h6>
+                                        <h6 class="h6-font">{{total_views}}</h6>
+                                        <h6 class="h6-font">{{joined}}</h6>
+                                </p>
+                                <div class="text-center">
+                                <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
+                                </div>
+                        </div>
+                        <div class="card-footer text-center">
+                                <small class="text-muted">Last retrieved <br> {{cache}}</small>
+                        </div>
+                        </div>
+        
+        <!-- Card 3 -->
+                        <div class="card">
+                        <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
+                        <div class="card-body">
+                        <h5 class="card-title">{{artist_name_1}}</h5>
+                        <p class="card-text">
+                                <h6 class="h6-font">{{total_videos_1}}</h6>
+                                <h6 class="h6-font">{{subscribers_1}}</h6>
+                                <h6 class="h6-font">{{total_views_1}}</h6>
+                                <h6 class="h6-font">{{joined_1}}</h6>
+                        </p>
+                        <div class="text-center">
+                        <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
+                        </div>
+                        </div>
+                        <div class="card-footer text-center">
+                        <small class="text-muted">Last retrieved <br> {{cache_1}}</small>
+                        </div>
+                        </div>
+        <!-- Card 4 -->
+                        <div class="card">
+                        <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap">
+                        <div class="card-body">
+                        <h5 class="card-title">{{artist_name_2}}</h5>
+                        <p class="card-text">
+                                <h6 class="h6-font">{{total_videos_2}}</h6>
+                                <h6 class="h6-font">{{subscribers_2}}</h6>
+                                <h6 class="h6-font">{{total_views_2}}</h6>
+                                <h6 class="h6-font">{{joined_2}}</h6>
+                        </p>
+                        <div class="text-center">
+                        <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
+                        </div>
+                        </div>
+                        <div class="card-footer text-center">
+                        <small class="text-muted">Last retrieved <br> {{cache_2}}</small>
+                        </div>
+                        </div>
+        
+        </div>
+        </div>
+</div>
 </div>
 
-</div>
-
-</div>
+<div id="deck-4">
+<div class="container-fluid">
+<br><br>
+<!-- Deck 4 -->
+<div class="row">
+        <div class="col-8 mx-auto">
+        
+        <!-- Card 1 -->
+        <div class="card-deck">
+                        <div class="card">
+                                <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
+                                <div class="card-body">
+                                <h5 class="card-title">Content Creator</h5>
+                                <p class="card-text">
+                                        <h6 class="h6-font">Videos</h6>
+                                        <h6 class="h6-font">Subscribers</h6>
+                                        <h6 class="h6-font">All-Time Views</h6>
+                                        <h6 class="h6-font">Joined</h6>
+                                </p>
+                                <div class="text-center">
+                                <a href="#" class="btn btn-sm btn-primary">Shuffle</a>
+                                </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                <small class="text-muted">Last retrieved</small>
+                                </div>
+                        </div>
+        
+        <!-- Card 2 -->
+                        <div class="card">
+                        <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
+                        <div class="card-body">
+                                <h5 class="card-title">{{artist_name}}</h5>
+                                <p class="card-text">
+                                        <h6 class="h6-font">{{total_videos}}</h6>
+                                        <h6 class="h6-font">{{subscribers}}</h6>
+                                        <h6 class="h6-font">{{total_views}}</h6>
+                                        <h6 class="h6-font">{{joined}}</h6>
+                                </p>
+                                <div class="text-center">
+                                <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a>
+                                </div>
+                        </div>
+                        <div class="card-footer text-center">
+                                <small class="text-muted">Last retrieved <br> {{cache}}</small>
+                        </div>
+                        </div>
+        
+        <!-- Card 3 -->
+                        <div class="card">
+                        <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
+                        <div class="card-body">
+                        <h5 class="card-title">{{artist_name_1}}</h5>
+                        <p class="card-text">
+                                <h6 class="h6-font">{{total_videos_1}}</h6>
+                                <h6 class="h6-font">{{subscribers_1}}</h6>
+                                <h6 class="h6-font">{{total_views_1}}</h6>
+                                <h6 class="h6-font">{{joined_1}}</h6>
+                        </p>
+                        <div class="text-center">
+                        <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
+                        </div>
+                        </div>
+                        <div class="card-footer text-center">
+                        <small class="text-muted">Last retrieved <br> {{cache_1}}</small>
+                        </div>
+                        </div>
+        <!-- Card 4 -->
+                        <div class="card">
+                        <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap">
+                        <div class="card-body">
+                        <h5 class="card-title">{{artist_name_2}}</h5>
+                        <p class="card-text">
+                                <h6 class="h6-font">{{total_videos_2}}</h6>
+                                <h6 class="h6-font">{{subscribers_2}}</h6>
+                                <h6 class="h6-font">{{total_views_2}}</h6>
+                                <h6 class="h6-font">{{joined_2}}</h6>
+                        </p>
+                        <div class="text-center">
+                        <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a>
+                        </div>
+                        </div>
+                        <div class="card-footer text-center">
+                        <small class="text-muted">Last retrieved <br> {{cache_2}}</small>
+                        </div>
+                        </div>
+        
+        </div>
+        </div>
 </div>
 </div>
 </div>
 <br>
 <br>
-<div class = "container-fluid">
         <div class="row">
                 <div class="col text-center">
-                <button type="button" onclick="more_decks()" class="btn btn-sm btn-default text-center">Load more</button>
+                <button type="button" class="btn btn-sm btn-info text-center">Load more</button>
                 </div>
         </div>
 </div>
@@ -547,7 +533,8 @@ asking to pull latest data - implementation - add to existing data or do full sc
 // if (person_1 !== null){
 // person_1.addEventListener("click", getData({{data_1|tojson}}))
 // }
-// getData({{data|tojson}})
+getData({{data|tojson}})
 </script>
+</div>
 </html>
 

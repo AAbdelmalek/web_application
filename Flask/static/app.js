@@ -20,12 +20,24 @@ var search_results = "";
 var button_url = "";
 var deck_2 = document.getElementById("deck-2");
 var deck_3 = document.getElementById("deck-3");
-
+var deck_4 = document.getElementById("deck-4");
+var counter = 4;
 //window.scrollTo(0,document.body.scrollHeight);
+var new_deck = document.getElementById(`deck-${counter}`);
+var infinite = document.getElementById("infinite_scroll");
 
-if (deck_3 !== null){
-    deck_3.style.display = "none";  
-    }
+
+function logo(){
+    document.getElementById("DS").innerHTML = '<a class="link_color" href="/">Data Scraper</a>';
+}
+
+if (new_deck !== null){
+new_deck.style.display = "none";
+}
+
+// if (deck_4 !== null){
+//     deck_4.style.display = "none";  
+//     }
 
 progress_bar.style.visibility = "hidden";
 // loading_warning.style.visibility = "hidden";
@@ -162,12 +174,47 @@ function generateURL(){
     }
 }
 
+// window.onscroll = function(ev) {
+//     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+//         setInterval(function(){
+//             deck_3.style.display = "block";},250);
+//     }
+// };
+
+
 window.onscroll = function(ev) {
+    new_deck = document.getElementById(`deck-${counter}`);
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        setInterval(function(){
-            deck_3.style.display = "block";},250);
-    }
-};
+            // url = url + "/page?=2";
+            // window.location.href = url + "/page?=2";
+            // window.scrollTo(window.innerHeight + window.scrollY);
+            // deck_4.style.display = "block";
+
+            //Good
+            // new_deck.style.display = "block";
+            // counter = counter + 1;
+            // more_decks();
+
+        }
+}
+
+
+function more_decks(){
+// var new_deck = document.getElementById(`deck-${counter}`);
+new_deck.style.display = "block";
+counter = counter + 1;
+new_deck = document.getElementById(`deck-${counter}`);
+deck_number = `deck-${counter+1}`;
+// new_deck.innerHTML = `<p>SUCCESS!!!</p><br><div id="${deck_number}"></div>`;
+html_new_deck =`<div id=${deck_number}>` + '<div class="container-fluid"><br><br><!-- Deck 4 --><div class="row"> <div class="col-8 mx-auto"> <!-- Card 1 --> <div class="card-deck"> <div class="card"> <img class="card-img-top" src="{{ url_for("static", filename="profile.jpg") }}" alt="Card image cap"> <div class="card-body"> <h5 class="card-title">Content Creator</h5> <p class="card-text"> <h6 class="h6-font">Videos</h6> <h6 class="h6-font">Subscribers</h6> <h6 class="h6-font">All-Time Views</h6> <h6 class="h6-font">Joined</h6> </p> <div class="text-center"> <a href="#" class="btn btn-sm btn-primary">Shuffle</a> </div> </div> <div class="card-footer text-center"> <small class="text-muted">Last retrieved</small> </div> </div> <!-- Card 2 --> <div class="card"> <img class="card-img-top" src="{{artist_image}}" alt="Card image cap"> <div class="card-body"> <h5 class="card-title">{{artist_name}}</h5> <p class="card-text"> <h6 class="h6-font">{{total_videos}}</h6> <h6 class="h6-font">{{subscribers}}</h6> <h6 class="h6-font">{{total_views}}</h6> <h6 class="h6-font">{{joined}}</h6> </p> <div class="text-center"> <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary" id="analytics_load_button data_1" onclick="analytics_load()">Analytics</a> </div> </div> <div class="card-footer text-center"> <small class="text-muted">Last retrieved <br> {{cache}}</small> </div> </div> <!-- Card 3 --> <div class="card"> <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap"> <div class="card-body"> <h5 class="card-title">{{artist_name_1}}</h5> <p class="card-text"> <h6 class="h6-font">{{total_videos_1}}</h6> <h6 class="h6-font">{{subscribers_1}}</h6> <h6 class="h6-font">{{total_views_1}}</h6> <h6 class="h6-font">{{joined_1}}</h6> </p> <div class="text-center"> <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a> </div> </div> <div class="card-footer text-center"> <small class="text-muted">Last retrieved <br> {{cache_1}}</small> </div> </div> <!-- Card 4 --> <div class="card"> <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap"> <div class="card-body"> <h5 class="card-title">{{artist_name_2}}</h5> <p class="card-text"> <h6 class="h6-font">{{total_videos_2}}</h6> <h6 class="h6-font">{{subscribers_2}}</h6> <h6 class="h6-font">{{total_views_2}}</h6> <h6 class="h6-font">{{joined_2}}</h6> </p> <div class="text-center"> <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary" id="analytics_load_button" onclick="analytics_load()">Analytics</a> </div> </div> <div class="card-footer text-center"> <small class="text-muted">Last retrieved <br> {{cache_2}}</small> </div> </div> </div> </div></div></div>';
+infinite.innerHTML += html_new_deck;
+
+window.scrollTo(0,document.body.offsetHeight);
+
+
+
+
+}
 
 
 search_button.on("keyup", generateURL);

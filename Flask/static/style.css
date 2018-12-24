@@ -9,6 +9,20 @@
   overflow:auto;
 } */
 
+#DS{
+text-align: :left;
+}
+
+.pos-btn{
+position:fixed;
+
+
+}
+
+#load-bar{
+  height:8px;
+}
+
 input.form-control{
   background-color:#F8F8F8;
 }
