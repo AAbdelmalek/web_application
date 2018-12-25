@@ -240,3 +240,27 @@ search_button.on("change", search(input));
 // if (window.history.replaceState) {
 //     window.history.replaceState( null, null, window.location.href);
 // }
+
+function cacheData(id){
+scrape_date = document.getElementById(`${id}`).innerHTML.split(" ")[3];
+
+document.getElementById("modal-body-text").innerHTML
+= `The data for this content creator may be stale (${scrape_date}). 
+Do you want to initiate a new scrape request?`;
+
+getPullURL(id);
+
+}
+
+function getPullURL(id){
+    id = id.split("_")[1];
+    name = document.getElementById(id).innerHTML.replace(" ", "_");
+    document.getElementById("pull-href").href = `/pull?name=${name}`;
+
+}
+
+function justLoad(){
+
+    progress_bar.style.visibility = "visible"; 
+
+}

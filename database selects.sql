@@ -15,6 +15,18 @@ ADD ARTIST_IMAGE VARCHAR(255) CHARACTER SET UTF8MB4;
 ALTER TABLE artists
 ADD TOTAL_VIDEOS INT;
 
+ALTER TABLE artists
+ADD ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4;
+
+ALTER TABLE artists
+DROP ARTIST_URL;
+
+ALTER TABLE artists
+DROP INDEX TABLE_NAME;
+
+DELETE  FROM artists 
+WHERE Artist = "kul";
+
 SELECT * FROM artists;
 
 SELECT * FROM requests;
@@ -53,6 +65,12 @@ SELECT * FROM Nitiphon_Singhasiri;
 
 DELETE  FROM artists 
 WHERE Artist = "Mars Phobos";
+
+DELETE  FROM requests 
+WHERE Artist = "Mars Phobos";
+
+DELETE  FROM requests 
+WHERE Artist = "kul";
 
 DROP TABLE bad_requests;
 

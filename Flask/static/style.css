@@ -9,14 +9,21 @@
   overflow:auto;
 } */
 
+body{
+  height:100%;
+}
+
+.modal-body{
+font-size: 14px;
+
+}
+
 #DS{
 text-align: :left;
 }
 
 .pos-btn{
 position:fixed;
-
-
 }
 
 #load-bar{
@@ -79,6 +86,17 @@ nav{
   text-decoration: none;
   color:black;
 }
+
+.link_color_2{
+  color:white;
+  text-decoration: none;
+}
+
+.link_color_2:hover{
+  text-decoration: none;
+  color:white;
+}
+
 
 .alert {
   height:5%;   
@@ -148,11 +166,11 @@ td{
   padding: 8px 16px;
 }
 
-.table-fixed th {
+/* .table-fixed th {
   position: sticky;
   top: 90px;
   background:white;
-} 
+}  */
 
 p {margin:auto;
    font-size : 20pt;

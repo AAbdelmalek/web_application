@@ -18,6 +18,16 @@ pymysql.install_as_MySQLdb()
 # Initialize Flask
 app = Flask(__name__)
 
+@app.route("/pull")
+def newPull():
+
+	# Get Search Key Value
+	name_key = request.args['name']
+	input_name = '''{}'''.format(name_key)
+
+	return render_template("test.html", data=input_name)
+
+
 # Home Page
 @app.route("/")
 def home():
@@ -986,83 +996,91 @@ def search():
 			(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
 			VALUES ('{scrape_date}', '{table_name_search}','{search_table_name}', '{original_name}')")
 			
-			return render_template("index.html", data=json_data, cache=scrape_date_str,\
+			# return render_template("index.html", data=json_data, cache=scrape_date_str,\
+			# artist_name=artist_name,\
+			# subscribers = f"{subscribers_str} Subscribers",\
+			# total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+			# artist_image=artist_image,\
+			# total_videos = total_videos_str,\
+			# analytics_base_url=analytics_base_url,\
+			# data_1=json_data_1, cache_1=scrape_date_str_1,\
+			# artist_name_1=artist_1_name,\
+			# subscribers_1 = f"{subscribers_1} Subscribers",\
+			# total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
+			# artist_image_1 = artist_image_1,\
+			# total_videos_1 = total_videos_str_1,\
+			# analytics_base_url_1=analytics_base_url_1,\
+			# data_2=json_data_2, cache_2=scrape_date_str_2,\
+			# artist_name_2=artist_2_name,\
+			# subscribers_2 = f"{subscribers_2} Subscribers",\
+			# total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
+			# artist_image_2 = artist_image_2,\
+			# total_videos_2 = total_videos_str_2,\
+			# analytics_base_url_2=analytics_base_url_2,\
+			# data_3=json_data_3, cache_3=scrape_date_str_3,\
+			# artist_name_3=artist_3_name,\
+			# subscribers_3 = f"{subscribers_3} Subscribers",\
+			# total_views_3 =f"{total_views_3} All-Time Views", joined_3=f"Joined {joined_3}",\
+			# artist_image_3 = artist_image_3,\
+			# total_videos_3 = total_videos_str_3,\
+			# analytics_base_url_3=analytics_base_url_3,\
+			# data_4=json_data_4, cache_4=scrape_date_str_4,\
+			# artist_name_4=artist_4_name,\
+			# subscribers_4 = f"{subscribers_4} Subscribers",\
+			# total_views_4 =f"{total_views_4} All-Time Views", joined_4=f"Joined {joined_4}",\
+			# artist_image_4 = artist_image_4,\
+			# total_videos_4 = total_videos_str_4,\
+			# analytics_base_url_4=analytics_base_url_4,\
+			# data_5=json_data_5, cache_5=scrape_date_str_5,\
+			# artist_name_5=artist_5_name,\
+			# subscribers_5 = f"{subscribers_5} Subscribers",\
+			# total_views_5 =f"{total_views_5} All-Time Views", joined_5=f"Joined {joined_5}",\
+			# artist_image_5 = artist_image_5,\
+			# total_videos_5 = total_videos_str_5,\
+			# analytics_base_url_5=analytics_base_url_5,\
+			# data_6=json_data_6, cache_6=scrape_date_str_6,\
+			# artist_name_6=artist_6_name,\
+			# subscribers_6 = f"{subscribers_6} Subscribers",\
+			# total_views_6 =f"{total_views_6} All-Time Views", joined_6=f"Joined {joined_6}",\
+			# artist_image_6 = artist_image_6,\
+			# total_videos_6 = total_videos_str_6,\
+			# analytics_base_url_6=analytics_base_url_6,\
+			# data_7=json_data_7, cache_7=scrape_date_str_7,\
+			# artist_name_7=artist_7_name,\
+			# subscribers_7 = f"{subscribers_7} Subscribers",\
+			# total_views_7 =f"{total_views_7} All-Time Views", joined_7=f"Joined {joined_7}",\
+			# artist_image_7 = artist_image_7,\
+			# total_videos_7 = total_videos_str_7,\
+			# analytics_base_url_7=analytics_base_url_7,\
+			# data_8=json_data_8, cache_8=scrape_date_str_8,\
+			# artist_name_8=artist_8_name,\
+			# subscribers_8 = f"{subscribers_8} Subscribers",\
+			# total_views_8 =f"{total_views_8} All-Time Views", joined_8=f"Joined {joined_8}",\
+			# artist_image_8 = artist_image_8,\
+			# total_videos_8 = total_videos_str_8,\
+			# analytics_base_url_8=analytics_base_url_8,\
+			# data_9=json_data_9, cache_9=scrape_date_str_9,\
+			# artist_name_9=artist_9_name,\
+			# subscribers_9 = f"{subscribers_9} Subscribers",\
+			# total_views_9 =f"{total_views_9} All-Time Views", joined_9=f"Joined {joined_9}",\
+			# artist_image_9 = artist_image_9,\
+			# total_videos_9 = total_videos_str_9,\
+			# analytics_base_url_9=analytics_base_url_9,\
+			# data_10=json_data_10, cache_10=scrape_date_str_10,\
+			# artist_name_10=artist_10_name,\
+			# subscribers_10 = f"{subscribers_10} Subscribers",\
+			# total_views_10 =f"{total_views_10} All-Time Views", joined_10=f"Joined {joined_10}",\
+			# artist_image_10 = artist_image_10,\
+			# total_videos_10 = total_videos_str_10,\
+			# analytics_base_url_10=analytics_base_url_10)
+
+			return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\
 			subscribers = f"{subscribers_str} Subscribers",\
 			total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
 			artist_image=artist_image,\
 			total_videos = total_videos_str,\
-			analytics_base_url=analytics_base_url,\
-			data_1=json_data_1, cache_1=scrape_date_str_1,\
-			artist_name_1=artist_1_name,\
-			subscribers_1 = f"{subscribers_1} Subscribers",\
-			total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
-			artist_image_1 = artist_image_1,\
-			total_videos_1 = total_videos_str_1,\
-			analytics_base_url_1=analytics_base_url_1,\
-			data_2=json_data_2, cache_2=scrape_date_str_2,\
-			artist_name_2=artist_2_name,\
-			subscribers_2 = f"{subscribers_2} Subscribers",\
-			total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
-			artist_image_2 = artist_image_2,\
-			total_videos_2 = total_videos_str_2,\
-			analytics_base_url_2=analytics_base_url_2,\
-			data_3=json_data_3, cache_3=scrape_date_str_3,\
-			artist_name_3=artist_3_name,\
-			subscribers_3 = f"{subscribers_3} Subscribers",\
-			total_views_3 =f"{total_views_3} All-Time Views", joined_3=f"Joined {joined_3}",\
-			artist_image_3 = artist_image_3,\
-			total_videos_3 = total_videos_str_3,\
-			analytics_base_url_3=analytics_base_url_3,\
-			data_4=json_data_4, cache_4=scrape_date_str_4,\
-			artist_name_4=artist_4_name,\
-			subscribers_4 = f"{subscribers_4} Subscribers",\
-			total_views_4 =f"{total_views_4} All-Time Views", joined_4=f"Joined {joined_4}",\
-			artist_image_4 = artist_image_4,\
-			total_videos_4 = total_videos_str_4,\
-			analytics_base_url_4=analytics_base_url_4,\
-			data_5=json_data_5, cache_5=scrape_date_str_5,\
-			artist_name_5=artist_5_name,\
-			subscribers_5 = f"{subscribers_5} Subscribers",\
-			total_views_5 =f"{total_views_5} All-Time Views", joined_5=f"Joined {joined_5}",\
-			artist_image_5 = artist_image_5,\
-			total_videos_5 = total_videos_str_5,\
-			analytics_base_url_5=analytics_base_url_5,\
-			data_6=json_data_6, cache_6=scrape_date_str_6,\
-			artist_name_6=artist_6_name,\
-			subscribers_6 = f"{subscribers_6} Subscribers",\
-			total_views_6 =f"{total_views_6} All-Time Views", joined_6=f"Joined {joined_6}",\
-			artist_image_6 = artist_image_6,\
-			total_videos_6 = total_videos_str_6,\
-			analytics_base_url_6=analytics_base_url_6,\
-			data_7=json_data_7, cache_7=scrape_date_str_7,\
-			artist_name_7=artist_7_name,\
-			subscribers_7 = f"{subscribers_7} Subscribers",\
-			total_views_7 =f"{total_views_7} All-Time Views", joined_7=f"Joined {joined_7}",\
-			artist_image_7 = artist_image_7,\
-			total_videos_7 = total_videos_str_7,\
-			analytics_base_url_7=analytics_base_url_7,\
-			data_8=json_data_8, cache_8=scrape_date_str_8,\
-			artist_name_8=artist_8_name,\
-			subscribers_8 = f"{subscribers_8} Subscribers",\
-			total_views_8 =f"{total_views_8} All-Time Views", joined_8=f"Joined {joined_8}",\
-			artist_image_8 = artist_image_8,\
-			total_videos_8 = total_videos_str_8,\
-			analytics_base_url_8=analytics_base_url_8,\
-			data_9=json_data_9, cache_9=scrape_date_str_9,\
-			artist_name_9=artist_9_name,\
-			subscribers_9 = f"{subscribers_9} Subscribers",\
-			total_views_9 =f"{total_views_9} All-Time Views", joined_9=f"Joined {joined_9}",\
-			artist_image_9 = artist_image_9,\
-			total_videos_9 = total_videos_str_9,\
-			analytics_base_url_9=analytics_base_url_9,\
-			data_10=json_data_10, cache_10=scrape_date_str_10,\
-			artist_name_10=artist_10_name,\
-			subscribers_10 = f"{subscribers_10} Subscribers",\
-			total_views_10 =f"{total_views_10} All-Time Views", joined_10=f"Joined {joined_10}",\
-			artist_image_10 = artist_image_10,\
-			total_videos_10 = total_videos_str_10,\
-			analytics_base_url_10=analytics_base_url_10)
+			analytics_base_url=analytics_base_url, number_scraped=number_scraped)
 						
 		else:
 
@@ -1342,6 +1360,7 @@ def search():
 							"FAMILY_FRIENDLY" : family_friendly,
 							"URL" : urls_to_date,
 							"ARTIST_IMAGE": artist_image,
+							"ARTIST_CODE" : youtube_code,
 							})
 
 			df = df.sort_values("PUBLISHED",ascending=False)
@@ -1387,7 +1406,8 @@ def search():
 			JOINED DATE,\
 			SUBSCRIBERS INT,\
 			TOTAL_VIEWS BIGINT,\
-			ARTIST_IMAGE VARCHAR(255) CHARACTER SET UTF8MB4\
+			ARTIST_IMAGE VARCHAR(255) CHARACTER SET UTF8MB4,\
+			ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL UNIQUE\
 			)")
 
 			# Creating Table for Requests
@@ -1421,6 +1441,7 @@ def search():
 				paid = df.loc[i,"PAID"]
 				family_friendly = df.loc[i,"FAMILY_FRIENDLY"]
 				url =  df.loc[i,"URL"]
+				artist_code =  df.loc[i,"ARTIST_CODE"]
 
 				connection.execute(f"INSERT INTO {artist_db_name}\
 				(SCRAPE_DATE, SEARCH_NAME, ARTIST, PUBLISHED, PUBLISHED_STR, TITLE, CATEGORY , DURATION,\
@@ -1432,10 +1453,10 @@ def search():
 
 			if subscribers == "Not available":
 				connection.execute(f"INSERT INTO artists \
-				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE)\
+				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
 				VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}', '{total_videos_in_playlist}', \
 				'{joined}', NULL,\
-				'{total_views}','{artist_image}')")
+				'{total_views}','{artist_image}', '{artist_code}')")
 
 				connection.execute(f"INSERT INTO requests \
 				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
@@ -1443,9 +1464,9 @@ def search():
 			
 			else:
 				connection.execute(f"INSERT INTO artists \
-				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE)\
+				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
 				VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}', '{total_videos_in_playlist}',\
-				'{joined}', '{subscribers}', '{total_views}','{artist_image}')")
+				'{joined}', '{subscribers}', '{total_views}','{artist_image}','{artist_code}')")
 
 				connection.execute(f"INSERT INTO requests \
 				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
@@ -1744,83 +1765,91 @@ def search():
 			total_views_10 = format(artist_10_table.loc[0,"TOTAL_VIEWS"],",")
 			artist_image_10 = artist_10_table.loc[0,"ARTIST_IMAGE"]
 					
-			return render_template("index.html", data=json_data, cache=scrape_date_str,\
+			# return render_template("index.html", data=json_data, cache=scrape_date_str,\
+			# artist_name=artist_name,\
+			# subscribers = f"{subscribers_str} Subscribers",\
+			# total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+			# artist_image=artist_image,\
+			# total_videos = total_videos_str,\
+			# analytics_base_url=analytics_base_url,\
+			# data_1=json_data_1, cache_1=scrape_date_str_1,\
+			# artist_name_1=artist_1_name,\
+			# subscribers_1 = f"{subscribers_1} Subscribers",\
+			# total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
+			# artist_image_1 = artist_image_1,\
+			# total_videos_1 = total_videos_str_1,\
+			# analytics_base_url_1=analytics_base_url_1,\
+			# data_2=json_data_2, cache_2=scrape_date_str_2,\
+			# artist_name_2=artist_2_name,\
+			# subscribers_2 = f"{subscribers_2} Subscribers",\
+			# total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
+			# artist_image_2 = artist_image_2,\
+			# total_videos_2 = total_videos_str_2,\
+			# analytics_base_url_2=analytics_base_url_2,\
+			# data_3=json_data_3, cache_3=scrape_date_str_3,\
+			# artist_name_3=artist_3_name,\
+			# subscribers_3 = f"{subscribers_3} Subscribers",\
+			# total_views_3 =f"{total_views_3} All-Time Views", joined_3=f"Joined {joined_3}",\
+			# artist_image_3 = artist_image_3,\
+			# total_videos_3 = total_videos_str_3,\
+			# analytics_base_url_3=analytics_base_url_3,\
+			# data_4=json_data_4, cache_4=scrape_date_str_4,\
+			# artist_name_4=artist_4_name,\
+			# subscribers_4 = f"{subscribers_4} Subscribers",\
+			# total_views_4 =f"{total_views_4} All-Time Views", joined_4=f"Joined {joined_4}",\
+			# artist_image_4 = artist_image_4,\
+			# total_videos_4 = total_videos_str_4,\
+			# analytics_base_url_4=analytics_base_url_4,\
+			# data_5=json_data_5, cache_5=scrape_date_str_5,\
+			# artist_name_5=artist_5_name,\
+			# subscribers_5 = f"{subscribers_5} Subscribers",\
+			# total_views_5 =f"{total_views_5} All-Time Views", joined_5=f"Joined {joined_5}",\
+			# artist_image_5 = artist_image_5,\
+			# total_videos_5 = total_videos_str_5,\
+			# analytics_base_url_5=analytics_base_url_5,\
+			# data_6=json_data_6, cache_6=scrape_date_str_6,\
+			# artist_name_6=artist_6_name,\
+			# subscribers_6 = f"{subscribers_6} Subscribers",\
+			# total_views_6 =f"{total_views_6} All-Time Views", joined_6=f"Joined {joined_6}",\
+			# artist_image_6 = artist_image_6,\
+			# total_videos_6 = total_videos_str_6,\
+			# analytics_base_url_6=analytics_base_url_6,\
+			# data_7=json_data_7, cache_7=scrape_date_str_7,\
+			# artist_name_7=artist_7_name,\
+			# subscribers_7 = f"{subscribers_7} Subscribers",\
+			# total_views_7 =f"{total_views_7} All-Time Views", joined_7=f"Joined {joined_7}",\
+			# artist_image_7 = artist_image_7,\
+			# total_videos_7 = total_videos_str_7,\
+			# analytics_base_url_7=analytics_base_url_7,\
+			# data_8=json_data_8, cache_8=scrape_date_str_8,\
+			# artist_name_8=artist_8_name,\
+			# subscribers_8 = f"{subscribers_8} Subscribers",\
+			# total_views_8 =f"{total_views_8} All-Time Views", joined_8=f"Joined {joined_8}",\
+			# artist_image_8 = artist_image_8,\
+			# total_videos_8 = total_videos_str_8,\
+			# analytics_base_url_8=analytics_base_url_8,\
+			# data_9=json_data_9, cache_9=scrape_date_str_9,\
+			# artist_name_9=artist_9_name,\
+			# subscribers_9 = f"{subscribers_9} Subscribers",\
+			# total_views_9 =f"{total_views_9} All-Time Views", joined_9=f"Joined {joined_9}",\
+			# artist_image_9 = artist_image_9,\
+			# total_videos_9 = total_videos_str_9,\
+			# analytics_base_url_9=analytics_base_url_9,\
+			# data_10=json_data_10, cache_10=scrape_date_str_10,\
+			# artist_name_10=artist_10_name,\
+			# subscribers_10 = f"{subscribers_10} Subscribers",\
+			# total_views_10 =f"{total_views_10} All-Time Views", joined_10=f"Joined {joined_10}",\
+			# artist_image_10 = artist_image_10,\
+			# total_videos_10 = total_videos_str_10,\
+			# analytics_base_url_10=analytics_base_url_10)
+
+			return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\
 			subscribers = f"{subscribers_str} Subscribers",\
 			total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
 			artist_image=artist_image,\
 			total_videos = total_videos_str,\
-			analytics_base_url=analytics_base_url,\
-			data_1=json_data_1, cache_1=scrape_date_str_1,\
-			artist_name_1=artist_1_name,\
-			subscribers_1 = f"{subscribers_1} Subscribers",\
-			total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
-			artist_image_1 = artist_image_1,\
-			total_videos_1 = total_videos_str_1,\
-			analytics_base_url_1=analytics_base_url_1,\
-			data_2=json_data_2, cache_2=scrape_date_str_2,\
-			artist_name_2=artist_2_name,\
-			subscribers_2 = f"{subscribers_2} Subscribers",\
-			total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
-			artist_image_2 = artist_image_2,\
-			total_videos_2 = total_videos_str_2,\
-			analytics_base_url_2=analytics_base_url_2,\
-			data_3=json_data_3, cache_3=scrape_date_str_3,\
-			artist_name_3=artist_3_name,\
-			subscribers_3 = f"{subscribers_3} Subscribers",\
-			total_views_3 =f"{total_views_3} All-Time Views", joined_3=f"Joined {joined_3}",\
-			artist_image_3 = artist_image_3,\
-			total_videos_3 = total_videos_str_3,\
-			analytics_base_url_3=analytics_base_url_3,\
-			data_4=json_data_4, cache_4=scrape_date_str_4,\
-			artist_name_4=artist_4_name,\
-			subscribers_4 = f"{subscribers_4} Subscribers",\
-			total_views_4 =f"{total_views_4} All-Time Views", joined_4=f"Joined {joined_4}",\
-			artist_image_4 = artist_image_4,\
-			total_videos_4 = total_videos_str_4,\
-			analytics_base_url_4=analytics_base_url_4,\
-			data_5=json_data_5, cache_5=scrape_date_str_5,\
-			artist_name_5=artist_5_name,\
-			subscribers_5 = f"{subscribers_5} Subscribers",\
-			total_views_5 =f"{total_views_5} All-Time Views", joined_5=f"Joined {joined_5}",\
-			artist_image_5 = artist_image_5,\
-			total_videos_5 = total_videos_str_5,\
-			analytics_base_url_5=analytics_base_url_5,\
-			data_6=json_data_6, cache_6=scrape_date_str_6,\
-			artist_name_6=artist_6_name,\
-			subscribers_6 = f"{subscribers_6} Subscribers",\
-			total_views_6 =f"{total_views_6} All-Time Views", joined_6=f"Joined {joined_6}",\
-			artist_image_6 = artist_image_6,\
-			total_videos_6 = total_videos_str_6,\
-			analytics_base_url_6=analytics_base_url_6,\
-			data_7=json_data_7, cache_7=scrape_date_str_7,\
-			artist_name_7=artist_7_name,\
-			subscribers_7 = f"{subscribers_7} Subscribers",\
-			total_views_7 =f"{total_views_7} All-Time Views", joined_7=f"Joined {joined_7}",\
-			artist_image_7 = artist_image_7,\
-			total_videos_7 = total_videos_str_7,\
-			analytics_base_url_7=analytics_base_url_7,\
-			data_8=json_data_8, cache_8=scrape_date_str_8,\
-			artist_name_8=artist_8_name,\
-			subscribers_8 = f"{subscribers_8} Subscribers",\
-			total_views_8 =f"{total_views_8} All-Time Views", joined_8=f"Joined {joined_8}",\
-			artist_image_8 = artist_image_8,\
-			total_videos_8 = total_videos_str_8,\
-			analytics_base_url_8=analytics_base_url_8,\
-			data_9=json_data_9, cache_9=scrape_date_str_9,\
-			artist_name_9=artist_9_name,\
-			subscribers_9 = f"{subscribers_9} Subscribers",\
-			total_views_9 =f"{total_views_9} All-Time Views", joined_9=f"Joined {joined_9}",\
-			artist_image_9 = artist_image_9,\
-			total_videos_9 = total_videos_str_9,\
-			analytics_base_url_9=analytics_base_url_9,\
-			data_10=json_data_10, cache_10=scrape_date_str_10,\
-			artist_name_10=artist_10_name,\
-			subscribers_10 = f"{subscribers_10} Subscribers",\
-			total_views_10 =f"{total_views_10} All-Time Views", joined_10=f"Joined {joined_10}",\
-			artist_image_10 = artist_image_10,\
-			total_videos_10 = total_videos_str_10,\
-			analytics_base_url_10=analytics_base_url_10)
+			analytics_base_url=analytics_base_url, number_scraped=number_scraped)
 
 	except:
 		# Creating Bad Requests Table

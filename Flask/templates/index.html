@@ -14,15 +14,14 @@
 - # of Scraped Videos -- OK
 - logo hyperlink bug -- OK
 - analytics button resize -- OK
-- Block redesign:
-        have an unknown card that populates with search,
-        then have others displayed from previous scrapes
+- Block redesign -- OK
+- Backgorund color of bottom of page when scrolling --
 - sortable table -- 
 - Terminate if page is refreshed/closed/stopped --
 - Regression (plotly) --
 - Export raw data file -- 
 - Fix table pretty -- 
-- Database SQL String issue -- 
+- Database SQL String issue -- Mayber try using `` for quotes
 - Fix Analytics Button generating another scrape -- OK
 - JSON data is available upon search screen returning (want just analytics page)
 - Analytics page 
@@ -34,12 +33,16 @@
 - Fix bug where scrape is terminated -- ??
 - Instagram NavBar -- 
 - Redirect back to home page after a search -- Not neccessary
-- Table for IP addresses and site visited -- 
+- Table for IP addresses and site visited -- Not neccessary
 - Integer to commas on cards -- OK
 - Last retrieved, make this a hyperlink/button that goes to a modal
 asking to pull latest data - implementation - add to existing data or do full scrape?
 - Analytics - avg likes/duration/views/days between posts/ rolling averages/etc.
-- Infinite scroll -- 
+- Infinite scroll -- NO, too hard
+- Queue requests --
+- Use channel codes instead of artist name as uinique identifier -- 
+- Change new tables to be artist code, not artist name --
+- Pass artist code to modal javascript, not artist name --
  -->
  <head>
      <meta charset="utf-8" />
@@ -49,11 +52,16 @@ asking to pull latest data - implementation - add to existing data or do full sc
      <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='style.css') }}" />
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
      <script src="https://d3js.org/d3.v5.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
      <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
  </head>
- <div id="bg">
+
  
-     <body>
+<body>
+    <div id="bg">  
                 <div class="container-fluid">
                 <!-- Nav Bar -->
 
@@ -62,9 +70,9 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                 <div class="col-5 text-left">
                                         <div class="navbar-brand">
         
-                                                <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" alt="Youtube DS"></a>
+                                                <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" alt="Youtube DS" onmouseover="logo()" onmouseout="logo()"></a>
         
-                                                <span class="header"><a class="link_color" href="/">YouTube </a></span>
+                                                <span class="header"><a class="link_color" href="/" onmouseover="logo()" onmouseout="logo()">YouTube </a></span>
                                                 <span class="header2"><a class="link_color" onmouseover="logo()" onmouseout="logo()" id="DS" href="/">DS</a></span>
                                         </div>
         
@@ -128,83 +136,92 @@ asking to pull latest data - implementation - add to existing data or do full sc
  
                                         <!-- Card 1 -->
                                         <div class="card-deck">
-                                        <div class="card">
-                                                <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
-                                                <div class="card-body">
-                                                <h5 class="card-title">Content Creator</h5>
-                                                <p class="card-text">
-                                                        <h6 class="h6-font">Videos</h6>
-                                                        <h6 class="h6-font">Subscribers</h6>
-                                                        <h6 class="h6-font">All-Time Views</h6>
-                                                        <h6 class="h6-font">Joined</h6>
-                                                </p>
-                                                <div class="text-center">
-                                                        <a href="#" class="btn btn-sm btn-primary">Shuffle</a>
+                                            <div class="card">
+                                                    <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
+                                                        <div class="card-body">
+                                                                <h5 class="card-title">Content Creator</h5>
+                                                                <p class="card-text">
+                                                                        <h6 class="h6-font">Videos</h6>
+                                                                        <h6 class="h6-font">Subscribers</h6>
+                                                                        <h6 class="h6-font">All-Time Views</h6>
+                                                                        <h6 class="h6-font">Joined</h6>
+                                                                </p>
+                                                                <div class="text-center">
+                                                                        <a href="#" class="btn btn-sm btn-primary">Shuffle</a>
+                                                                </div>
+                                                        </div>
+                                                    <div class="card-footer text-center">
+                                                            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                                                    Launch demo modal
+                                                                  </button> -->
+                                                        <small class="text-muted">Last retrieved</small>
+                                                    </div>
                                                 </div>
-                                                </div>
-                                                <div class="card-footer text-center">
-                                                <small class="text-muted">Last retrieved</small>
-                                                </div>
-                                        </div>
+
                 
                                         <!-- Card 2 -->
                                         <div class="card">
-                                                <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
+                                            <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
                                                 <div class="card-body">
-                                                <h5 class="card-title">{{artist_name}}</h5>
-                                                <p class="card-text">
-                                                        <h6 class="h6-font">{{total_videos}}</h6>
-                                                        <h6 class="h6-font">{{subscribers}}</h6>
-                                                        <h6 class="h6-font">{{total_views}}</h6>
-                                                        <h6 class="h6-font">{{joined}}</h6>
-                                                </p>
-                                                <div class="text-center">
-                                                        <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                        <h5 class="card-title" id="0">{{artist_name}}</h5>
+                                                        <p class="card-text">
+                                                                <h6 class="h6-font">{{total_videos}}</h6>
+                                                                <h6 class="h6-font">{{subscribers}}</h6>
+                                                                <h6 class="h6-font">{{total_views}}</h6>
+                                                                <h6 class="h6-font">{{joined}}</h6>
+                                                        </p>
+                                                                <div class="text-center">
+                                                                        <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                                </div>
                                                 </div>
-                                                </div>
-                                                <div class="card-footer text-center">
-                                                <small class="text-muted">Last retrieved <br> {{cache}}</small>
-                                                </div>
+
+                                                    <div class="card-footer text-center">
+                                                            <small class="text-muted"><a id="_0" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache}}</a></small>
+
+                                                            <!-- <small class="text-muted">Last retrieved <br> {{cache}}</small> -->
+                                                    </div>
                                         </div>
                 
                                         <!-- Card 3 -->
                                         <div class="card">
                                                 <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
-                                                <div class="card-body">
-                                                <h5 class="card-title">{{artist_name_1}}</h5>
-                                                <p class="card-text">
-                                                        <h6 class="h6-font">{{total_videos_1}}</h6>
-                                                        <h6 class="h6-font">{{subscribers_1}}</h6>
-                                                        <h6 class="h6-font">{{total_views_1}}</h6>
-                                                        <h6 class="h6-font">{{joined_1}}</h6>
-                                                </p>
-                                                <div class="text-center">
-                                                        <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                </div>
-                                                </div>
-                                                <div class="card-footer text-center">
-                                                <small class="text-muted">Last retrieved <br> {{cache_1}}</small>
-                                                </div>
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" id="1">{{artist_name_1}}</h5>
+                                                        <p class="card-text">
+                                                                <h6 class="h6-font">{{total_videos_1}}</h6>
+                                                                <h6 class="h6-font">{{subscribers_1}}</h6>
+                                                                <h6 class="h6-font">{{total_views_1}}</h6>
+                                                                <h6 class="h6-font">{{joined_1}}</h6>
+                                                        </p>
+                                                            <div class="text-center">
+                                                                    <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                            </div>
+                                                    </div>
+
+                                                        <div class="card-footer text-center">
+                                                            <small class="text-muted"><a id="_1" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_1}}</a></small>
+                                                            </div>
                                         </div>
                                         
                                         <!-- Card 4 -->
                                         <div class="card">
                                                 <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap">
-                                                <div class="card-body">
-                                                <h5 class="card-title">{{artist_name_2}}</h5>
-                                                <p class="card-text">
-                                                        <h6 class="h6-font">{{total_videos_2}}</h6>
-                                                        <h6 class="h6-font">{{subscribers_2}}</h6>
-                                                        <h6 class="h6-font">{{total_views_2}}</h6>
-                                                        <h6 class="h6-font">{{joined_2}}</h6>
-                                                </p>
-                                                <div class="text-center">
-                                                        <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                </div>
-                                                </div>
-                                                <div class="card-footer text-center">
-                                                <small class="text-muted">Last retrieved <br> {{cache_2}}</small>
-                                                </div>
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" id="2">{{artist_name_2}}</h5>
+                                                        <p class="card-text">
+                                                                <h6 class="h6-font">{{total_videos_2}}</h6>
+                                                                <h6 class="h6-font">{{subscribers_2}}</h6>
+                                                                <h6 class="h6-font">{{total_views_2}}</h6>
+                                                                <h6 class="h6-font">{{joined_2}}</h6>
+                                                        </p>
+                                                            <div class="text-center">
+                                                                    <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                            </div>
+                                                    </div>
+
+                                                        <div class="card-footer text-center">
+                                                                <small class="text-muted"><a id="_2" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_2}}</a></small>
+                                                            </div>
                                         </div>
  
                                 </div>
@@ -224,48 +241,49 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                      <div class="card-deck">
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_3}}" alt="Card image cap">
-                                             <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_3}}</h5>
-                                                 <p class="card-text">
-                                                     <h6 class="h6-font">{{total_videos_3}}</h6>
-                                                     <h6 class="h6-font">{{subscribers_3}}</h6>
-                                                     <h6 class="h6-font">{{total_views_3}}</h6>
-                                                     <h6 class="h6-font">{{joined_3}}</h6>
-                                                 </p>
-                                                 <div class="text-center">
-                                                     <a href="{{analytics_base_url_3}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                 </div>
-                                             </div>
-                                             <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_3}}</small>
-                                             </div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title" id="3">{{artist_name_3}}</h5>
+                                                    <p class="card-text">
+                                                        <h6 class="h6-font">{{total_videos_3}}</h6>
+                                                        <h6 class="h6-font">{{subscribers_3}}</h6>
+                                                        <h6 class="h6-font">{{total_views_3}}</h6>
+                                                        <h6 class="h6-font">{{joined_3}}</h6>
+                                                    </p>
+                                                            <div class="text-center">
+                                                                <a href="{{analytics_base_url_3}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                            </div>
+                                                </div>
+                                                        <div class="card-footer text-center">
+                                                                <small class="text-muted"><a id="_3" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_3}}</a></small>
+                                                            </div>
                                          </div>
  
                                          <!-- Card 2 -->
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_4}}" alt="Card image cap">
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_4}}</h5>
-                                                 <p class="card-text">
-                                                     <h6 class="h6-font">{{total_videos_4}}</h6>
-                                                     <h6 class="h6-font">{{subscribers_4}}</h6>
-                                                     <h6 class="h6-font">{{total_views_4}}</h6>
-                                                     <h6 class="h6-font">{{joined_4}}</h6>
-                                                 </p>
-                                                 <div class="text-center">
-                                                     <a href="{{analytics_base_url_4}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                 </div>
+                                                 <h5 class="card-title" id="4">{{artist_name_4}}</h5>
+                                                    <p class="card-text">
+                                                        <h6 class="h6-font">{{total_videos_4}}</h6>
+                                                        <h6 class="h6-font">{{subscribers_4}}</h6>
+                                                        <h6 class="h6-font">{{total_views_4}}</h6>
+                                                        <h6 class="h6-font">{{joined_4}}</h6>
+                                                    </p>
+                                                    <div class="text-center">
+                                                        <a href="{{analytics_base_url_4}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                    </div>
                                              </div>
-                                             <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_4}}</small>
-                                             </div>
+
+                                                    <div class="card-footer text-center">
+                                                            <small class="text-muted"><a id="_4" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_4}}</a></small>
+                                                    </div>
                                          </div>
  
                                          <!-- Card 3 -->
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_5}}" alt="Card image cap">
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_5}}</h5>
+                                                 <h5 class="card-title" id="5">{{artist_name_5}}</h5>
                                                  <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_5}}</h6>
                                                      <h6 class="h6-font">{{subscribers_5}}</h6>
@@ -277,14 +295,14 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                  </div>
                                              </div>
                                              <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_5}}</small>
-                                             </div>
+                                                    <small class="text-muted"><a id="_5" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_5}}</a></small>
+                                                </div>
                                          </div>
                                          <!-- Card 4 -->
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_6}}" alt="Card image cap">
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_6}}</h5>
+                                                 <h5 class="card-title" id="6">{{artist_name_6}}</h5>
                                                  <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_6}}</h6>
                                                      <h6 class="h6-font">{{subscribers_6}}</h6>
@@ -296,8 +314,8 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                  </div>
                                              </div>
                                              <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_2}}</small>
-                                             </div>
+                                                    <small class="text-muted"><a id="_6" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_6}}</a></small>
+                                                </div>
                                          </div>
  
                                      </div>
@@ -320,7 +338,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_7}}" alt="Card image cap">
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_7}}</h5>
+                                                 <h5 class="card-title" id="7">{{artist_name_7}}</h5>
                                                  <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_7}}</h6>
                                                      <h6 class="h6-font">{{subscribers_7}}</h6>
@@ -332,15 +350,15 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                  </div>
                                              </div>
                                              <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_7}}</small>
-                                             </div>
+                                                    <small class="text-muted"><a id="_7" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_7}}</a></small>
+                                                </div>
                                          </div>
  
                                          <!-- Card 2 -->
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_8}}" alt="Card image cap">
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_8}}</h5>
+                                                 <h5 class="card-title" id="8">{{artist_name_8}}</h5>
                                                  <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_8}}</h6>
                                                      <h6 class="h6-font">{{subscribers_8}}</h6>
@@ -352,15 +370,15 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                  </div>
                                              </div>
                                              <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_8}}</small>
-                                             </div>
+                                                    <small class="text-muted"><a id="_8" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_8}}</a></small>
+                                                </div>
                                          </div>
  
                                          <!-- Card 3 -->
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_9}}" alt="Card image cap">
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_9}}</h5>
+                                                 <h5 class="card-title" id="9">{{artist_name_9}}</h5>
                                                  <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_9}}</h6>
                                                      <h6 class="h6-font">{{subscribers_9}}</h6>
@@ -372,14 +390,14 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                  </div>
                                              </div>
                                              <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_9}}</small>
-                                             </div>
+                                                    <small class="text-muted"><a id="_9" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_9}}</a></small>
+                                                </div>
                                          </div>
                                          <!-- Card 4 -->
                                          <div class="card">
                                              <img class="card-img-top" src="{{artist_image_10}}" alt="Card image cap">
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_10}}</h5>
+                                                 <h5 class="card-title" id="10">{{artist_name_10}}</h5>
                                                  <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_10}}</h6>
                                                      <h6 class="h6-font">{{subscribers_10}}</h6>
@@ -391,15 +409,15 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                  </div>
                                              </div>
                                              <div class="card-footer text-center">
-                                                 <small class="text-muted">Last retrieved <br> {{cache_10}}</small>
-                                             </div>
+                                                    <small class="text-muted"><a id="_10" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onclick="cacheData(this.id)">Last retrieved <br> {{cache_10}}</a></small>
+                                                </div>
                                          </div>
  
                                      </div>
                                  </div>
  
                                  <!-- Deck 4 -->
-                                 <div id="deck-4">
+                                 <!-- <div id="deck-4">
                                      <div class="container-fluid">
                                          <br>
                                          <br>
@@ -407,7 +425,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                          <div class="row">
                                              <div class="col-7 mx-auto">
  
-                                                 <!-- Card 1 -->
+                                                 <!- - Card 1 - ->
                                                  <div class="card-deck">
                                                      <div class="card">
                                                          <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
@@ -428,7 +446,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                          </div>
                                                      </div>
  
-                                                     <!-- Card 2 -->
+                                                     <!- - Card 2 - ->
                                                      <div class="card">
                                                          <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
                                                          <div class="card-body">
@@ -448,7 +466,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                          </div>
                                                      </div>
  
-                                                     <!--Card 3-->
+                                                     <!- -Card 3- ->
                                                      <div class="card">
                                                          <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
                                                          <div class="card-body">
@@ -467,7 +485,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                              <small class="text-muted">Last retrieved <br> {{cache_1}}</small>
                                                          </div>
                                                      </div>
-                                                     <!-- Card 4 -->
+                                                     <!- - Card 4 - ->
                                                      <div class="card">
                                                          <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap">
                                                          <div class="card-body">
@@ -490,13 +508,14 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                                  </div>
                                              </div>
                                          </div>
-                                         <!-- </div> -->
+                                        </div>
+                                         </div> -->
  
-                                         <div id="deck-5">
+                                         <!-- <div id="deck-5">
  
-                                         </div>
+                                         </div> -->
  
-                                     </div>
+                                     <!-- </div> -->
  
                                  </div>
                              </div>
@@ -504,6 +523,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                      </div>
                      <br>
                      <br>
+
                      <div class="container-fluid">
                          <div class="row">
                              <div class="col text-center">
@@ -511,10 +531,36 @@ asking to pull latest data - implementation - add to existing data or do full sc
                              </div>
                          </div>
                      </div>
+
                      <br>
                      <br>
-     </body>
-     </div>
+    </div>
+
+          
+          <!-- Modal -->
+          <div class="modal fade" id="initiatePull" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Initiate Scrape Request</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="modal-body-text">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                  <!-- <button type="button" class="btn btn-sm btn-primary"><a href="#" class="link_color_2" id="pull-href" onclick="justLoad()">Pull</a></button> -->
+                  <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="pull-href" onclick="justLoad()">Pull</a>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </body>
+
      <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
  
  </html>
