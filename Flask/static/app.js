@@ -242,21 +242,41 @@ search_button.on("change", search(input));
 // }
 
 function cacheData(id){
+id_orig = id;
 scrape_date = document.getElementById(`${id}`).innerHTML.split(" ")[3];
+id = id.split("_")[1];
+raw_name = document.getElementById(id).innerHTML;
+name = raw_name.replace(" ", "_");
+scrape_date_object = new Date(scrape_date + "Z");
+today_date_object = Date.now();
+
+staleness = (Math.abs(today_date_object - scrape_date_object))/(1000*60*60*24);
+days = Math.round(staleness);
+
+// console.log(scrape_date_object);
+// console.log(today_date_object);
+// console.log(staleness);
+// console.log(days);
 
 document.getElementById("modal-body-text").innerHTML
-= `The data for this content creator may be stale (${scrape_date}). 
-Do you want to initiate a new scrape request?`;
+= `The data for this content creator was retrieved ${days} 
+days old. Do you want to check for updates?`
+// = `The data for ${raw_name} is from ${scrape_date}. 
+// Do you want to initiate a new scrape request?`;
 
-getPullURL(id);
-
+getPullURL(name, days, id_orig);
 }
 
-function getPullURL(id){
-    id = id.split("_")[1];
-    name = document.getElementById(id).innerHTML.replace(" ", "_");
-    document.getElementById("pull-href").href = `/pull?name=${name}`;
+function getPullURL(name, days, id_orig){
+    
+    if (days < 2){
+        document.getElementById(id_orig).setAttribute("data-target", ""); 
+    }
+    else{
 
+        document.getElementById(id_orig).setAttribute("data-target", "#initiatePull");  
+    }
+    document.getElementById("pull-href").href = `/pull?name=${name}`;
 }
 
 function justLoad(){
