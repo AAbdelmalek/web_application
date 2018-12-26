@@ -49,34 +49,34 @@ def home():
 	CREATE TABLE IF NOT EXISTS requests(\
 	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 	SCRAPE_DATE DATETIME,\
-	TABLE_NAME VARCHAR(255)CHARACTER SET UTF8MB4,\
 	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
-	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4\
+	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+	ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 	)")
 
 	# Getting Last Artists to also Display on Home Page	
 	artists_table = pd.read_sql("SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 11", connection) 
 
-	artist_db_name = artists_table.loc[0,"TABLE_NAME"]
-	artist_1 = artists_table.loc[1,"TABLE_NAME"]
-	artist_2 = artists_table.loc[2,"TABLE_NAME"]
-	artist_3 = artists_table.loc[3,"TABLE_NAME"]
-	artist_4 = artists_table.loc[4,"TABLE_NAME"]
-	artist_5 = artists_table.loc[5,"TABLE_NAME"]
-	artist_6 = artists_table.loc[6,"TABLE_NAME"]
-	artist_7 = artists_table.loc[7,"TABLE_NAME"]
-	artist_8 = artists_table.loc[8,"TABLE_NAME"]
-	artist_9 = artists_table.loc[9,"TABLE_NAME"]
-	artist_10 = artists_table.loc[10,"TABLE_NAME"]
+	artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+	artist_1 = artists_table.loc[1,"ARTIST_CODE"]
+	artist_2 = artists_table.loc[2,"ARTIST_CODE"]
+	artist_3 = artists_table.loc[3,"ARTIST_CODE"]
+	artist_4 = artists_table.loc[4,"ARTIST_CODE"]
+	artist_5 = artists_table.loc[5,"ARTIST_CODE"]
+	artist_6 = artists_table.loc[6,"ARTIST_CODE"]
+	artist_7 = artists_table.loc[7,"ARTIST_CODE"]
+	artist_8 = artists_table.loc[8,"ARTIST_CODE"]
+	artist_9 = artists_table.loc[9,"ARTIST_CODE"]
+	artist_10 = artists_table.loc[10,"ARTIST_CODE"]
 
 	# Get Artist 0 Info
 	df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
-	{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.TABLE_NAME, \
+	{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 	{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 	{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 	{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 	INNER JOIN {artist_db_name} \
-	ON artists.artist = {artist_db_name}.artist", connection)
+	ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
 
 	# Get Artist 1 Info
 	artist_1_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
@@ -431,15 +431,16 @@ def home():
 # 	SCRAPE_DATE DATETIME,\
 # 	TABLE_NAME VARCHAR(255)CHARACTER SET UTF8MB4,\
 # 	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
-# 	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4\
+# 	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+#	ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 # 	)")
 
 # 	# Getting Last Artists to also Display on Home Page	
 # 	artists_table = pd.read_sql("SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 3", connection) 
 
-# 	artist_db_name = artists_table.loc[0,"TABLE_NAME"]
-# 	artist_1 = artists_table.loc[1,"TABLE_NAME"]
-# 	artist_2 = artists_table.loc[2,"TABLE_NAME"]
+# 	artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+# 	artist_1 = artists_table.loc[1,"ARTIST_CODE"]
+# 	artist_2 = artists_table.loc[2,"ARTIST_CODE"]
 
 # 	# Get Artist 0 Info
 # 	df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
@@ -570,12 +571,12 @@ def search():
 
 			# Get Artist Info
 			df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
-			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.TABLE_NAME, \
+			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 			{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 			{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 			{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 			INNER JOIN {artist_db_name} \
-			ON artists.artist = {artist_db_name}.artist", connection)
+			ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
 
 			# Artist Information
 			scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
@@ -702,6 +703,22 @@ def search():
 		# Replacing spaces with underscores for new table name
 		artist_db_name = artist_name.replace(" ","_").replace("`","")
 
+		# Convert User Name to UU Format
+		youtube_code = raw_youtube_name_link.split("/")[2]
+
+		if youtube_code[0:2] == "UC":
+
+			youtube_code = raw_youtube_name_link.split("/")[2]
+			playlist_link = "https://www.youtube.com" + "/playlist?list=UU" + youtube_code[2:] 
+
+		elif youtube_code[0:2] != "UC":
+
+			youtube_code_raw = about_soup.find("link", rel="canonical").get("href")
+			youtube_code = youtube_code_raw.split("/")[4]
+			playlist_link = "https://www.youtube.com" + "/playlist?list=UU" + youtube_code[2:]  
+
+		artist_db_name = youtube_code
+
 		# Checking Database to See if Data was Previously Scraped
 		df_cache = []
 		artist_1_table = []
@@ -709,26 +726,26 @@ def search():
 		try:
 			# Searching for input Artist
 			df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
-			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.TABLE_NAME, \
+			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 			{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 			{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 			{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 			INNER JOIN {artist_db_name} \
-			ON artists.artist = {artist_db_name}.artist", connection)
+			ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
 
 			# Getting Last Artists to also Display on Home Page	
 			artists_table = pd.read_sql("SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 11", connection) 
 
-			artist_1 = artists_table.loc[0,"TABLE_NAME"]
-			artist_2 = artists_table.loc[1,"TABLE_NAME"]
-			artist_3 = artists_table.loc[2,"TABLE_NAME"]
-			artist_4 = artists_table.loc[3,"TABLE_NAME"]
-			artist_5 = artists_table.loc[4,"TABLE_NAME"]
-			artist_6 = artists_table.loc[5,"TABLE_NAME"]
-			artist_7 = artists_table.loc[6,"TABLE_NAME"]
-			artist_8 = artists_table.loc[7,"TABLE_NAME"]
-			artist_9 = artists_table.loc[8,"TABLE_NAME"]
-			artist_10 = artists_table.loc[9,"TABLE_NAME"]
+			artist_1 = artists_table.loc[0,"ARTIST_CODE"]
+			artist_2 = artists_table.loc[1,"ARTIST_CODE"]
+			artist_3 = artists_table.loc[2,"ARTIST_CODE"]
+			artist_4 = artists_table.loc[3,"ARTIST_CODE"]
+			artist_5 = artists_table.loc[4,"ARTIST_CODE"]
+			artist_6 = artists_table.loc[5,"ARTIST_CODE"]
+			artist_7 = artists_table.loc[6,"ARTIST_CODE"]
+			artist_8 = artists_table.loc[7,"ARTIST_CODE"]
+			artist_9 = artists_table.loc[8,"ARTIST_CODE"]
+			artist_10 = artists_table.loc[9,"ARTIST_CODE"]
 
 			# Get Artist 1 Info
 			artist_1_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
@@ -824,6 +841,8 @@ def search():
 		except:
 			print("Not found in database")
 
+			render_template("test.html", data="lololol")
+
 		if len(df_cache) != 0:
 			# Search Result Information
 			print(f"A cached scrape ({scrape_date} UTC) has been found...")
@@ -837,7 +856,7 @@ def search():
 			analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
 			subscribers = format(df_cache.loc[0,"SUBSCRIBERS"],",")
 			joined = df_cache.loc[0,"JOINED"]
-			table_name_search = df_cache.loc[0,"TABLE_NAME"]
+			#table_name_search = df_cache.loc[0,"TABLE_NAME"]
 			search_table_name = df_cache.loc[0, "SEARCH_NAME"]
 			total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
 			artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
@@ -993,87 +1012,9 @@ def search():
 		# else:
 			# Inserting Request into Database
 			connection.execute(f"INSERT INTO requests \
-			(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
-			VALUES ('{scrape_date}', '{table_name_search}','{search_table_name}', '{original_name}')")
+			(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
+			VALUES ('{scrape_date}', '{search_table_name}', '{original_name}','{artist_db_name}')")
 			
-			# return render_template("index.html", data=json_data, cache=scrape_date_str,\
-			# artist_name=artist_name,\
-			# subscribers = f"{subscribers_str} Subscribers",\
-			# total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
-			# artist_image=artist_image,\
-			# total_videos = total_videos_str,\
-			# analytics_base_url=analytics_base_url,\
-			# data_1=json_data_1, cache_1=scrape_date_str_1,\
-			# artist_name_1=artist_1_name,\
-			# subscribers_1 = f"{subscribers_1} Subscribers",\
-			# total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
-			# artist_image_1 = artist_image_1,\
-			# total_videos_1 = total_videos_str_1,\
-			# analytics_base_url_1=analytics_base_url_1,\
-			# data_2=json_data_2, cache_2=scrape_date_str_2,\
-			# artist_name_2=artist_2_name,\
-			# subscribers_2 = f"{subscribers_2} Subscribers",\
-			# total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
-			# artist_image_2 = artist_image_2,\
-			# total_videos_2 = total_videos_str_2,\
-			# analytics_base_url_2=analytics_base_url_2,\
-			# data_3=json_data_3, cache_3=scrape_date_str_3,\
-			# artist_name_3=artist_3_name,\
-			# subscribers_3 = f"{subscribers_3} Subscribers",\
-			# total_views_3 =f"{total_views_3} All-Time Views", joined_3=f"Joined {joined_3}",\
-			# artist_image_3 = artist_image_3,\
-			# total_videos_3 = total_videos_str_3,\
-			# analytics_base_url_3=analytics_base_url_3,\
-			# data_4=json_data_4, cache_4=scrape_date_str_4,\
-			# artist_name_4=artist_4_name,\
-			# subscribers_4 = f"{subscribers_4} Subscribers",\
-			# total_views_4 =f"{total_views_4} All-Time Views", joined_4=f"Joined {joined_4}",\
-			# artist_image_4 = artist_image_4,\
-			# total_videos_4 = total_videos_str_4,\
-			# analytics_base_url_4=analytics_base_url_4,\
-			# data_5=json_data_5, cache_5=scrape_date_str_5,\
-			# artist_name_5=artist_5_name,\
-			# subscribers_5 = f"{subscribers_5} Subscribers",\
-			# total_views_5 =f"{total_views_5} All-Time Views", joined_5=f"Joined {joined_5}",\
-			# artist_image_5 = artist_image_5,\
-			# total_videos_5 = total_videos_str_5,\
-			# analytics_base_url_5=analytics_base_url_5,\
-			# data_6=json_data_6, cache_6=scrape_date_str_6,\
-			# artist_name_6=artist_6_name,\
-			# subscribers_6 = f"{subscribers_6} Subscribers",\
-			# total_views_6 =f"{total_views_6} All-Time Views", joined_6=f"Joined {joined_6}",\
-			# artist_image_6 = artist_image_6,\
-			# total_videos_6 = total_videos_str_6,\
-			# analytics_base_url_6=analytics_base_url_6,\
-			# data_7=json_data_7, cache_7=scrape_date_str_7,\
-			# artist_name_7=artist_7_name,\
-			# subscribers_7 = f"{subscribers_7} Subscribers",\
-			# total_views_7 =f"{total_views_7} All-Time Views", joined_7=f"Joined {joined_7}",\
-			# artist_image_7 = artist_image_7,\
-			# total_videos_7 = total_videos_str_7,\
-			# analytics_base_url_7=analytics_base_url_7,\
-			# data_8=json_data_8, cache_8=scrape_date_str_8,\
-			# artist_name_8=artist_8_name,\
-			# subscribers_8 = f"{subscribers_8} Subscribers",\
-			# total_views_8 =f"{total_views_8} All-Time Views", joined_8=f"Joined {joined_8}",\
-			# artist_image_8 = artist_image_8,\
-			# total_videos_8 = total_videos_str_8,\
-			# analytics_base_url_8=analytics_base_url_8,\
-			# data_9=json_data_9, cache_9=scrape_date_str_9,\
-			# artist_name_9=artist_9_name,\
-			# subscribers_9 = f"{subscribers_9} Subscribers",\
-			# total_views_9 =f"{total_views_9} All-Time Views", joined_9=f"Joined {joined_9}",\
-			# artist_image_9 = artist_image_9,\
-			# total_videos_9 = total_videos_str_9,\
-			# analytics_base_url_9=analytics_base_url_9,\
-			# data_10=json_data_10, cache_10=scrape_date_str_10,\
-			# artist_name_10=artist_10_name,\
-			# subscribers_10 = f"{subscribers_10} Subscribers",\
-			# total_views_10 =f"{total_views_10} All-Time Views", joined_10=f"Joined {joined_10}",\
-			# artist_image_10 = artist_image_10,\
-			# total_videos_10 = total_videos_str_10,\
-			# analytics_base_url_10=analytics_base_url_10)
-
 			return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\
 			subscribers = f"{subscribers_str} Subscribers",\
@@ -1083,6 +1024,8 @@ def search():
 			analytics_base_url=analytics_base_url, number_scraped=number_scraped)
 						
 		else:
+
+
 
 			try:
 				# Convert User Name to UU Format
@@ -1375,7 +1318,7 @@ def search():
 			print("Inserting data into database...")
 			# Creating table for videos
 			connection.execute(f"\
-			CREATE TABLE IF NOT EXISTS {artist_db_name} (\
+			CREATE TABLE IF NOT EXISTS {youtube_code} (\
 			ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 			SCRAPE_DATE DATETIME,\
 			SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
@@ -1391,7 +1334,8 @@ def search():
 			COMMENTS INT,\
 			PAID VARCHAR(255) CHARACTER SET UTF8MB4,\
 			FAMILY_FRIENDLY VARCHAR(255) CHARACTER SET UTF8MB4,\
-			URL VARCHAR(255) CHARACTER SET UTF8MB4\
+			URL VARCHAR(255) CHARACTER SET UTF8MB4,\
+			ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 			)")
 
 			# Creating Table for Artist data
@@ -1399,7 +1343,6 @@ def search():
 			CREATE TABLE IF NOT EXISTS artists(\
 			ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 			SCRAPE_DATE DATETIME,\
-			TABLE_NAME VARCHAR(255)CHARACTER SET UTF8MB4,\
 			SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
 			ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 			TOTAL_VIDEOS INT,\
@@ -1415,9 +1358,9 @@ def search():
 			CREATE TABLE IF NOT EXISTS requests(\
 			ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 			SCRAPE_DATE DATETIME,\
-			TABLE_NAME VARCHAR(255)CHARACTER SET UTF8MB4,\
 			SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
-			ARTIST VARCHAR(255) CHARACTER SET UTF8MB4\
+			ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+			ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 			)")
 
 			# Getting df values and inserting into appropriate tables
@@ -1443,34 +1386,34 @@ def search():
 				url =  df.loc[i,"URL"]
 				artist_code =  df.loc[i,"ARTIST_CODE"]
 
-				connection.execute(f"INSERT INTO {artist_db_name}\
+				connection.execute(f"INSERT INTO {youtube_code}\
 				(SCRAPE_DATE, SEARCH_NAME, ARTIST, PUBLISHED, PUBLISHED_STR, TITLE, CATEGORY , DURATION,\
-				VIEWS, LIKES, DISLIKES, PAID, FAMILY_FRIENDLY, URL)\
+				VIEWS, LIKES, DISLIKES, PAID, FAMILY_FRIENDLY, URL, ARTIST_CODE)\
 				VALUES ('{scrape_date}','{search_name}', '{artist}', '{published}', \
 				'{published_str}','{title}', '{category}',\
 				'{duration}', '{views}', '{likes}', '{dislikes}', '{paid}',\
-				'{family_friendly}', '{url}')")
+				'{family_friendly}', '{url}','{artist_code}')")
 
 			if subscribers == "Not available":
 				connection.execute(f"INSERT INTO artists \
-				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
-				VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}', '{total_videos_in_playlist}', \
+				(SCRAPE_DATE, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
+				VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_in_playlist}', \
 				'{joined}', NULL,\
 				'{total_views}','{artist_image}', '{artist_code}')")
 
 				connection.execute(f"INSERT INTO requests \
-				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
-				VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}')")
+				(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
+				VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
 			
 			else:
 				connection.execute(f"INSERT INTO artists \
-				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
-				VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}', '{total_videos_in_playlist}',\
+				(SCRAPE_DATE, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
+				VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_in_playlist}',\
 				'{joined}', '{subscribers}', '{total_views}','{artist_image}','{artist_code}')")
 
 				connection.execute(f"INSERT INTO requests \
-				(SCRAPE_DATE, TABLE_NAME, SEARCH_NAME, ARTIST)\
-				VALUES ('{scrape_date}', '{table_name}','{search_name}', '{artist}')")
+				(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
+				VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
 				
 
 			print("Inserted data into database successfully...")
@@ -1499,26 +1442,26 @@ def search():
 
 			artists_table = pd.read_sql("SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 11", connection) 
 
-			artist_db_name = artists_table.loc[0,"TABLE_NAME"]
-			artist_1 = artists_table.loc[1,"TABLE_NAME"]
-			artist_2 = artists_table.loc[2,"TABLE_NAME"]
-			artist_3 = artists_table.loc[3,"TABLE_NAME"]
-			artist_4 = artists_table.loc[4,"TABLE_NAME"]
-			artist_5 = artists_table.loc[5,"TABLE_NAME"]
-			artist_6 = artists_table.loc[6,"TABLE_NAME"]
-			artist_7 = artists_table.loc[7,"TABLE_NAME"]
-			artist_8 = artists_table.loc[8,"TABLE_NAME"]
-			artist_9 = artists_table.loc[9,"TABLE_NAME"]
-			artist_10 = artists_table.loc[10,"TABLE_NAME"]
+			artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+			artist_1 = artists_table.loc[1,"ARTIST_CODE"]
+			artist_2 = artists_table.loc[2,"ARTIST_CODE"]
+			artist_3 = artists_table.loc[3,"ARTIST_CODE"]
+			artist_4 = artists_table.loc[4,"ARTIST_CODE"]
+			artist_5 = artists_table.loc[5,"ARTIST_CODE"]
+			artist_6 = artists_table.loc[6,"ARTIST_CODE"]
+			artist_7 = artists_table.loc[7,"ARTIST_CODE"]
+			artist_8 = artists_table.loc[8,"ARTIST_CODE"]
+			artist_9 = artists_table.loc[9,"ARTIST_CODE"]
+			artist_10 = artists_table.loc[10,"ARTIST_CODE"]
 
 			# Searching for input Artist
 			df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
-			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.TABLE_NAME, \
+			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 			{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 			{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 			{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 			INNER JOIN {artist_db_name} \
-			ON artists.artist = {artist_db_name}.artist", connection)
+			ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
 
 			# Get Artist 1 Info
 			artist_1_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
@@ -1764,84 +1707,6 @@ def search():
 			joined_10 = artist_10_table.loc[0,"JOINED"]
 			total_views_10 = format(artist_10_table.loc[0,"TOTAL_VIEWS"],",")
 			artist_image_10 = artist_10_table.loc[0,"ARTIST_IMAGE"]
-					
-			# return render_template("index.html", data=json_data, cache=scrape_date_str,\
-			# artist_name=artist_name,\
-			# subscribers = f"{subscribers_str} Subscribers",\
-			# total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
-			# artist_image=artist_image,\
-			# total_videos = total_videos_str,\
-			# analytics_base_url=analytics_base_url,\
-			# data_1=json_data_1, cache_1=scrape_date_str_1,\
-			# artist_name_1=artist_1_name,\
-			# subscribers_1 = f"{subscribers_1} Subscribers",\
-			# total_views_1 =f"{total_views_1} All-Time Views", joined_1=f"Joined {joined_1}",\
-			# artist_image_1 = artist_image_1,\
-			# total_videos_1 = total_videos_str_1,\
-			# analytics_base_url_1=analytics_base_url_1,\
-			# data_2=json_data_2, cache_2=scrape_date_str_2,\
-			# artist_name_2=artist_2_name,\
-			# subscribers_2 = f"{subscribers_2} Subscribers",\
-			# total_views_2 =f"{total_views_2} All-Time Views", joined_2=f"Joined {joined_2}",\
-			# artist_image_2 = artist_image_2,\
-			# total_videos_2 = total_videos_str_2,\
-			# analytics_base_url_2=analytics_base_url_2,\
-			# data_3=json_data_3, cache_3=scrape_date_str_3,\
-			# artist_name_3=artist_3_name,\
-			# subscribers_3 = f"{subscribers_3} Subscribers",\
-			# total_views_3 =f"{total_views_3} All-Time Views", joined_3=f"Joined {joined_3}",\
-			# artist_image_3 = artist_image_3,\
-			# total_videos_3 = total_videos_str_3,\
-			# analytics_base_url_3=analytics_base_url_3,\
-			# data_4=json_data_4, cache_4=scrape_date_str_4,\
-			# artist_name_4=artist_4_name,\
-			# subscribers_4 = f"{subscribers_4} Subscribers",\
-			# total_views_4 =f"{total_views_4} All-Time Views", joined_4=f"Joined {joined_4}",\
-			# artist_image_4 = artist_image_4,\
-			# total_videos_4 = total_videos_str_4,\
-			# analytics_base_url_4=analytics_base_url_4,\
-			# data_5=json_data_5, cache_5=scrape_date_str_5,\
-			# artist_name_5=artist_5_name,\
-			# subscribers_5 = f"{subscribers_5} Subscribers",\
-			# total_views_5 =f"{total_views_5} All-Time Views", joined_5=f"Joined {joined_5}",\
-			# artist_image_5 = artist_image_5,\
-			# total_videos_5 = total_videos_str_5,\
-			# analytics_base_url_5=analytics_base_url_5,\
-			# data_6=json_data_6, cache_6=scrape_date_str_6,\
-			# artist_name_6=artist_6_name,\
-			# subscribers_6 = f"{subscribers_6} Subscribers",\
-			# total_views_6 =f"{total_views_6} All-Time Views", joined_6=f"Joined {joined_6}",\
-			# artist_image_6 = artist_image_6,\
-			# total_videos_6 = total_videos_str_6,\
-			# analytics_base_url_6=analytics_base_url_6,\
-			# data_7=json_data_7, cache_7=scrape_date_str_7,\
-			# artist_name_7=artist_7_name,\
-			# subscribers_7 = f"{subscribers_7} Subscribers",\
-			# total_views_7 =f"{total_views_7} All-Time Views", joined_7=f"Joined {joined_7}",\
-			# artist_image_7 = artist_image_7,\
-			# total_videos_7 = total_videos_str_7,\
-			# analytics_base_url_7=analytics_base_url_7,\
-			# data_8=json_data_8, cache_8=scrape_date_str_8,\
-			# artist_name_8=artist_8_name,\
-			# subscribers_8 = f"{subscribers_8} Subscribers",\
-			# total_views_8 =f"{total_views_8} All-Time Views", joined_8=f"Joined {joined_8}",\
-			# artist_image_8 = artist_image_8,\
-			# total_videos_8 = total_videos_str_8,\
-			# analytics_base_url_8=analytics_base_url_8,\
-			# data_9=json_data_9, cache_9=scrape_date_str_9,\
-			# artist_name_9=artist_9_name,\
-			# subscribers_9 = f"{subscribers_9} Subscribers",\
-			# total_views_9 =f"{total_views_9} All-Time Views", joined_9=f"Joined {joined_9}",\
-			# artist_image_9 = artist_image_9,\
-			# total_videos_9 = total_videos_str_9,\
-			# analytics_base_url_9=analytics_base_url_9,\
-			# data_10=json_data_10, cache_10=scrape_date_str_10,\
-			# artist_name_10=artist_10_name,\
-			# subscribers_10 = f"{subscribers_10} Subscribers",\
-			# total_views_10 =f"{total_views_10} All-Time Views", joined_10=f"Joined {joined_10}",\
-			# artist_image_10 = artist_image_10,\
-			# total_videos_10 = total_videos_str_10,\
-			# analytics_base_url_10=analytics_base_url_10)
 
 			return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\

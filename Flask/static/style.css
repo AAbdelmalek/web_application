@@ -9,6 +9,11 @@
   overflow:auto;
 } */
 
+.retrieved-link:hover{
+  text-decoration: none;
+  cursor:default;
+}
+
 body{
   height:100%;
 }

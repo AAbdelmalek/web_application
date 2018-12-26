@@ -245,8 +245,9 @@ function cacheData(id){
 id_orig = id;
 scrape_date = document.getElementById(`${id}`).innerHTML.split(" ")[3];
 id = id.split("_")[1];
-raw_name = document.getElementById(id).innerHTML;
-name = raw_name.replace(" ", "_");
+analytics_url = document.getElementById(id).href;
+pull_url = "/pull?name=" + analytics_url.split("=")[1].split("&")[0];
+
 scrape_date_object = new Date(scrape_date + "Z");
 today_date_object = Date.now();
 
@@ -260,23 +261,31 @@ days = Math.round(staleness);
 
 document.getElementById("modal-body-text").innerHTML
 = `The data for this content creator was retrieved ${days} 
-days old. Do you want to check for updates?`
+days ago. Do you want to check for updates?`
 // = `The data for ${raw_name} is from ${scrape_date}. 
 // Do you want to initiate a new scrape request?`;
 
-getPullURL(name, days, id_orig);
+getPullURL(pull_url, days, id_orig);
 }
 
-function getPullURL(name, days, id_orig){
-    
-    if (days < 2){
-        document.getElementById(id_orig).setAttribute("data-target", ""); 
-    }
-    else{
+function getPullURL(pull_url, days, id_orig){
 
-        document.getElementById(id_orig).setAttribute("data-target", "#initiatePull");  
+    last_retrieved_link = document.getElementById(id_orig);
+
+    if (days < 0){
+        
+        last_retrieved_link.setAttribute("data-target", ""); 
+        last_retrieved_link.classList.add("retrieved-link");
+        // last_retrieved_link.remove();
     }
-    document.getElementById("pull-href").href = `/pull?name=${name}`;
+
+    else {
+
+       last_retrieved_link.setAttribute("data-target", "#initiatePull");  
+
+    }
+
+    document.getElementById("pull-href").href = pull_url;
 }
 
 function justLoad(){

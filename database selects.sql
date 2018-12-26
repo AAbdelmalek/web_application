@@ -51,6 +51,7 @@ SELECT * FROM Avicii;
 
 SELECT * FROM Michael_Vongsa;
 
+SELECT * FROM UCdvYSTbhmzWgWyfGnhet03Q;
 
 SELECT artists.artist, Ariana_Grande.URL;
 
@@ -105,3 +106,12 @@ DROP DATABASE web_app_dev;
 SELECT * from artists 
 INNER JOIN Mars_Phobos
 ON artists.artist = Mars_Phobos.artist;
+
+INSERT INTO requests 
+VALUES (11,"2018-12-25 19:27:33","mars_phobos_remix_bieber","Mars Phobos","UCWOKPH3jOLZhZiKQMjl1Fmg");
+
+RENAME TABLE `Mars_Phobos` TO `UCWOKPH3jOLZhZiKQMjl1Fmg`;
+
+SELECT * FROM UCWOKPH3jOLZhZiKQMjl1Fmg;
+
+SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 11;
