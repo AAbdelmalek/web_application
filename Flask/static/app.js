@@ -246,6 +246,7 @@ id_orig = id;
 scrape_date = document.getElementById(`${id}`).innerHTML.split(" ")[3];
 id = id.split("_")[1];
 analytics_url = document.getElementById(id).href;
+update_url = "/update?name=" + analytics_url.split("=")[1].split("&")[0];
 pull_url = "/pull?name=" + analytics_url.split("=")[1].split("&")[0];
 
 scrape_date_object = new Date(scrape_date + "Z");
@@ -285,7 +286,7 @@ function getPullURL(pull_url, days, id_orig){
 
     }
 
-    document.getElementById("pull-href").href = pull_url;
+    document.getElementById("pull-href").href = update_url;
 }
 
 function justLoad(){
