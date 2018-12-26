@@ -40,12 +40,14 @@ asking to pull latest data - implementation - add to existing data or do full sc
 - Analytics - avg likes/duration/views/days between posts/ rolling averages/etc.
 - Infinite scroll -- NO, too hard
 - Queue requests --
-- Use channel codes instead of artist name as uinique identifier -- 
-- Change new tables to be artist code, not artist name --
-- Pass artist code to modal javascript, not artist name --
+- Use channel codes instead of artist name as uinique identifier -- OK
+- Change new tables to be artist code, not artist name -- OK
+- Pass artist code to modal javascript, not artist name -- OK
 - Load Bar bug 2nd and 3rd decks -- 
-- Drop TABLE_NAME columns? -- new pull uses original name, scrape uses UC code
-
+- Drop TABLE_NAME columns? -- new pull uses original name, scrape uses UC code -- OK, dropped
+- Modal pops up if not found in database with artist info pulled up
+asks user to verify if they want to make a new scrape request
+- Youtube code SQL error insert into db /UCZ--wioJBLuh5oLMG5aoIcQ -- 
  -->
  <head>
      <meta charset="utf-8" />
@@ -66,17 +68,22 @@ asking to pull latest data - implementation - add to existing data or do full sc
 <body>
     <div id="bg">  
                 <div class="container-fluid">
+
+                 
                 <!-- Nav Bar -->
 
                         <nav class="navbar justify-content-between fixed-top">
-        
-                                <div class="col-5 text-left">
+
+                    
+                                <div class="col-3 text-left">
                                         <div class="navbar-brand">
-        
+                                            
                                                 <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" alt="Youtube DS" onmouseover="logo()" onmouseout="logo()"></a>
         
                                                 <span class="header"><a class="link_color" href="/" onmouseover="logo()" onmouseout="logo()">YouTube </a></span>
                                                 <span class="header2"><a class="link_color" onmouseover="logo()" onmouseout="logo()" id="DS" href="/">DS</a></span>
+                                            
+                                       
                                         </div>
         
                                 </div>
@@ -109,6 +116,7 @@ asking to pull latest data - implementation - add to existing data or do full sc
                                         </div> -->
                 
                         </nav>
+                    
  
 
                 </div>
@@ -541,12 +549,12 @@ asking to pull latest data - implementation - add to existing data or do full sc
     </div>
 
           
-          <!-- Modal New Scrape -->
+          <!-- Modal LAst Retrieved -->
           <div class="modal fade" id="initiatePull" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Initiate Scrape Request</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Initiate Update Request</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -563,8 +571,69 @@ asking to pull latest data - implementation - add to existing data or do full sc
             </div>
           </div>
 
+
+        <!-- Modal New Scrape -->
+        <div class="modal fade" id="new-scrape" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Initiate New Request</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body-text">
+                    <div class="container-fluid">
+                            <div class="row"> 
+                                <div class="col">   
+                            The content creator was not found in the database. Do you want
+                            to initiate a new request?
+                                </div>
+                            </div>
+                    
+
+                            <div class="row">
+                                <div class="col">
+                                <br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                
+                                <div class="col-3">
+                                        <div class="text-center">
+                                        <img src="{{artist_image_new_scrape}}" alt="New Scrape Request" height="90">
+                                        </div>
+                                </div>
+                                <div class="col-9">
+                                    
+                                        <h6>{{artist_name_new_scrape}}</h6>
+                                        {{subscribers_int_new_scrape}} Subscribers
+                                        <br>
+                                        {{total_views_int_new_scrape}} All-Time Views
+                                        <br>
+                                        Joined {{joined_convert_new_scrape}}
+                                        
+                                
+                                </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col">
+                                    <br>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="justLoad()">OK</a>
+                </div>
+                </div>
+            </div>
+            </div>
+
     </body>
 
      <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+     <script>newScrape({{not_found_in_db}},"{{youtube_code_new_scrape}}")</script>
  
  </html>

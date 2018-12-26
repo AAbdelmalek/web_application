@@ -14,10 +14,18 @@ import pymysql
 import time
 from numpy import random
 pymysql.install_as_MySQLdb()
+not_found_in_db = 0
+youtube_code_new_scrape = ""
+artist_name_new_scrape = ""
+subscribers_int_new_scrape = ""
+total_views_int_new_scrape = ""
+joined_convert_new_scrape = ""
+artist_image_new_scrape = ""
 
 # Initialize Flask
 app = Flask(__name__)
 
+# New Scrape Request
 @app.route("/pull")
 def newPull():
 
@@ -27,10 +35,28 @@ def newPull():
 
 	return render_template("test.html", data=input_name)
 
+# Update Stale Data
+@app.route("/update")
+def newScrape():
+
+	# Get Search Key Value
+	name_key = request.args['name']
+	input_name = '''{}'''.format(name_key)
+
+	return render_template("test.html", data=input_name)
+
+
+
 
 # Home Page
 @app.route("/")
-def home():
+def home(not_found_in_db = not_found_in_db, youtube_code_new_scrape=\
+youtube_code_new_scrape, artist_name_new_scrape=artist_name_new_scrape,\
+subscribers_int_new_scrape=subscribers_int_new_scrape,\
+total_views_int_new_scrape=total_views_int_new_scrape,\
+joined_convert_new_scrape=joined_convert_new_scrape,\
+artist_image_new_scrape = artist_image_new_scrape):
+
 	# Set Variables, Render Home Page
 	json_data = []
 	json_data_1 = []
@@ -399,7 +425,14 @@ def home():
 	total_views_10 =f"{total_views_10} All-Time Views", joined_10=f"Joined {joined_10}",\
 	artist_image_10 = artist_image_10,\
 	total_videos_10 = total_videos_str_10,\
-	analytics_base_url_10=analytics_base_url_10)
+	analytics_base_url_10=analytics_base_url_10,\
+	not_found_in_db=not_found_in_db,\
+	youtube_code_new_scrape=youtube_code_new_scrape,\
+	artist_name_new_scrape=artist_name_new_scrape,\
+	subscribers_int_new_scrape=subscribers_int_new_scrape,\
+	total_views_int_new_scrape=total_views_int_new_scrape,\
+	joined_convert_new_scrape=joined_convert_new_scrape,\
+	artist_image_new_scrape = artist_image_new_scrape)
 
 # Infinite Scroll
 # @app.route("/page")
@@ -657,11 +690,12 @@ def search():
 		# Parse HTML
 		about_soup = bs(about_html.text, "lxml")
 
+		# Artist Image
+		artist_image = about_soup.find("img", class_="channel-header-profile-image").get("src")
+
 		# Artist Information
 		try:
 			artist_name = about_soup.find("meta", property="og:title").get("content")
-
-			artist_image = about_soup.find("img", class_="channel-header-profile-image").get("src")
 
 			subscribers = about_soup.find_all("span", class_="about-stat")[0].text
 			subscribers_str = subscribers.split(" ")[0]
@@ -841,7 +875,20 @@ def search():
 		except:
 			print("Not found in database")
 
-			render_template("test.html", data="lololol")
+			#return render_template("index.html", data="lololol")
+			not_found_in_db = 1
+			youtube_code_new_scrape = youtube_code
+			artist_name_new_scrape = artist_name
+			subscribers_int_new_scrape = format(subscribers_int,",")
+			total_views_int_new_scrape = format(total_views_int,",")
+			joined_convert_new_scrape = str(joined_convert).split(" ")[0]
+			artist_image_new_scrape = artist_image
+
+			return home(not_found_in_db, youtube_code_new_scrape,\
+			artist_name_new_scrape, subscribers_int_new_scrape,\
+			total_views_int_new_scrape,joined_convert_new_scrape,\
+			artist_image_new_scrape)
+
 
 		if len(df_cache) != 0:
 			# Search Result Information
@@ -1013,7 +1060,7 @@ def search():
 			# Inserting Request into Database
 			connection.execute(f"INSERT INTO requests \
 			(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
-			VALUES ('{scrape_date}', '{search_table_name}', '{original_name}','{artist_db_name}')")
+			VALUES ('{scrape_date}', '{input_name}', '{original_name}','{artist_db_name}')")
 			
 			return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\
@@ -1727,7 +1774,7 @@ def search():
 
 		connection.execute(f"INSERT INTO bad_requests \
 		(SCRAPE_DATE, SEARCH_NAME) \
-		VALUES ('{scrape_datetime}','{search_name}')")
+		VALUES ('{scrape_datetime}','{input_name}')")
 
 		# Generating Error Reason
 		json_data = []

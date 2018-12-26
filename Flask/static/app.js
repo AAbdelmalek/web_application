@@ -261,7 +261,7 @@ days = Math.round(staleness);
 
 document.getElementById("modal-body-text").innerHTML
 = `The data for this content creator was retrieved ${days} 
-days ago. Do you want to check for updates?`
+days ago. Do you want to initiate an update request?`
 // = `The data for ${raw_name} is from ${scrape_date}. 
 // Do you want to initiate a new scrape request?`;
 
@@ -291,5 +291,21 @@ function getPullURL(pull_url, days, id_orig){
 function justLoad(){
 
     progress_bar.style.visibility = "visible"; 
+
+}
+
+function newScrape(not_found_in_db, youtube_code){
+
+    if (not_found_in_db === 0){
+        $("#new-scrape").modal("hide");
+    }
+
+    else{
+
+        $("#new-scrape").modal("show");
+        document.getElementById("new-scrape-href").href = "/pull?name=" + youtube_code;
+
+
+    }
 
 }
