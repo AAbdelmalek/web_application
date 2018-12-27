@@ -266,10 +266,10 @@ days ago. Do you want to initiate an update request?`
 // = `The data for ${raw_name} is from ${scrape_date}. 
 // Do you want to initiate a new scrape request?`;
 
-getPullURL(pull_url, days, id_orig);
+getPullURL(update_url, days, id_orig);
 }
 
-function getPullURL(pull_url, days, id_orig){
+function getPullURL(update_url, days, id_orig){
 
     last_retrieved_link = document.getElementById(id_orig);
 
