@@ -29,129 +29,164 @@ app = Flask(__name__)
 # New Scrape Request
 @app.route("/pull")
 def newPull(global_search_name=global_search_name):
-	
-	# Start Clock, Set Variables
-	start = time.time()
-	json_data = []
-	json_data_1 = []
-	cache = ""
-	percent_complete_str = "0"
-
-	# Connect to Database Server
-	connection = create_engine('mysql://root:Mars@127.0.0.1')
-
-	# Creating database if not exists
-	connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
-	connection.execute("USE web_app_dev")
-
-	# Creating Table for Requests
-	connection.execute("\
-	CREATE TABLE IF NOT EXISTS requests(\
-	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
-	SCRAPE_DATE DATETIME,\
-	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
-	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
-	ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
-	)")
-
-	# Convert Date from Jan 1, 1999 format to datetime object
-	raw_months = {"Jan": 1, "Feb": 2, "Mar" : 3, "Apr" : 4, 
-				"May" : 5, "Jun" : 6, "Jul" : 7, "Aug" : 8,
-				"Sep" : 9, "Oct" : 10, "Nov" : 11, "Dec" : 12}
-
-	def convertDate(raw_date):
-		
-		try:
-			converted_date = ""
-			number_month = raw_months.get(raw_date[0])
-			date_str = (str(number_month) + "/" + raw_date[1] + "/" + raw_date[2]).replace(",", "")
-			converted_date = datetime.strptime(date_str, '%m/%d/%Y')
-			return converted_date
-			
-		except:
-			print(f"{raw_date} Convert function date is not valid.")
-
-	converted_input_date = datetime.strptime("1944-06-06", '%Y-%m-%d')
-
-	# Get Search Key Value
-	name_key = request.args['name']
-	input_name = '''{}'''.format(name_key)
-	youtube_code = input_name
-	#table_name = youtube_code_orig.replace("-","")
-	search_name = input_name.replace("-","_replaced_")
-
-	# Get Scrape Date
-	scrape_date = datetime.now().strftime("%Y-%m-%d")
-	scrape_datetime = datetime.utcnow()
-
 	try:
+		# Start Clock, Set Variables
+		start = time.time()
+		json_data = []
+		json_data_1 = []
+		cache = ""
+		percent_complete_str = "0"
 
-		try:
-			# First Links
-			videos_link = "https://www.youtube.com/channel/" + youtube_code + "/videos"
-			about_link = "https://www.youtube.com/channel/" + youtube_code + "/about"
+		# Connect to Database Server
+		connection = create_engine('mysql://root:Mars@127.0.0.1')
 
-			print(videos_link)
-			print(about_link)
+		# Creating database if not exists
+		connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
+		connection.execute("USE web_app_dev")
 
-			# Get About Information
-			about_html = requests.get(about_link)
+		# Creating Table for Requests
+		connection.execute("\
+		CREATE TABLE IF NOT EXISTS requests(\
+		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+		SCRAPE_DATE DATETIME,\
+		SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
+		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+		ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
+		)")
 
-			# Parse HTML
-			about_soup = bs(about_html.text, "lxml")
+		# Convert Date from Jan 1, 1999 format to datetime object
+		raw_months = {"Jan": 1, "Feb": 2, "Mar" : 3, "Apr" : 4, 
+					"May" : 5, "Jun" : 6, "Jul" : 7, "Aug" : 8,
+					"Sep" : 9, "Oct" : 10, "Nov" : 11, "Dec" : 12}
 
-			# Artist Image
-			artist_image = about_soup.find("img", class_="channel-header-profile-image").get("src")
+		def convertDate(raw_date):
 
-			# Artist Information
 			try:
-				artist_name = about_soup.find("meta", property="og:title").get("content")
-
-				subscribers = about_soup.find_all("span", class_="about-stat")[0].text
-				subscribers_str = subscribers.split(" ")[0]
-				
-				try:
-					subscribers_int = int(subscribers.split(" ")[0].replace(",",""))
-
-				except:
-					subscribers_int = "Not available"
-
-				total_views = about_soup.find_all("span", class_="about-stat")[1].text
-				total_views_str = total_views[3:len(total_views)].split(" ")[0]
-				
-				try:
-					total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
-					joined = about_soup.find_all("span", class_="about-stat")[2].text
-					joined_temp = joined.split(" ")[1:4]
-					joined_convert = convertDate(joined_temp)
-					joined_str = str(joined_convert).split(" ")[0]
-
-				except:
-					total_views = about_soup.find_all("span", class_="about-stat")[0].text
-					total_views_str = total_views[3:len(total_views)].split(" ")[0]
-					total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
-					
-					joined = about_soup.find_all("span", class_="about-stat")[1].text
-					joined_temp = joined.split(" ")[1:4]
-					joined_convert = convertDate(joined_temp)
-					joined_str = str(joined_convert).split(" ")[0]
-
-				print(f"Artist: {artist_name}")
-				print(f"Subscribers: {subscribers_int}")
-				print(f"Views: {total_views_int}")
-				print(f"Joined: {joined_convert}")
+				converted_date = ""
+				number_month = raw_months.get(raw_date[0])
+				date_str = (str(number_month) + "/" + raw_date[1] + "/" + raw_date[2]).replace(",", "")
+				converted_date = datetime.strptime(date_str, '%m/%d/%Y')
+				return converted_date
 
 			except:
-				print("Something went wrong getting artist information..")
+				print(f"{raw_date} Convert function date is not valid.")
 
-			# Setting Table Name
-			artist_db_name = youtube_code.replace("-","_replaced_")
+		converted_input_date = datetime.strptime("1944-06-06", '%Y-%m-%d')
+
+		
+		# Get Search Key Value
+		name_key = request.args['name']
+		input_name = '''{}'''.format(name_key)
+		youtube_code = input_name
+		#table_name = youtube_code_orig.replace("-","")
+		search_name = input_name.replace("-","_replaced_")
+
+		# Get Scrape Date
+		scrape_date = datetime.now().strftime("%Y-%m-%d")
+		scrape_datetime = datetime.utcnow()
+
+		# try:
+		# First Links
+		videos_link = "https://www.youtube.com/channel/" + youtube_code + "/videos"
+		about_link = "https://www.youtube.com/channel/" + youtube_code + "/about"
+
+		print(videos_link)
+		print(about_link)
+
+		# Get About Information
+		about_html = requests.get(about_link)
+
+		# Parse HTML
+		about_soup = bs(about_html.text, "lxml")
+
+		# Artist Image
+		artist_image = about_soup.find("img", class_="channel-header-profile-image").get("src")
+
+		# Artist Information
+		try:
+			artist_name = about_soup.find("meta", property="og:title").get("content")
+
+			subscribers = about_soup.find_all("span", class_="about-stat")[0].text
+			subscribers_str = subscribers.split(" ")[0]
+
+			try:
+				subscribers_int = int(subscribers.split(" ")[0].replace(",",""))
+
+			except:
+				subscribers_int = "Not available"
+
+			total_views = about_soup.find_all("span", class_="about-stat")[1].text
+			total_views_str = total_views[3:len(total_views)].split(" ")[0]
+
+			try:
+				total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
+				joined = about_soup.find_all("span", class_="about-stat")[2].text
+				joined_temp = joined.split(" ")[1:4]
+				joined_convert = convertDate(joined_temp)
+				joined_str = str(joined_convert).split(" ")[0]
+
+			except:
+				total_views = about_soup.find_all("span", class_="about-stat")[0].text
+				total_views_str = total_views[3:len(total_views)].split(" ")[0]
+				total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
+
+				joined = about_soup.find_all("span", class_="about-stat")[1].text
+				joined_temp = joined.split(" ")[1:4]
+				joined_convert = convertDate(joined_temp)
+				joined_str = str(joined_convert).split(" ")[0]
+
+			print(f"Artist: {artist_name}")
+			print(f"Subscribers: {subscribers_int}")
+			print(f"Views: {total_views_int}")
+			print(f"Joined: {joined_convert}")
+
+		except:
+			print("Something went wrong getting artist information..")
+
+		# Setting Table Name
+		artist_db_name = youtube_code.replace("-","_replaced_")
+
+		# Youtube Code
+		youtube_code = input_name
+
+		# Getting ALL Playlist Names
+		videos_response=requests.get(videos_link)
+		videos_soup = bs(videos_response.text,"lxml")
+		videos_soup.find_all("span",class_="branded-page-module-title-text")
+
+		playlist_names_html = videos_soup.find_all("span",class_="branded-page-module-title-text")
+		playlist_names = []
+
+		for name in playlist_names_html:
+
+			if name.text != "\nUploads\n":
+				playlist_names.append(name.text.replace("\n",""))
+				
+		playlist_names.append("Uploads")
+
+		# Getting ALL Playlist URLS
+		playlist_urls_html = videos_soup.find_all("a",class_="branded-page-module-title-link")
+		playlist_urls = []
+		playlist_uploads_link = "https://www.youtube.com" + "/playlist?list=UU" + youtube_code[2:]
+
+		for playlist in playlist_urls_html:
+
+			if "/user/" not in playlist.get("href"):
+				playlist_urls.append("https://www.youtube.com" + playlist.get("href"))
+				
+		playlist_urls.append(playlist_uploads_link)
+
+		print(f"Found {len(playlist_urls)} playlists:")
+
+		for i in range(len(playlist_urls)):
+			print(f"{playlist_names[i]}: {playlist_urls[i]}")
+
+		urls_all = []
+		counter = 0
+		total_videos_all = 0
+		for playlist_link in playlist_urls:    
 			
-			# Youtube Code
-			youtube_code = input_name
-			playlist_link = "https://www.youtube.com" + "/playlist?list=UU" + youtube_code[2:] 
-
-			print(playlist_link)
+			print(f"Getting {playlist_names[counter]} urls now...")
 
 			# Get Playlist Response
 			playlist_response = requests.get(playlist_link)
@@ -163,22 +198,24 @@ def newPull(global_search_name=global_search_name):
 			first_video = "https://www.youtube.com" + playlist_soup.find_all("a", class_="pl-video-title-link")[0].get("href").split("&")[0]
 			first_video_within_playlist = first_video + "&" + playlist_link.split("?")[1]
 
-			print(first_video_within_playlist)
+		#     print(first_video_within_playlist)
 
 			# Create Soup Object for First Video Inside Playlist
 			playlist_inside_request = requests.get(first_video_within_playlist) 
 
 			playlist_inside_soup = bs(playlist_inside_request.text, "lxml")
 
-			urls_all = []
+			
 			total_videos_in_playlist = int(playlist_inside_soup.find("span", id="playlist-length").text.replace(" videos","").replace(",",""))
 			print(f"Total videos: {total_videos_in_playlist}")
+			total_videos_all = total_videos_all + total_videos_in_playlist
+			
 			number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) 
 			last_video_index = int(playlist_inside_soup.find_all("span", class_="index")[-1].text.replace("\n        ","").replace("\n    ",""))
 			last_shown_link = playlist_inside_soup.find_all("span", class_="index")[-1].find_next("a").get("href")
 			link_fix = "https://www.youtube.com" + last_shown_link
 
-			print("Getting urls...")
+		#     print("Getting urls...")
 
 			for i in range(total_videos_in_playlist):   
 
@@ -224,15 +261,17 @@ def newPull(global_search_name=global_search_name):
 					next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
 					original_url = next_url.split("&")[0]
 					urls_all.append(original_url)
+					
+			counter += 1
 
-				request_duration = time.time() - start
-				if request_duration >  1000:
-					json_data = []
-					reason = "The request took too long to complete."
-					return render_template("uh-oh.html", data = json_data, reason=reason)
-		
-		except:
-			print("Something went wrong getting video urls..")
+		#             request_duration = time.time() - start
+		#         if request_duration >  1000:
+		#             json_data = []
+		#             reason = "The request took too long to complete."
+		#             return render_template("uh-oh.html", data = json_data, reason=reason)
+
+		# except:
+		#     print("Something went wrong getting video urls..")
 
 		# Going to Each Video and Extracting Data
 		published_on = []
@@ -248,6 +287,8 @@ def newPull(global_search_name=global_search_name):
 		paid_list = []
 		family_friendly = []
 		bump = 0
+
+		print(f"There are {len(urls_all)} total videos to get...")
 
 		for i in range(len(urls_all)):
 			try:
@@ -319,18 +360,19 @@ def newPull(global_search_name=global_search_name):
 				# Family Friendly
 				family = video_soup.find("meta", itemprop="isFamilyFriendly").get("content")
 				family_friendly.append(family)
-
+				
+				# Percent Complete
 				percent_complete = round(((i+1) / (len(urls_all)))*100,0)
 
 				percent_complete_str = str(percent_complete)
 
 				print(f"{percent_complete}% complete...")
 
-				request_duration = time.time() - start
-				if request_duration >  1000:
-					json_data = []
-					reason = "The request took too long to complete."
-					return render_template("uh-oh.html", data = json_data, reason=reason)
+		#         request_duration = time.time() - start
+		#         if request_duration >  1000:
+		#             json_data = []
+		#             reason = "The request took too long to complete."
+		#             return render_template("uh-oh.html", data = json_data, reason=reason)
 
 			# Remove any data apended to lists during an exception, account for smaller list size after removal vs. i
 			except:
@@ -389,17 +431,16 @@ def newPull(global_search_name=global_search_name):
 					pass
 				bump = bump + 1
 				continue
-				
+
 		urls_to_date = urls_all[0:len(published_on)]
 
 		youtube_code = input_name.replace("-","_replaced_")
-
 
 		# Create DataFrame
 		df = pd.DataFrame({"ARTIST" : artist_name,
 						"SCRAPE_DATE" : scrape_datetime,
 						"SEARCH_NAME" : global_search_name,
-						"TOTAL_VIDEOS" : total_videos_in_playlist,
+						"TOTAL_VIDEOS" : total_videos_all,
 						"JOINED" : joined_convert,
 						"SUBSCRIBERS" : subscribers_int,
 						"TOTAL_VIEWS" : total_views_int,
@@ -418,8 +459,12 @@ def newPull(global_search_name=global_search_name):
 						"ARTIST_CODE" : youtube_code,
 						})
 
-		df = df.sort_values("PUBLISHED",ascending=False)
-		
+		# print(df["PUBLISHED"])
+
+		df = df.sort_values(by=["PUBLISHED"], ascending=False).reset_index()
+
+		# print(df["PUBLISHED"])
+
 		# Saving to CSV
 		#df.to_csv(f"{artist_name}_scrape.csv")
 
@@ -440,7 +485,7 @@ def newPull(global_search_name=global_search_name):
 		TITLE VARCHAR(255) CHARACTER SET UTF8MB4,\
 		CATEGORY VARCHAR(255) CHARACTER SET UTF8MB4,\
 		DURATION FLOAT,\
-		VIEWS INT,\
+		VIEWS BIGINT,\
 		LIKES INT,\
 		DISLIKES INT,\
 		COMMENTS INT,\
@@ -509,27 +554,27 @@ def newPull(global_search_name=global_search_name):
 		if subscribers == "Not available":
 			connection.execute(f"INSERT INTO artists \
 			(SCRAPE_DATE, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
-			VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_in_playlist}', \
+			VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_all}', \
 			'{joined}', NULL,\
 			'{total_views}','{artist_image}', '{artist_code}')")
 
 			connection.execute(f"INSERT INTO requests \
 			(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
 			VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
-		
+
 		else:
 			connection.execute(f"INSERT INTO artists \
 			(SCRAPE_DATE, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
-			VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_in_playlist}',\
+			VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_all}',\
 			'{joined}', '{subscribers}', '{total_views}','{artist_image}','{artist_code}')")
 
 			connection.execute(f"INSERT INTO requests \
 			(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
 			VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
-			
+
 
 		print("Inserted data into database successfully...")
-		
+
 		# Searching for input Artist
 		df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 		{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
@@ -1559,7 +1604,7 @@ def search():
 			TITLE VARCHAR(255) CHARACTER SET UTF8MB4,\
 			CATEGORY VARCHAR(255) CHARACTER SET UTF8MB4,\
 			DURATION FLOAT,\
-			VIEWS INT,\
+			VIEWS BIGINT,\
 			LIKES INT,\
 			DISLIKES INT,\
 			COMMENTS INT,\
