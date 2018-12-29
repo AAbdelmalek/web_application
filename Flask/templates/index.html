@@ -24,6 +24,7 @@
 - Queue requests --
 - Load Bar bug 2nd and 3rd decks -- 
 - Clean up SEARCH_NAME columns -- delete or something
+- Lock modal on search -- 
  -->
 
  <head>
@@ -124,32 +125,41 @@
  
                                         <!-- Card 1 -->
                                         <div class="card-deck">
-                                            <div class="card">
-                                                    <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
+                                            <div class="card view">
+                                                <div class="zoom">
+                                                    <a href="{{analytics_base_url_0}}">
+                                                    <img class="card-img-top image" src="{{artist_image_0}}" href="{{analytics_base_url_0}}" alt="Card image cap">
+                                                    </a>
+                                                </div>
                                                         <div class="card-body">
-                                                                <h5 class="card-title">Content Creator</h5>
+                                                                <h5 class="card-title">{{artist_name_0}}</h5>
                                                                 <p class="card-text">
-                                                                        <h6 class="h6-font">Videos</h6>
-                                                                        <h6 class="h6-font">Subscribers</h6>
-                                                                        <h6 class="h6-font">All-Time Views</h6>
-                                                                        <h6 class="h6-font">Joined</h6>
+                                                                        <h6 class="h6-font">{{total_videos_0}}</h6>
+                                                                        <h6 class="h6-font">{{subscribers_0}}</h6>
+                                                                        <h6 class="h6-font">{{total_views_0}}</h6>
+                                                                        <h6 class="h6-font">{{joined_0}}</h6>
                                                                 </p>
                                                                 <div class="text-center">
-                                                                        <a href="#" class="btn btn-sm btn-primary">Shuffle</a>
+                                                                        <a id="00" href="{{analytics_base_url_0}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                                 </div>
                                                         </div>
                                                     <div class="card-footer text-center">
-                                                            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                                                    Launch demo modal
-                                                                  </button> -->
-                                                        <small class="text-muted">Last retrieved</small>
+
+                                                        <small class="text-muted"><a id="_00" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_0}}</a></small>
+
                                                     </div>
                                                 </div>
 
                 
                                         <!-- Card 2 -->
                                         <div class="card">
-                                            <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
+                                            
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url}}">
+                                                        <img class="card-img-top image" src="{{artist_image}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                                 <div class="card-body">
                                                         <h5 class="card-title">{{artist_name}}</h5>
                                                         <p class="card-text">
@@ -172,7 +182,12 @@
                 
                                         <!-- Card 3 -->
                                         <div class="card">
-                                                <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_1}}">
+                                                        <img class="card-img-top image" src="{{artist_image_1}}" alt="Card image cap">
+                                                        </a>
+                                                    </div>
+
                                                     <div class="card-body">
                                                         <h5 class="card-title">{{artist_name_1}}</h5>
                                                         <p class="card-text">
@@ -193,7 +208,12 @@
                                         
                                         <!-- Card 4 -->
                                         <div class="card">
-                                                <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_2}}">
+                                                        <img class="card-img-top image" src="{{artist_image_2}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                                     <div class="card-body">
                                                         <h5 class="card-title">{{artist_name_2}}</h5>
                                                         <p class="card-text">
@@ -228,7 +248,12 @@
                                      <!-- Card 1 -->
                                      <div class="card-deck">
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_3}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_3}}">
+                                                        <img class="card-img-top image" src="{{artist_image_3}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{artist_name_3}}</h5>
                                                     <p class="card-text">
@@ -248,7 +273,12 @@
  
                                          <!-- Card 2 -->
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_4}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_4}}">
+                                                        <img class="card-img-top image" src="{{artist_image_4}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                              <div class="card-body">
                                                  <h5 class="card-title">{{artist_name_4}}</h5>
                                                     <p class="card-text">
@@ -269,7 +299,12 @@
  
                                          <!-- Card 3 -->
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_5}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_5}}">
+                                                        <img class="card-img-top image" src="{{artist_image_5}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                              <div class="card-body">
                                                  <h5 class="card-title">{{artist_name_5}}</h5>
                                                  <p class="card-text">
@@ -288,7 +323,12 @@
                                          </div>
                                          <!-- Card 4 -->
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_6}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_6}}">
+                                                        <img class="card-img-top image" src="{{artist_image_6}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                              <div class="card-body">
                                                  <h5 class="card-title">{{artist_name_6}}</h5>
                                                  <p class="card-text">
@@ -324,7 +364,12 @@
                                      <!-- Card 1 -->
                                      <div class="card-deck">
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_7}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_7}}">
+                                                        <img class="card-img-top image" src="{{artist_image_7}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                              <div class="card-body">
                                                  <h5 class="card-title">{{artist_name_7}}</h5>
                                                  <p class="card-text">
@@ -344,7 +389,12 @@
  
                                          <!-- Card 2 -->
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_8}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_8}}">
+                                                        <img class="card-img-top image" src="{{artist_image_8}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                              <div class="card-body">
                                                  <h5 class="card-title">{{artist_name_8}}</h5>
                                                  <p class="card-text">
@@ -364,7 +414,12 @@
  
                                          <!-- Card 3 -->
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_9}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_9}}">
+                                                        <img class="card-img-top image" src="{{artist_image_9}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                              <div class="card-body">
                                                  <h5 class="card-title">{{artist_name_9}}</h5>
                                                  <p class="card-text">
@@ -383,7 +438,12 @@
                                          </div>
                                          <!-- Card 4 -->
                                          <div class="card">
-                                             <img class="card-img-top" src="{{artist_image_10}}" alt="Card image cap">
+                                                <div class="zoom">
+                                                        <a href="{{analytics_base_url_10}}">
+                                                        <img class="card-img-top image" src="{{artist_image_10}}" alt="Card image cap">
+                                                        </a>
+                                                </div>
+
                                              <div class="card-body">
                                                  <h5 class="card-title">{{artist_name_10}}</h5>
                                                  <p class="card-text">
@@ -525,7 +585,7 @@
     </div>
 
           
-          <!-- Modal LAst Retrieved -->
+          <!-- Modal Last Retrieved -->
           <div class="modal fade" id="initiatePull" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -554,7 +614,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Initiate New Request</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button id = "new-scrape-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -601,7 +661,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="justLoad()">OK</a>
+                    <button id = "new-scrape-ok-button" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>                    
+                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="resetURL()">OK</a>
                 </div>
                 </div>
             </div>

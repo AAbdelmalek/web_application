@@ -159,7 +159,7 @@ def newPull(global_search_name=global_search_name):
 
 		for name in playlist_names_html:
 
-			if name.text != "\nUploads\n":
+			if name.text != "\nUploads\n" or name.text != "\nLiked videos\n":
 				playlist_names.append(name.text.replace("\n",""))
 				
 		playlist_names.append("Uploads")
@@ -697,21 +697,32 @@ artist_image_new_scrape = artist_image_new_scrape):
 	)")
 
 	# Getting Last Artists to also Display on Home Page	
-	artists_table = pd.read_sql("SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 11", connection) 
+	artists_table = pd.read_sql("SELECT * FROM REQUESTS ORDER BY ID DESC LIMIT 12", connection) 
 
-	artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
-	artist_1 = artists_table.loc[1,"ARTIST_CODE"]
-	artist_2 = artists_table.loc[2,"ARTIST_CODE"]
-	artist_3 = artists_table.loc[3,"ARTIST_CODE"]
-	artist_4 = artists_table.loc[4,"ARTIST_CODE"]
-	artist_5 = artists_table.loc[5,"ARTIST_CODE"]
-	artist_6 = artists_table.loc[6,"ARTIST_CODE"]
-	artist_7 = artists_table.loc[7,"ARTIST_CODE"]
-	artist_8 = artists_table.loc[8,"ARTIST_CODE"]
-	artist_9 = artists_table.loc[9,"ARTIST_CODE"]
-	artist_10 = artists_table.loc[10,"ARTIST_CODE"]
+	artist_0 = artists_table.loc[0,"ARTIST_CODE"]
+	artist_db_name = artists_table.loc[1,"ARTIST_CODE"]
+	artist_1 = artists_table.loc[2,"ARTIST_CODE"]
+	artist_2 = artists_table.loc[3,"ARTIST_CODE"]
+	artist_3 = artists_table.loc[4,"ARTIST_CODE"]
+	artist_4 = artists_table.loc[5,"ARTIST_CODE"]
+	artist_5 = artists_table.loc[6,"ARTIST_CODE"]
+	artist_6 = artists_table.loc[7,"ARTIST_CODE"]
+	artist_7 = artists_table.loc[8,"ARTIST_CODE"]
+	artist_8 = artists_table.loc[9,"ARTIST_CODE"]
+	artist_9 = artists_table.loc[10,"ARTIST_CODE"]
+	artist_10 = artists_table.loc[11,"ARTIST_CODE"]
 
+	
 	# Get Artist 0 Info
+	artist_0_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	{artist_0}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
+	{artist_0}.TITLE, {artist_0}.CATEGORY , {artist_0}.DURATION, {artist_0}.VIEWS, \
+	{artist_0}.LIKES, {artist_0}.DISLIKES, {artist_0}.PAID, {artist_0}.FAMILY_FRIENDLY, \
+	{artist_0}.URL, artists.ARTIST_IMAGE FROM artists \
+	INNER JOIN {artist_0} \
+	ON artists.ARTIST_CODE = {artist_0}.ARTIST_CODE", connection)
+
+	# Get Artist DB Info
 	df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 	{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
@@ -809,8 +820,22 @@ artist_image_new_scrape = artist_image_new_scrape):
 	{artist_10}.URL, artists.ARTIST_IMAGE FROM artists \
 	INNER JOIN {artist_10} \
 	ON artists.artist = {artist_10}.artist", connection)
-
+	
 	# Artist 0 Information
+	scrape_date_0 = artist_0_table.loc[0,"SCRAPE_DATE"]
+	cache_0 = f"{scrape_date_0} scrape"
+	json_data_0 = artist_0_table.to_json(orient="records")
+	scrape_date_str_0 = str(scrape_date_0).split(" ")[0]
+	total_videos_str_0 = format(artist_0_table.loc[0,"TOTAL_VIDEOS"],",") + " Videos"
+	number_scraped_0 = int(len(artist_0_table))
+	artist_0_name = artist_0_table.loc[0,"ARTIST"]
+	analytics_base_url_0 = "/query?name=" + artist_0 + "&analytics=base"
+	subscribers_0 = format(artist_0_table.loc[0,"SUBSCRIBERS"],",")
+	joined_0 = artist_0_table.loc[0,"JOINED"]
+	total_views_0 = format(artist_0_table.loc[0,"TOTAL_VIEWS"],",")
+	artist_image_0 = artist_0_table.loc[0,"ARTIST_IMAGE"]
+	
+	# Artist DB Information
 	scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
 	cache = f"{scrape_date} scrape"
 	json_data = df_cache.to_json(orient="records")
@@ -1048,7 +1073,14 @@ artist_image_new_scrape = artist_image_new_scrape):
 	subscribers_int_new_scrape=subscribers_int_new_scrape,\
 	total_views_int_new_scrape=total_views_int_new_scrape,\
 	joined_convert_new_scrape=joined_convert_new_scrape,\
-	artist_image_new_scrape = artist_image_new_scrape)
+	artist_image_new_scrape = artist_image_new_scrape,\
+	data_0=json_data_0, cache_0=scrape_date_str_0,\
+	artist_name_0=artist_0_name,\
+	subscribers_0 = f"{subscribers_0} Subscribers",\
+	total_views_0 =f"{total_views_0} All-Time Views", joined_0=f"Joined {joined_0}",\
+	artist_image_0 = artist_image_0,\
+	total_videos_0 = total_videos_str_0,\
+	analytics_base_url_0=analytics_base_url_0)
 
 # Query String
 @app.route("/query")
@@ -1057,7 +1089,7 @@ def search():
 	# Get Search Key Value
 	name_key = request.args['name']
 	input_name = '''{}'''.format(name_key)
-	global_search_name = input_name
+	# global_search_name = input_name.replace("-","_replaced_")
 
 	try:
 		# Start Clock, Set Variables
@@ -1236,7 +1268,7 @@ def search():
 			youtube_code = youtube_code_raw.split("/")[4]
 			playlist_link = "https://www.youtube.com" + "/playlist?list=UU" + youtube_code[2:]  
 
-		artist_db_name = youtube_code
+		artist_db_name = youtube_code.replace("-","_replaced_")
 
 		# Checking Database to See if Data was Previously Scraped
 		df_cache = []

@@ -164,7 +164,7 @@ function load_bar(){
 
             progress_bar.style.visibility = "visible"; 
             // loading_warning.style.visibility = "visible";
-
+            document.getElementById("DS").href = "#";
             window.location.href = url;
   }   
 }
@@ -209,7 +209,7 @@ window.onscroll = function(ev) {
             // more_decks();
 
         }
-}
+};
 
 
 function more_decks(){
@@ -223,12 +223,7 @@ deck_number = `deck-${counter+1}`;
 infinite.innerHTML += html_new_deck;
 
 window.scrollTo(0,document.body.offsetHeight);
-
-
-
-
 }
-
 
 search_button.on("keyup", generateURL);
 
@@ -287,26 +282,55 @@ function getPullURL(update_url, days, id_orig){
     }
 
     document.getElementById("pull-href").href = update_url;
-}
+};
 
 function justLoad(){
 
     progress_bar.style.visibility = "visible"; 
 
-}
+};
 
 function newScrape(not_found_in_db, youtube_code){
 
     if (not_found_in_db === 0){
         $("#new-scrape").modal("hide");
+        $('#new-scrape').data('bs.modal',null); 
     }
 
     else{
 
-        $("#new-scrape").modal("show");
+        $("#new-scrape").modal({
+            keyboard : false,
+            backdrop : "static",
+          });
         document.getElementById("new-scrape-href").href = "/pull?name=" + youtube_code;
 
 
     }
+
+};
+
+
+function resetURL(){
+
+    // $("#new-scrape").modal("hide");
+    // $('#new-scrape').data('bs.modal',null); 
+
+    // $("#new-scrape").modal({
+    //     keyboard : false,
+    //     backdrop : "static",
+    //   });
+    
+    progress_bar.style.visibility = "visible"; 
+    ok_button = document.getElementById("new-scrape-ok-button");
+    ok_button.innerHTML = "Please wait...";
+    ok_button.setAttribute("data-dismiss","");
+
+
+    ok_link = document.getElementById("new-scrape-href");
+    ok_link.style.display = "none";
+
+    document.getElementById("new-scrape-close").style.visibility = "hidden";
+
 
 }
