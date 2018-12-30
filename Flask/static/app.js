@@ -209,7 +209,7 @@ window.onscroll = function(ev) {
             // more_decks();
 
         }
-};
+}
 
 
 function more_decks(){
@@ -282,13 +282,13 @@ function getPullURL(update_url, days, id_orig){
     }
 
     document.getElementById("pull-href").href = update_url;
-};
+}
 
 function justLoad(){
 
     progress_bar.style.visibility = "visible"; 
 
-};
+}
 
 function newScrape(not_found_in_db, youtube_code){
 
@@ -308,7 +308,7 @@ function newScrape(not_found_in_db, youtube_code){
 
     }
 
-};
+}
 
 
 function resetURL(){

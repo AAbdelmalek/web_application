@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v5.min.js"></script>  
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+    <script src="{{ url_for('static', filename='plotly-latest.min.js') }}"></script>
 </head>
 <body>
+<div id="bg">
 
 <!-- Load Bar -->
 <div id="load-bar" class="progress">
@@ -31,7 +33,7 @@
 
  <!-- Load Alert -->       
 
-        <div class="row">
+        <!-- <div class="row">
         <div class="col">
                 <div class="alert alert-info" role="alert" id="loading">
                         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -39,25 +41,26 @@
                         Getting data...this will take a moment...
                 </div>
         </div>
-        </div>
+        </div> -->
 
 
 
 <!-- Cards -->
 <div class="row">
                 <div class="col">
+                </div>
+</div>
                         
 <!-- Card 1 -->
-<a href="/static/{{youtube_code}}" download>
+<div class="text-center">
+        <a href="/static/{{youtube_code}}" download>
         <button type="button" class="btn btn-sm btn-primary analytics_load_button">Export to CSV</button>
-</a>
-<br>
-
-{{youtube_code}}
-{{data}}
-
+        </a>
 </div>
-</div>
+
+<!-- {{youtube_code}}
+{{data}} -->
+
 
 <!-- Artist Image -->
         <!-- <div class="row"> 
@@ -80,14 +83,24 @@
         </div> -->
 
 </div>
-    
+<!-- Plot 1 -->
+<br>
+<br>
+        <div class="container-fluid">
+                <div class="row">
+                        <div class="col-7 mx-auto">
+                                <div id = "plot-1"></div>
+                        </div>
+                </div>
+        </div>
+</div>
 </body>
 
 <footer class="footer">
 
 </footer>
-
-<script src="{{ url_for('static', filename='app.js') }}"></script>
+<script src="{{ url_for('static', filename='plots.js') }}"></script>
 <script>getData({{data|tojson}})</script>
+
 </html>
 

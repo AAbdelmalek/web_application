@@ -440,7 +440,7 @@ def newPull():
 	# Create DataFrame
 	df = pd.DataFrame({"ARTIST" : artist_name,
 					"SCRAPE_DATE" : scrape_datetime,
-					"SEARCH_NAME" : global_search_name,
+					"SEARCH_NAME" : input_name,
 					"TOTAL_VIDEOS" : total_videos_all,
 					"JOINED" : joined_convert,
 					"SUBSCRIBERS" : subscribers_int,
