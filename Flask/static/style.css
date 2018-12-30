@@ -204,13 +204,13 @@ p {margin:auto;
 }
 
 .card-body {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   /* font-size:10vw; */
   /* overflow-wrap: inherit; */
 }
 
 .card-footer{
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 /* .card-text{
@@ -218,14 +218,18 @@ p {margin:auto;
 
 } */
 
-/* .footer {
+.footer {
+  border-style: solid;
+  border-color: #E0E0E0 white white white;
+  border-width: thin;
   position: fixed;
   left: 0;
   bottom: 0;
   height : 35px;
   width: 100%;
-  background-color: #202020;
-  color: white;
+  background-color: white;
+  color: black;
   text-align: center;
-} */
+  font-size : 14px;
+}
 

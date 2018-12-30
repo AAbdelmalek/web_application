@@ -268,7 +268,7 @@ function getPullURL(update_url, days, id_orig){
 
     last_retrieved_link = document.getElementById(id_orig);
 
-    if (days < 0){
+    if (days < 6){
         
         last_retrieved_link.setAttribute("data-target", ""); 
         last_retrieved_link.classList.add("retrieved-link");
@@ -297,6 +297,10 @@ function newScrape(not_found_in_db, youtube_code){
         $('#new-scrape').data('bs.modal',null); 
     }
 
+    else if (not_found_in_db === 2){ 
+        window.location.href = "/";
+    }
+
     else{
 
         $("#new-scrape").modal({
@@ -321,10 +325,14 @@ function resetURL(){
     //     backdrop : "static",
     //   });
     
+
+    
     progress_bar.style.visibility = "visible"; 
     ok_button = document.getElementById("new-scrape-ok-button");
     ok_button.innerHTML = "Please wait...";
     ok_button.setAttribute("data-dismiss","");
+
+    document.getElementById("modal-cancel").innerHTML += '<a class="btn btn-sm btn-danger" role="button" href="#" class="link_color_2" id="new-scrape-cancel" onclick="cancelRequest()">Cancel</a>';
 
 
     ok_link = document.getElementById("new-scrape-href");
@@ -332,5 +340,15 @@ function resetURL(){
 
     document.getElementById("new-scrape-close").style.visibility = "hidden";
 
+
+}
+
+function cancelRequest(){
+
+    $("#new-scrape").modal("hide");
+    $('#new-scrape').data('bs.modal',null); 
+
+    window.location.href = "/cancel";
+    
 
 }

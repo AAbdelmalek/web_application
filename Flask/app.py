@@ -14,6 +14,7 @@ import pymysql
 import time
 from numpy import random
 from os.path import join, dirname, realpath
+from flask import request
 pymysql.install_as_MySQLdb()
 not_found_in_db = 0
 youtube_code_new_scrape = ""
@@ -23,13 +24,23 @@ total_views_int_new_scrape = ""
 joined_convert_new_scrape = ""
 artist_image_new_scrape = ""
 global_search_name = ""
+cancel = 0
 
 # Initialize Flask
 app = Flask(__name__)
 
+# Cancel Scrape Request
+# @app.route("/cancel")
+# def shutdown():
+
+# 	cancel = 1
+# 	newPull(cancel)
+# 	return cancel
+
+
 # New Scrape Request
 @app.route("/pull")
-def newPull():
+def newPull(cancel=cancel):
 	# try:
 
 	# Start Clock, Set Variables
@@ -218,7 +229,11 @@ def newPull():
 
 	#     print("Getting urls...")
 
-		for i in range(total_videos_in_playlist):   
+		for i in range(total_videos_in_playlist):  
+			# shutdown() 
+			# if cancel == 1:
+			# 	cancel = 0
+			# 	raise RuntimeError
 
 			if i == 0:       
 				first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
@@ -292,6 +307,11 @@ def newPull():
 	print(f"There are {len(urls_all)} total videos to get...")
 
 	for i in range(len(urls_all)):
+		# shutdown() 
+		# if cancel == 1:
+		# 	cancel = 0
+		# 	raise RuntimeError
+
 		try:
 			video_url = urls_all[i]
 			video_response = requests.get(video_url)
@@ -685,7 +705,8 @@ youtube_code_new_scrape, artist_name_new_scrape=artist_name_new_scrape,\
 subscribers_int_new_scrape=subscribers_int_new_scrape,\
 total_views_int_new_scrape=total_views_int_new_scrape,\
 joined_convert_new_scrape=joined_convert_new_scrape,\
-artist_image_new_scrape = artist_image_new_scrape):
+artist_image_new_scrape = artist_image_new_scrape,\
+cancel=cancel):
 
 	# Set Variables, Render Home Page
 	json_data = []
