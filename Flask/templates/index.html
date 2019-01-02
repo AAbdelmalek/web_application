@@ -12,8 +12,8 @@
         - Artist info
         - Return to search results/home screen
         - Regression (plotly)
-        - Income Estimate
-        - Raw Data
+        - Income Estimate?
+        - Raw Data -- OK
         - Pretty, sortable table?
 - asking to pull latest data - implementation - add to existing data or do full scrape? --
 - Analytics - avg likes/duration/views/days between posts/ rolling averages/etc. -- 
@@ -44,38 +44,44 @@
 <body>
     <div id="bg">  
                 <div class="container-fluid">
-
+                    <div class = "row">
+                        <div class = "col">
                  
                 <!-- Nav Bar -->
 
-                        <nav class="navbar justify-content-between fixed-top">
+                        <nav class="navbar fixed-top">
 
-                    
-                                <div class="col-3 text-left">
-                                        <div class="navbar-brand">
-                                            
-                                                <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" alt="Youtube DS" onmouseover="logo()" onmouseout="logo()"></a>
-        
-                                                <span class="header"><a class="link_color" href="/" onmouseover="logo()" onmouseout="logo()">YouTube </a></span>
-                                                <span class="header2"><a class="link_color" onmouseover="logo()" onmouseout="logo()" id="DS" href="/">DS</a></span>
-                                            
-                                       
-                                        </div>
-        
-                                </div>
-        
-                                <!-- Load Bar -->
-        
-                                <div class="col-4">
-                                        <div class="input-group">
-                                                <input id="button" type="text" class="form-control" placeholder="Content Creator">
-                                                <span class="input-group-btn">
-                                                        <a onclick="load_bar()" class="btn button btn-danger" href="#" role="button" id="loader_search">Search</a>
-                                                </span>
-                                        </div>
-        
-                                </div>
-                        
+                            <div class="row">
+                                    <div class="col-3 text-left">
+                                            <div class="navbar-brand">
+                                                
+                                                    <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" alt="Youtube DS" onmouseover="logo()" onmouseout="logo()"></a>
+            
+                                                    <span class="header"><a class="link_color" href="/" onmouseover="logo()" onmouseout="logo()">YouTube </a></span>
+                                                    <span class="header2"><a class="link_color" onmouseover="logo()" onmouseout="logo()" id="DS" href="/">DS</a></span>
+                                                
+                                        
+                                            </div>
+            
+                                    </div>
+            
+                                    <!-- Search Bar -->
+            
+                                    <div class="col-4">
+                                            <div class="input-group">
+                                                    <input id="button" type="text" class="form-control" placeholder="Content Creator">
+                                                    <span class="input-group-btn">
+                                                            <a onclick="load_bar()" class="btn button btn-danger" href="#" role="button" id="loader_search">Search</a>
+                                                    </span>
+                                            </div>
+            
+                                    </div>
+
+
+                                    <button type="button" class="btn btn-default" aria-label="Left Align">
+                                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                                    </button>
+                            
                                                 <!-- Progress Warning -->
                                                 <!-- <div class="col-3">
                                         <div class="center-block"> -->
@@ -90,9 +96,10 @@
                                                 <!-- <div class="col-1 img-responsive">
                                         <img id = "info" src="{{ url_for('static', filename='inof.png') }}" height="30px">
                                         </div> -->
-                
+                            </div>
                         </nav>
-                    
+                    </div>
+                    </div>
  
 
                 </div>
@@ -461,108 +468,6 @@
  
                                      </div>
                                  </div>
- 
-                                 <!-- Deck 4 -->
-                                 <!-- <div id="deck-4">
-                                     <div class="container-fluid">
-                                         <br>
-                                         <br>
- 
-                                         <div class="row">
-                                             <div class="col-7 mx-auto">
- 
-                                                 <!- - Card 1 - ->
-                                                 <div class="card-deck">
-                                                     <div class="card">
-                                                         <img class="card-img-top" src="{{ url_for('static', filename='profile.jpg') }}" alt="Card image cap">
-                                                         <div class="card-body">
-                                                             <h5 class="card-title">Content Creator</h5>
-                                                             <p class="card-text">
-                                                                 <h6 class="h6-font">Videos</h6>
-                                                                 <h6 class="h6-font">Subscribers</h6>
-                                                                 <h6 class="h6-font">All-Time Views</h6>
-                                                                 <h6 class="h6-font">Joined</h6>
-                                                             </p>
-                                                             <div class="text-center">
-                                                                 <a href="#" class="btn btn-sm btn-primary">Shuffle</a>
-                                                             </div>
-                                                         </div>
-                                                         <div class="card-footer text-center">
-                                                             <small class="text-muted">Last retrieved</small>
-                                                         </div>
-                                                     </div>
- 
-                                                     <!- - Card 2 - ->
-                                                     <div class="card">
-                                                         <img class="card-img-top" src="{{artist_image}}" alt="Card image cap">
-                                                         <div class="card-body">
-                                                             <h5 class="card-title">{{artist_name}}</h5>
-                                                             <p class="card-text">
-                                                                 <h6 class="h6-font">{{total_videos}}</h6>
-                                                                 <h6 class="h6-font">{{subscribers}}</h6>
-                                                                 <h6 class="h6-font">{{total_views}}</h6>
-                                                                 <h6 class="h6-font">{{joined}}</h6>
-                                                             </p>
-                                                             <div class="text-center">
-                                                                 <a href="{{analytics_base_url}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                             </div>
-                                                         </div>
-                                                         <div class="card-footer text-center">
-                                                             <small class="text-muted">Last retrieved <br> {{cache}}</small>
-                                                         </div>
-                                                     </div>
- 
-                                                     <!- -Card 3- ->
-                                                     <div class="card">
-                                                         <img class="card-img-top" src="{{artist_image_1}}" alt="Card image cap">
-                                                         <div class="card-body">
-                                                             <h5 class="card-title">{{artist_name_1}}</h5>
-                                                             <p class="card-text">
-                                                                 <h6 class="h6-font">{{total_videos_1}}</h6>
-                                                                 <h6 class="h6-font">{{subscribers_1}}</h6>
-                                                                 <h6 class="h6-font">{{total_views_1}}</h6>
-                                                                 <h6 class="h6-font">{{joined_1}}</h6>
-                                                             </p>
-                                                             <div class="text-center">
-                                                                 <a href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                             </div>
-                                                         </div>
-                                                         <div class="card-footer text-center">
-                                                             <small class="text-muted">Last retrieved <br> {{cache_1}}</small>
-                                                         </div>
-                                                     </div>
-                                                     <!- - Card 4 - ->
-                                                     <div class="card">
-                                                         <img class="card-img-top" src="{{artist_image_2}}" alt="Card image cap">
-                                                         <div class="card-body">
-                                                             <h5 class="card-title">{{artist_name_2}}</h5>
-                                                             <p class="card-text">
-                                                                 <h6 class="h6-font">{{total_videos_2}}</h6>
-                                                                 <h6 class="h6-font">{{subscribers_2}}</h6>
-                                                                 <h6 class="h6-font">{{total_views_2}}</h6>
-                                                                 <h6 class="h6-font">{{joined_2}}</h6>
-                                                             </p>
-                                                             <div class="text-center">
-                                                                 <a href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                             </div>
-                                                         </div>
-                                                         <div class="card-footer text-center">
-                                                             <small class="text-muted">Last retrieved <br> {{cache_2}}</small>
-                                                         </div>
-                                                     </div>
- 
-                                                 </div>
-                                             </div>
-                                         </div>
-                                        </div>
-                                         </div> -->
- 
-                                         <!-- <div id="deck-5">
- 
-                                         </div> -->
- 
-                                     <!-- </div> -->
- 
                                  </div>
                              </div>
                          </div>
@@ -570,16 +475,16 @@
                      <br>
                      <br>
 
-                     <div class="container-fluid">
+                     <!-- <div class="container-fluid">
                          <div class="row">
                              <div class="col text-center">
                                  <button type="button" onclick="more_decks()" class="btn btn-sm btn-default text-center">Load more</button>
                              </div>
                          </div>
-                     </div>
+                     </div> -->
 
                      <br>
-                     <br>
+                     <!-- <br> -->
     </div>
 
           
@@ -665,14 +570,14 @@
                 </div>
             </div>
             </div>
-<!-- 
+
 
 
             <footer class="footer">
                     <div class="container-fluid">
                       <span class="text-muted"></span>
                     </div>
-                  </footer> -->
+                  </footer>
     </body>
 
      <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>

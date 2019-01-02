@@ -222,10 +222,10 @@ p {margin:auto;
   border-style: solid;
   border-color: #E0E0E0 white white white;
   border-width: thin;
-  position: fixed;
+  /* position: fixed; */
   left: 0;
   bottom: 0;
-  height : 35px;
+  height : 75px;
   width: 100%;
   background-color: white;
   color: black;
