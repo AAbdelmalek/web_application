@@ -4,7 +4,7 @@
 - Exit proceedure for large scrapes -- OK -- timeout -- need to set interval
 - Load "this may take a while" -- OK -- need to revisit
 - Last retrieved, make this a hyperlink/button that goes to a modal -- OK - need to set interval
-- Cancel request in search modal next to "Please wait..." -- 
+- Cancel request in search modal next to "Please wait..." -- OK
 - Background color of bottom of page when scrolling --
 - Terminate if page is refreshed/closed/stopped --
 - Database SQL String issue -- Maybe try using `` for quotes? -- not a big problem, csv export is fine
@@ -24,6 +24,7 @@
 - Load percent in modal search -- 
 - Add exception error pages back to query and newPull -- 
 - Get comment numbers -- 
+- One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA
  -->
 
  <head>
@@ -50,9 +51,9 @@
                 <!-- Nav Bar -->
 
                         <nav class="navbar fixed-top">
-
+                            <!-- Logo -->
                             <div class="row">
-                                    <div class="col-3 text-left">
+                                    <div class="col-3">
                                             <div class="navbar-brand">
                                                 
                                                     <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.ico') }}" height="25" alt="Youtube DS" onmouseover="logo()" onmouseout="logo()"></a>

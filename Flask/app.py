@@ -15,6 +15,7 @@ import time
 from numpy import random
 from os.path import join, dirname, realpath
 from flask import request
+import atexit
 pymysql.install_as_MySQLdb()
 not_found_in_db = 0
 youtube_code_new_scrape = ""
@@ -30,17 +31,28 @@ cancel = 0
 app = Flask(__name__)
 
 # Cancel Scrape Request
-# @app.route("/cancel")
-# def shutdown():
+@app.route("/cancel")
+def end_program():
+	global cancel
+	cancel = 1
+	shutdown()
+	return home()
 
-# 	cancel = 1
-# 	newPull(cancel)
-# 	return cancel
-
+def shutdown():
+	global cancel
+	# print(f"Cancel: {cancel}")
+	# print(f"Cancel: {cancel}")
+	# # newPull(cancel)
+	# # return cancel
+	# func = request.environ.get('werkzeug.server.shutdown')
+	# func()
+	# return test(cancel)
+	return cancel
 
 # New Scrape Request
 @app.route("/pull")
-def newPull(cancel=cancel):
+def newPull():
+
 	# try:
 
 	# Start Clock, Set Variables
@@ -198,6 +210,14 @@ def newPull(cancel=cancel):
 	counter = 0
 	total_videos_all = 0
 	for playlist_link in playlist_urls:    
+
+		global cancel
+		shutdown() 
+
+		print(cancel)
+		if cancel == 1:
+			cancel = 0
+			raise ValueError('A cancel request was submitted, cancelling process.')
 		
 		print(f"Getting {playlist_names[counter]} urls now...")
 
@@ -218,8 +238,8 @@ def newPull(cancel=cancel):
 
 		playlist_inside_soup = bs(playlist_inside_request.text, "lxml")
 		
-		total_videos_in_playlist = int(playlist_inside_soup.find("span", id="playlist-length").text.replace(" videos","").replace(",",""))
-		print(f"Total videos: {total_videos_in_playlist}")
+		total_videos_in_playlist = int(playlist_inside_soup.find("span", id="playlist-length").text.replace(" videos","").replace(" video","").replace(",",""))
+		print(f"Videos in playlist: {total_videos_in_playlist}")
 		total_videos_all = total_videos_all + total_videos_in_playlist
 		
 		number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) 
@@ -307,10 +327,24 @@ def newPull(cancel=cancel):
 	print(f"There are {len(urls_all)} total videos to get...")
 
 	for i in range(len(urls_all)):
-		# shutdown() 
+
+		shutdown() 
 		# if cancel == 1:
 		# 	cancel = 0
 		# 	raise RuntimeError
+		print(cancel)
+		if cancel == 1:
+			cancel = 0
+			raise ValueError('A cancel request was submitted, cancelling process.')
+	
+		# print(cancel)
+
+		# shutdown()
+		
+		# if cancel == 1:
+
+		# 	# cancel = 0
+		# 	raise ValueError('A cancel request was submitted, cancelling process.')
 
 		try:
 			video_url = urls_all[i]
@@ -1484,7 +1518,16 @@ def search():
 		# reason = 'Magic 8-ball says, "' + eight_ball[random_int] + '."'
 		# return render_template("uh-oh.html", data = json_data, reason=reason)
 		
+def test(cancel):
+	if cancel == 1:
+		# print(f"Cancel: {cancel}")
+		# cancel = 0
+		# app.run(port=8001)
+		try:
+			return app.run()
+		except:
+			return home()
+
 if __name__ == "__main__":
 	app.run()
-
 
