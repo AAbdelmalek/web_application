@@ -332,7 +332,7 @@ def newPull():
 		# if cancel == 1:
 		# 	cancel = 0
 		# 	raise RuntimeError
-		print(cancel)
+		# print(cancel)
 		if cancel == 1:
 			cancel = 0
 			raise ValueError('A cancel request was submitted, cancelling process.')
