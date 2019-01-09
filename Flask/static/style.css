@@ -47,8 +47,8 @@ nav{
   border-style: solid;
   border-color: white white #E0E0E0 white;
   border-width: thin;
-  height: 75px;
-  text-align:right;
+  /* height: 75px; */
+  /* text-align:right;  */
   background-color:white;
 }
 
