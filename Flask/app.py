@@ -666,7 +666,7 @@ def newPull():
 	artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 	csv_filepath = input_name.replace("_replaced_","-") + "_scrape.csv"
 
-	return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
+	return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 	artist_name=artist_name,\
 	subscribers = f"{subscribers_str} Subscribers",\
 	total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
@@ -1278,7 +1278,7 @@ def search():
 		print("Got artist data from database...")
 		
 		# Return HTML
-		return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
+		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
 		subscribers = f"{subscribers_str} Subscribers",\
 		total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
@@ -1464,7 +1464,7 @@ def search():
 		(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
 		VALUES ('{scrape_date}', '{input_name}', '{original_name}','{artist_db_name}')")
 		
-		return render_template("analytics_base.html", data=json_data, cache=scrape_date_str,\
+		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
 		subscribers = f"{subscribers_str} Subscribers",\
 		total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\

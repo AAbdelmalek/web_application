@@ -27,9 +27,9 @@ font-size: 14px;
 
 }
 
-#DS{
-text-align: :left;
-}
+/* #DS{
+text-align: : left;
+} */
 
 .pos-btn{
 position:fixed;
@@ -47,7 +47,7 @@ nav{
   border-style: solid;
   border-color: white white #E0E0E0 white;
   border-width: thin;
-  /* height: 75px; */
+  height: 60px;
   /* text-align:right;  */
   background-color:white;
 }
@@ -71,7 +71,7 @@ nav{
 } */
 
 #bg{
-  background-color:#F8F8F8;
+  background-color:#F5F5F5;
 }
 
 /* .navbar-brand{
@@ -122,12 +122,13 @@ nav{
   font-size: 10pt;
 }
 
-.h6-font{
+.h5-font{
 font-size: 9pt;
 }
 
 #load-bar{
   vertical-align: super;
+  height:18px;
 }
 
 .pic{
@@ -199,9 +200,9 @@ p {margin:auto;
   /* margin: 0 auto; */
 }
 
-.zoom:hover {
+/* .zoom:hover {
   transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-}
+} */
 
 .card-body {
   /* white-space: nowrap; */
@@ -231,5 +232,67 @@ p {margin:auto;
   color: black;
   text-align: center;
   font-size : 14px;
+}
+
+.card{
+  border:none !important;
+}
+
+.card:hover{
+  opacity : 0.75; 
+  box-shadow: 0px 0px 10px 5px #87AFC7 !important;
+  border : solid;
+  /* border-width: 10px !important; */
+  border-color : #87AFC7;
+  transition : 0.2s;
+  /* transform: scale(1.02);  */
+
+}
+
+#load-bar-2{
+
+  height:7px;
+}
+
+.text-muted{
+
+font-size:9pt;
+
+}
+
+.card-title{
+  font-weight: 200 !important;
+  /* font-size : 14px !important; */
+}
+
+.card-link{
+  color:black;
+}
+
+.data-header{
+font-weight: 200 !important;
+font-size: 15pt;
+
+}
+
+#navbar-1-analytics{
+top : 0px !important;
+
+}
+
+/* Style the header */
+#header-content{
+  height: 60px;
+  }
+
+
+#analytics-img{
+
+border-style:solid;
+border-width :5px;
+border-color:white;
+border-radius: 15px;
+
+
 }
 

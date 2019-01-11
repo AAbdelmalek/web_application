@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+     <meta charset="utf-8" />
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <title>youtubedata.io</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='style.css') }}" />
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+     <script src="https://d3js.org/d3.v5.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}" />
+     <script src="{{ url_for('static', filename='plotly-latest.min.js') }}"></script>
+ </head>
+
+<body>
+    <div id="bg">  
+                
+    
+         
+            <!-- Load Bar 1 -->
+                <!-- <div id="load-bar" class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div> 
+            <br> -->
+                <!-- Nav Bar -->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" id="navbar-1-analytics">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-brand">
+                                                
+                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.png') }}" height="23" alt="Youtube DS" ></a>
+
+                        <span class="header2"><a class="link_color" href="/">youtubedata<strong>.io</strong></a></span>
+                        <span class="header"><a class="link_color" id="DS" href="/"></a></span>
+                    
+            
+                </div>
+                  
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item disabled">
+                            <a class="nav-link" href="">About<span class="sr-only"></span></a>
+                        </li>
+                        <li class="nav-item disabled">
+                            <a class="nav-link" href="">Help<span class="sr-only"></span></a>
+                        </li>
+                        <li class="nav-item disabled">
+                            <a class="nav-link" href="">Resources<span class="sr-only"></span></a>
+                        </li>
+                 
+        
+                      </ul>
+                      <form class="form-inline my-2 my-lg-2">
+                        <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
+                        <span class="input-group-btn">
+                            <a onclick="load_bar()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
+                    </span>
+                      </form>
+                    </div>
+                  </nav>
+                  
+               
+                  <!-- Header Info -->
+                  <nav class="navbar navbar-light bg-light shadow" id="header-content">
+                    <a class="navbar-brand data-header" href="{{analytics_base_url}}">
+                    <br><br>
+                      <img src="{{artist_image}}" width="90" height="auto" class="d-inline-block align-top shadow" id="analytics-img" alt="">
+                      &nbsp;{{artist_name}} 
+                      <!-- <span class="text-muted">{{total_views}}</span>
+                      <span class="text-muted">{{subscribers}}</span>
+                      <span class="text-muted">{{total_views}}</span>
+                      <span class="text-muted">{{total_views}}</span> -->
+                
+                    </a>
+
+                    <a href="/static/{{youtube_code}}" download>
+                        <button type="button" class="btn btn-sm btn-primary analytics_load_button">Export to CSV</button>
+                        </a>
+                  </nav>
+                  <div id="sticky-header-fix"></div>
+            <br><br>
+
+            <!-- Row 1 -->
+        <div class="container">
+            <div class="row">
+                        <div class="col">
+                            <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
+                                <a href="#" class="card-link" onclick="showTimeseries()">
+                                    <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <p class="card-title text-center data-header">Time Series</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                    <div class="col">
+                            <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
+                                    <a href="#" class="card-link">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='data-2r.jpg')}}" alt="Card image cap">
+                                        <div class="card-body">
+                                            <p class="card-title text-center data-header">Regression</p>
+                                        </div>
+                                    </a>
+                            </div>
+                    </div>
+           
+                    <div class="col">
+                        <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
+                                <a href="#" class="card-link">
+                                    <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <p class="card-title text-center data-header">Bubble Charts</p>
+                                    </div>
+                                </a>
+                            </div>
+                    </div>                                        
+                                           
+            </div>  
+
+            <div class="row">
+                    <div class="col">
+                        <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
+                            <a href="#" class="card-link" onclick="showTimeseries()">
+                                <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-title text-center data-header">Time Series</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                <div class="col">
+                        <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
+                                <a href="#" class="card-link">
+                                    <img class="card-img-top" src="{{ url_for('static', filename='data-2r.jpg')}}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <p class="card-title text-center data-header">Grouped Data Set</p>
+                                    </div>
+                                </a>
+                        </div>
+                </div>
+       
+                <div class="col">
+                    <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
+                            <a href="#" class="card-link">
+                                <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-title text-center data-header">Processed Data Set</p>
+                                </div>
+                            </a>
+                        </div>
+                </div>                                        
+                                       
+        </div> 
+            <br><br>
+
+            <!-- Plots -->
+
+ 
+
+            <div class="container-fluid">
+                    <div class="row">
+                            <div class="col-7 mx-auto">
+                                    <div id = "plot-1"></div>
+                            </div>
+                    </div>
+            </div>
+    
+        </div>
+        <div id="select-plot-data">
+                <div id="total-views"></div>
+                <div id="total-likes"></div>
+                <div id="likes-per-view"></div>
+                    <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                    
+                    <select id="selDataset" onchange="switch_data(this.value)">
+                            <option value="Views Time Series">Views Time Series</option>
+                            <option value="Duration Time Series">Duration Time Series</option>
+                            <option value="Likes Time Series">Likes Time Series</option>
+                            <option value="Views vs Views/Likes">Views vs Views/Likes</option>
+                    </select>
+            
+        </div>   
+    
+
+
+
+
+
+
+
+
+        
+          
+          <!-- Modal Last Retrieved -->
+          <div class="modal fade" id="initiatePull" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Initiate Update Request</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="modal-body-text">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                  <!-- <button type="button" class="btn btn-sm btn-primary"><a href="#" class="link_color_2" id="pull-href" onclick="justLoad()">Pull</a></button> -->
+                  <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="pull-href" onclick="justLoad()">OK</a>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        <!-- Modal New Scrape -->
+        <div class="modal fade" id="new-scrape" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+
+
+
+                    <h5 class="modal-title" id="exampleModalLabel">Initiate New Request</h5>
+                    <button id = "new-scrape-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body-text">
+                
+
+                    <div class="container-fluid">
+                            <div class="row"> 
+                                <div class="col">   
+                            The content creator was not found in the database. Do you want
+                            to initiate a new request?
+                                </div>
+                            </div>
+                    
+
+                            <div class="row">
+                                <div class="col">
+                                <br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                
+                                <div class="col-3">
+                                        <div class="text-center">
+                                        <img src="{{artist_image_new_scrape}}" alt="New Scrape Request" height="90">
+                                        </div>
+                                </div>
+                                <div class="col-9">
+                                    
+                                        <h6>{{artist_name_new_scrape}}</h6>
+                                        {{subscribers_int_new_scrape}} Subscribers
+                                        <br>
+                                        {{total_views_int_new_scrape}} All-Time Views
+                                        <br>
+                                        Joined {{joined_convert_new_scrape}}
+                                        
+                                
+                                </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col">
+                                    <br>
+                                    </div>
+                                </div>
+
+                                  <!-- Load Bar 2 -->
+                                  <div id="load-bar-2" class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                                  </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-cancel">
+                    <button id = "new-scrape-ok-button" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>                    
+                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="resetURL()">OK</a>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- <footer class="footer">
+                    <div class="container-fluid">
+                      <span class="text-muted"></span>
+                    </div>
+                  </footer> -->
+    </body>
+    <script>getData({{data|tojson}})</script>
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+     <!-- <script>newScrape({{not_found_in_db}},"{{youtube_code_new_scrape}}")</script> -->
+ 
+ </html>

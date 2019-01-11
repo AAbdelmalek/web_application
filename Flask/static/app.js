@@ -1,6 +1,7 @@
 // Setting up variables
 var search_button = d3.select("#button");
 var progress_bar = document.getElementById("load-bar");
+var progress_bar_2 = document.getElementById("load-bar-2");
 var analytics_loader = document.getElementsByClassName("analytics_load_button");
 var search_loader = document.getElementById("loader_search")
 var link_button = document.getElementById("search");
@@ -26,23 +27,23 @@ var counter = 4;
 var new_deck = document.getElementById(`deck-${counter}`);
 var infinite = document.getElementById("infinite_scroll");
 
-
-
-function logo(){
-    if(document.getElementById("DS").innerHTML === "DS"){
-
-        document.getElementById("DS").innerHTML = 'Data Scraper';
-
-    }
-    
-    else{
-
-    document.getElementById("DS").innerHTML = 'DS';
-    }
-
+if (progress_bar_2 !== null ){
+    progress_bar_2.style.visibility = "hidden"; 
 }
 
+// function logo(){
+//     if(document.getElementById("DS").innerHTML === "DS"){
 
+//         document.getElementById("DS").innerHTML = 'Data Scraper';
+
+//     }
+    
+//     else{
+
+//     document.getElementById("DS").innerHTML = 'DS';
+//     }
+
+// }
 
 if (new_deck !== null){
 new_deck.style.display = "none";
@@ -52,7 +53,9 @@ new_deck.style.display = "none";
 //     deck_4.style.display = "none";  
 //     }
 
-progress_bar.style.visibility = "hidden";
+if (progress_bar !== null ){
+    progress_bar.style.visibility = "hidden"; 
+}
 // loading_warning.style.visibility = "hidden";
 
 // Get JSON Data from Flask
@@ -268,7 +271,7 @@ function getPullURL(update_url, days, id_orig){
 
     last_retrieved_link = document.getElementById(id_orig);
 
-    if (days < 6){
+    if (days < 100){
         
         last_retrieved_link.setAttribute("data-target", ""); 
         last_retrieved_link.classList.add("retrieved-link");
@@ -328,6 +331,7 @@ function resetURL(){
 
     
     progress_bar.style.visibility = "visible"; 
+    progress_bar_2.style.visibility = "visible"; 
     ok_button = document.getElementById("new-scrape-ok-button");
     ok_button.innerHTML = "Please wait...";
     ok_button.setAttribute("data-dismiss","");
@@ -356,3 +360,62 @@ function cancelRequest(){
 // if (window.location.href === "http://127.0.0.1:5000//cancel"){
 //     window.location.href = "/";
 // }
+
+
+if (document.getElementById("header-content") !== null){
+
+
+// When the user scrolls the page, execute myFunction 
+window.onscroll = function() {myFunction()};
+
+// Get the header
+var header = document.getElementById("header-content");
+
+// Get the offset position of the navbar
+var sticky = header.offsetTop;
+
+// Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+function myFunction() {
+  if (window.pageYOffset > sticky) {
+    header.classList.add("fixed-top");
+    var fix = document.getElementById("sticky-header-fix");
+    fix.innerHTML = "<br><br>";
+
+  } else {
+    header.classList.remove("fixed-top");
+    var fix = document.getElementById("sticky-header-fix");
+    fix.innerHTML = "";
+  }
+}
+}
+
+function showTimeseries(){
+
+   if (document.getElementById("plot-1").style.display === "block") {
+
+            document.getElementById("plot-1").style.display = "none";
+            document.getElementById("select-plot-data").style.display = "none";}
+
+
+    else{
+        document.getElementById("plot-1").style.display = "block";
+        document.getElementById("select-plot-data").style.display = "block";
+
+        document.getElementById("select-plot-data").scrollIntoView();
+
+        // x = top.pageXOffset;
+        // y = top.pageYOffset;
+    }
+
+}
+
+if (document.getElementById("plot-1") !== null){
+
+    document.getElementById("plot-1").style.display = "none";
+    document.getElementById("select-plot-data").style.display = "none";
+
+    
+
+    
+}
+

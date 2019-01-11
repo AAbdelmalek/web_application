@@ -26,12 +26,14 @@
 - Get comment numbers -- 
 - One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA
 - Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
+- Search bar search ub -- works osmetimes, sometimes not enter vs press search --
+- nav bar expand when broser is small broken -- 
  -->
 
  <head>
      <meta charset="utf-8" />
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <title>Youtube Data Scraper</title>
+     <title>youtubedata.io</title>
      <meta name="viewport" content="width=device-width, initial-scale=1">
      <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='style.css') }}" />
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -39,7 +41,6 @@
      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-
      <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}" />
  </head>
 
@@ -108,34 +109,43 @@
                         <br>
                         <br>
                         <br> -->
-         <!-- Load Bar -->
+         
          <br>
          <br>
-         <br>
+         
+            <!-- Load Bar 1 -->
                 <div id="load-bar" class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                 </div> 
+            <br>
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                       <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-brand">
                                                 
-                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.png') }}" height="23" alt="Youtube DS" onmouseover="logo()" onmouseout="logo()"></a>
+                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.png') }}" height="23" alt="Youtube DS" ></a>
 
-                        <span class="header"><a class="link_color" href="/" onmouseover="logo()" onmouseout="logo()">YouTube </a></span>
-                        <span class="header2"><a class="link_color" onmouseover="logo()" onmouseout="logo()" id="DS" href="/">Data Scraper</a></span>
+                        <span class="header2"><a class="link_color" href="/">youtubedata<strong>.io</strong></a></span>
+                        <span class="header"><a class="link_color" id="DS" href="/"></a></span>
                     
             
                 </div>
                   
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <!-- <li class="nav-item active">
-                          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <li class="nav-item disabled">
+                            <a class="nav-link" href="#">About<span class="sr-only"></span></a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item disabled">
+                            <a class="nav-link" href="#">Help<span class="sr-only"></span></a>
+                        </li>
+                        <li class="nav-item disabled">
+                            <a class="nav-link" href="#">Resources<span class="sr-only"></span></a>
+                        </li>
+                 
+                        <!-- <li class="nav-item">
                           <a class="nav-link" href="#">Link</a>
                         </li>
                         <li class="nav-item">
@@ -151,8 +161,7 @@
                     </div>
                   </nav>
 
-
-                        <br>
+                        
                         <br>
          <!-- Load Alert -->
  
@@ -167,134 +176,132 @@
          </div> -->
          <!-- <div id=infinite_scroll> -->
              <!-- Deck 1 -->
-             <div class="container-fluid">
-                        <div class="row">
-                                <div class="col-8 mx-auto"> 
-                                        <!-- Card 1 -->
-                                        <div class="card-deck">
-                                            <div class="card">
-                                                <div class="zoom">
-                                                    <a id="00" href="{{analytics_base_url_0}}">
-                                                    <img class="card-img-top image" src="{{artist_image_0}}" href="{{analytics_base_url_0}}" alt="Card image cap">
-                                                    </a>
-                                                </div>
-                                                        <div class="card-body">
-                                                                <h5 class="card-title">{{artist_name_0}}</h5>
-                                                                <p class="card-text">
-                                                                        <h6 class="h6-font">{{total_videos_0}}</h6>
-                                                                        <h6 class="h6-font">{{subscribers_0}}</h6>
-                                                                        <h6 class="h6-font">{{total_views_0}}</h6>
-                                                                        <h6 class="h6-font">{{joined_0}}</h6>
-                                                                </p>
-                                                                <!-- <div class="text-center">
-                                                                        <a id="00" href="{{analytics_base_url_0}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                                </div> -->
-                                                        </div>
-                                                    <div class="card-footer text-center">
+                    <div id="deck-2">
+                        <div class="container-fluid">
+      
 
-                                                        <small class="text-muted"><a id="_00" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_0}}</a></small>
+                            <div class="row">
+                                <div class="col-8 mx-auto">
 
-                                                    </div>
-                                                </div>
+                                    <!-- Card 1 -->
+                                    <div class="card-deck">
+                                        <div class="card shadow ml-3 mb-5">
+                                               <div class="zoom">
+                                                       <a id="3" href="{{analytics_base_url_0}}">
+                                                       <img class="card-img-top image" src="{{artist_image_0}}" alt="Card image cap">
+                                                       </a>
+                                               </div>
 
-                
+                                               <div class="card-body">
+                                                   <h5 class="card-title text-center">{{artist_name_0}}</h5>
+                                                   <!-- <p class="card-text">
+                                                       <h6 class="h6-font">{{total_videos_3}}</h6>
+                                                       <h6 class="h6-font">{{subscribers_3}}</h6>
+                                                       <h6 class="h6-font">{{total_views_3}}</h6>
+                                                       <h6 class="h6-font">{{joined_3}}</h6>
+                                                   </p> -->
+                                                           <!-- <div class="text-center">
+                                                               <a id="3" href="{{analytics_base_url_3}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                           </div> -->
+                                               </div>
+                                                       <!-- <div class="card-footer text-center">
+                                                               <small class="text-muted"><a id="_3" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_3}}</a></small>
+                                                           </div> -->
+                                        </div>
+
                                         <!-- Card 2 -->
-                                        <div class="card">
-                                            
-                                                <div class="zoom">
-                                                        <a id="0" href="{{analytics_base_url}}">
-                                                        <img class="card-img-top image" src="{{artist_image}}" alt="Card image cap">
-                                                        </a>
-                                                </div>
+                                        <div class="card shadow ml-3 mb-5">
+                                               <div class="zoom">
+                                                       <a id="4" href="{{analytics_base_url}}">
+                                                       <img class="card-img-top image" src="{{artist_image}}" alt="Card image cap">
+                                                       </a>
+                                               </div>
 
-                                                <div class="card-body">
-                                                        <h5 class="card-title">{{artist_name}}</h5>
-                                                        <p class="card-text">
-                                                                <h6 class="h6-font">{{total_videos}}</h6>
-                                                                <h6 class="h6-font">{{subscribers}}</h6>
-                                                                <h6 class="h6-font">{{total_views}}</h6>
-                                                                <h6 class="h6-font">{{joined}}</h6>
-                                                        </p>
-                                                                <!-- <div class="text-center">
-                                                                        <a id="0" href="{{analytics_base_url}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                                </div> -->
-                                                </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">{{artist_name}}</h5>
+                                                   <!-- <p class="card-text">
+                                                       <h6 class="h6-font">{{total_videos_4}}</h6>
+                                                       <h6 class="h6-font">{{subscribers_4}}</h6>
+                                                       <h6 class="h6-font">{{total_views_4}}</h6>
+                                                       <h6 class="h6-font">{{joined_4}}</h6>
+                                                   </p> -->
+                                                   <!-- <div class="text-center">
+                                                       <a id="4" href="{{analytics_base_url_4}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                   </div> -->
+                                            </div>
 
-                                                    <div class="card-footer text-center">
-                                                            <small class="text-muted"><a id="_0" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache}}</a></small>
-
-                                                            <!-- <small class="text-muted">Last retrieved <br> {{cache}}</small> -->
-                                                    </div>
+                                                   <!-- <div class="card-footer text-center">
+                                                           <small class="text-muted"><a id="_4" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_4}}</a></small>
+                                                   </div> -->
                                         </div>
-                
+
                                         <!-- Card 3 -->
-                                        <div class="card">
-                                                <div class="zoom">
-                                                        <a id="1" href="{{analytics_base_url_1}}">
-                                                        <img class="card-img-top image" src="{{artist_image_1}}" alt="Card image cap">
-                                                        </a>
-                                                    </div>
+                                        <div class="card shadow ml-3 mb-5">
+                                               <div class="zoom">
+                                                       <a id="5" href="{{analytics_base_url_1}}">
+                                                       <img class="card-img-top image" src="{{artist_image_1}}" alt="Card image cap">
+                                                       </a>
+                                               </div>
 
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">{{artist_name_1}}</h5>
-                                                        <p class="card-text">
-                                                                <h6 class="h6-font">{{total_videos_1}}</h6>
-                                                                <h6 class="h6-font">{{subscribers_1}}</h6>
-                                                                <h6 class="h6-font">{{total_views_1}}</h6>
-                                                                <h6 class="h6-font">{{joined_1}}</h6>
-                                                        </p>
-                                                            <!-- <div class="text-center">
-                                                                    <a id="1" href="{{analytics_base_url_1}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                            </div> -->
-                                                    </div>
-
-                                                        <div class="card-footer text-center">
-                                                            <small class="text-muted"><a id="_1" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_1}}</a></small>
-                                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">{{artist_name_1}}</h5>
+                                                <!-- <p class="card-text">
+                                                    <h6 class="h6-font">{{total_videos_5}}</h6>
+                                                    <h6 class="h6-font">{{subscribers_5}}</h6>
+                                                    <h6 class="h6-font">{{total_views_5}}</h6>
+                                                    <h6 class="h6-font">{{joined_5}}</h6>
+                                                </p> -->
+                                                <!-- <div class="text-center">
+                                                    <a id="5" href="{{analytics_base_url_5}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                </div> -->
+                                            </div>
+                                            <!-- <div class="card-footer text-center">
+                                                   <small class="text-muted"><a id="_5" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_5}}</a></small>
+                                               </div> -->
                                         </div>
-                                        
                                         <!-- Card 4 -->
-                                        <div class="card">
-                                                <div class="zoom">
-                                                        <a id="2" href="{{analytics_base_url_2}}">
-                                                        <img class="card-img-top image" src="{{artist_image_2}}" alt="Card image cap">
-                                                        </a>
-                                                </div>
+                                        <div class="card shadow ml-3 mb-5">
+                                               <div class="zoom">
+                                                       <a id="6" href="{{analytics_base_url_2}}">
+                                                       <img class="card-img-top image" src="{{artist_image_2}}" alt="Card image cap">
+                                                       </a>
+                                               </div>
 
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">{{artist_name_2}}</h5>
-                                                        <p class="card-text">
-                                                                <h6 class="h6-font">{{total_videos_2}}</h6>
-                                                                <h6 class="h6-font">{{subscribers_2}}</h6>
-                                                                <h6 class="h6-font">{{total_views_2}}</h6>
-                                                                <h6 class="h6-font">{{joined_2}}</h6>
-                                                        </p>
-                                                            <!-- <div class="text-center">
-                                                                    <a id="2" href="{{analytics_base_url_2}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
-                                                            </div> -->
-                                                    </div>
-
-                                                        <div class="card-footer text-center">
-                                                                <small class="text-muted"><a id="_2" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_2}}</a></small>
-                                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title text-center">{{artist_name_2}}</h5>
+                                                <!-- <p class="card-text">
+                                                    <h6 class="h6-font">{{total_videos_6}}</h6>
+                                                    <h6 class="h6-font">{{subscribers_6}}</h6>
+                                                    <h6 class="h6-font">{{total_views_6}}</h6>
+                                                    <h6 class="h6-font">{{joined_6}}</h6>
+                                                </p> -->
+                                                <!-- <div class="text-center">
+                                                    <a id="6" href="{{analytics_base_url_6}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
+                                                </div> -->
+                                            </div>
+                                            <!-- <div class="card-footer text-center">
+                                                   <small class="text-muted"><a id="_6" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_6}}</a></small>
+                                               </div> -->
                                         </div>
- 
+
+                                    </div>
                                 </div>
+                            </div>
                         </div>
-                </div>
+                 
+
  
                      <!-- Deck 2 -->
                      <div id="deck-2">
                          <div class="container-fluid">
-                             <br>
-                             <br>
+                    
  
                              <div class="row">
                                  <div class="col-8 mx-auto">
  
                                      <!-- Card 1 -->
                                      <div class="card-deck">
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="3" href="{{analytics_base_url_3}}">
                                                         <img class="card-img-top image" src="{{artist_image_3}}" alt="Card image cap">
@@ -302,24 +309,24 @@
                                                 </div>
 
                                                 <div class="card-body">
-                                                    <h5 class="card-title">{{artist_name_3}}</h5>
-                                                    <p class="card-text">
+                                                    <h5 class="card-title text-center">{{artist_name_3}}</h5>
+                                                    <!-- <p class="card-text">
                                                         <h6 class="h6-font">{{total_videos_3}}</h6>
                                                         <h6 class="h6-font">{{subscribers_3}}</h6>
                                                         <h6 class="h6-font">{{total_views_3}}</h6>
                                                         <h6 class="h6-font">{{joined_3}}</h6>
-                                                    </p>
+                                                    </p> -->
                                                             <!-- <div class="text-center">
                                                                 <a id="3" href="{{analytics_base_url_3}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                             </div> -->
                                                 </div>
-                                                        <div class="card-footer text-center">
+                                                        <!-- <div class="card-footer text-center">
                                                                 <small class="text-muted"><a id="_3" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_3}}</a></small>
-                                                            </div>
+                                                            </div> -->
                                          </div>
  
                                          <!-- Card 2 -->
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="4" href="{{analytics_base_url_4}}">
                                                         <img class="card-img-top image" src="{{artist_image_4}}" alt="Card image cap">
@@ -327,25 +334,25 @@
                                                 </div>
 
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_4}}</h5>
-                                                    <p class="card-text">
+                                                 <h5 class="card-title text-center">{{artist_name_4}}</h5>
+                                                    <!-- <p class="card-text">
                                                         <h6 class="h6-font">{{total_videos_4}}</h6>
                                                         <h6 class="h6-font">{{subscribers_4}}</h6>
                                                         <h6 class="h6-font">{{total_views_4}}</h6>
                                                         <h6 class="h6-font">{{joined_4}}</h6>
-                                                    </p>
+                                                    </p> -->
                                                     <!-- <div class="text-center">
                                                         <a id="4" href="{{analytics_base_url_4}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                     </div> -->
                                              </div>
 
-                                                    <div class="card-footer text-center">
+                                                    <!-- <div class="card-footer text-center">
                                                             <small class="text-muted"><a id="_4" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_4}}</a></small>
-                                                    </div>
+                                                    </div> -->
                                          </div>
  
                                          <!-- Card 3 -->
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="5" href="{{analytics_base_url_5}}">
                                                         <img class="card-img-top image" src="{{artist_image_5}}" alt="Card image cap">
@@ -353,23 +360,23 @@
                                                 </div>
 
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_5}}</h5>
-                                                 <p class="card-text">
+                                                 <h5 class="card-title text-center">{{artist_name_5}}</h5>
+                                                 <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_5}}</h6>
                                                      <h6 class="h6-font">{{subscribers_5}}</h6>
                                                      <h6 class="h6-font">{{total_views_5}}</h6>
                                                      <h6 class="h6-font">{{joined_5}}</h6>
-                                                 </p>
+                                                 </p> -->
                                                  <!-- <div class="text-center">
                                                      <a id="5" href="{{analytics_base_url_5}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                  </div> -->
                                              </div>
-                                             <div class="card-footer text-center">
+                                             <!-- <div class="card-footer text-center">
                                                     <small class="text-muted"><a id="_5" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_5}}</a></small>
-                                                </div>
+                                                </div> -->
                                          </div>
                                          <!-- Card 4 -->
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="6" href="{{analytics_base_url_6}}">
                                                         <img class="card-img-top image" src="{{artist_image_6}}" alt="Card image cap">
@@ -377,20 +384,20 @@
                                                 </div>
 
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_6}}</h5>
-                                                 <p class="card-text">
+                                                 <h5 class="card-title text-center">{{artist_name_6}}</h5>
+                                                 <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_6}}</h6>
                                                      <h6 class="h6-font">{{subscribers_6}}</h6>
                                                      <h6 class="h6-font">{{total_views_6}}</h6>
                                                      <h6 class="h6-font">{{joined_6}}</h6>
-                                                 </p>
+                                                 </p> -->
                                                  <!-- <div class="text-center">
                                                      <a id="6" href="{{analytics_base_url_6}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                  </div> -->
                                              </div>
-                                             <div class="card-footer text-center">
+                                             <!-- <div class="card-footer text-center">
                                                     <small class="text-muted"><a id="_6" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_6}}</a></small>
-                                                </div>
+                                                </div> -->
                                          </div>
  
                                      </div>
@@ -398,44 +405,43 @@
                              </div>
                          </div>
                      </div>
- 
+                
                      <!-- Deck 3 -->
                      <div id="deck-3">
                          <div class="container-fluid">
-                             <br>
-                             <br>
+                          
  
                              <div class="row">
                                  <div class="col-8 mx-auto">
  
                                      <!-- Card 1 -->
                                      <div class="card-deck">
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="7" href="{{analytics_base_url_7}}">
                                                         <img class="card-img-top image" src="{{artist_image_7}}" alt="Card image cap">
                                                         </a>
                                                 </div>
 
-                                             <div class="card-body">
+                                             <div class="card-body text-center">
                                                  <h5 class="card-title">{{artist_name_7}}</h5>
-                                                 <p class="card-text">
+                                                 <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_7}}</h6>
                                                      <h6 class="h6-font">{{subscribers_7}}</h6>
                                                      <h6 class="h6-font">{{total_views_7}}</h6>
                                                      <h6 class="h6-font">{{joined_7}}</h6>
-                                                 </p>
+                                                 </p> -->
                                                  <!-- <div class="text-center">
                                                      <a id="7" href="{{analytics_base_url_7}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                  </div> -->
                                              </div>
-                                             <div class="card-footer text-center">
+                                             <!-- <div class="card-footer text-center">
                                                     <small class="text-muted"><a id="_7" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_7}}</a></small>
-                                                </div>
+                                                </div> -->
                                          </div>
  
                                          <!-- Card 2 -->
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="8" href="{{analytics_base_url_8}}">
                                                         <img class="card-img-top image" src="{{artist_image_8}}" alt="Card image cap">
@@ -443,24 +449,24 @@
                                                 </div>
 
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_8}}</h5>
-                                                 <p class="card-text">
+                                                 <h5 class="card-title text-center">{{artist_name_8}}</h5>
+                                                 <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_8}}</h6>
                                                      <h6 class="h6-font">{{subscribers_8}}</h6>
                                                      <h6 class="h6-font">{{total_views_8}}</h6>
                                                      <h6 class="h6-font">{{joined_8}}</h6>
-                                                 </p>
+                                                 </p> -->
                                                  <!-- <div class="text-center">
                                                      <a id="8" href="{{analytics_base_url_8}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                  </div> -->
                                              </div>
-                                             <div class="card-footer text-center">
+                                             <!-- <div class="card-footer text-center">
                                                     <small class="text-muted"><a id="_8" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_8}}</a></small>
-                                                </div>
+                                                </div> -->
                                          </div>
  
                                          <!-- Card 3 -->
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="9" href="{{analytics_base_url_9}}">
                                                         <img class="card-img-top image" src="{{artist_image_9}}" alt="Card image cap">
@@ -468,23 +474,23 @@
                                                 </div>
 
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_9}}</h5>
-                                                 <p class="card-text">
+                                                 <h5 class="card-title text-center">{{artist_name_9}}</h5>
+                                                 <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_9}}</h6>
                                                      <h6 class="h6-font">{{subscribers_9}}</h6>
                                                      <h6 class="h6-font">{{total_views_9}}</h6>
                                                      <h6 class="h6-font">{{joined_9}}</h6>
-                                                 </p>
+                                                 </p> -->
                                                  <!-- <div class="text-center">
                                                      <a id="9" href="{{analytics_base_url_9}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                  </div> -->
                                              </div>
-                                             <div class="card-footer text-center">
+                                             <!-- <div class="card-footer text-center">
                                                     <small class="text-muted"><a id="_9" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_9}}</a></small>
-                                                </div>
+                                                </div> -->
                                          </div>
                                          <!-- Card 4 -->
-                                         <div class="card">
+                                         <div class="card shadow ml-3 mb-5">
                                                 <div class="zoom">
                                                         <a id="10" href="{{analytics_base_url_10}}">
                                                         <img class="card-img-top image" src="{{artist_image_10}}" alt="Card image cap">
@@ -492,20 +498,20 @@
                                                 </div>
 
                                              <div class="card-body">
-                                                 <h5 class="card-title">{{artist_name_10}}</h5>
-                                                 <p class="card-text">
+                                                 <h5 class="card-title text-center">{{artist_name_10}}</h5>
+                                                 <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_10}}</h6>
                                                      <h6 class="h6-font">{{subscribers_10}}</h6>
                                                      <h6 class="h6-font">{{total_views_10}}</h6>
                                                      <h6 class="h6-font">{{joined_10}}</h6>
-                                                 </p>
+                                                 </p> -->
                                                  <!-- <div class="text-center">
                                                      <a id="10" href="{{analytics_base_url_10}}" class="btn btn-sm btn-primary analytics_load_button" onclick="analytics_load()">Analytics</a>
                                                  </div> -->
                                              </div>
-                                             <div class="card-footer text-center">
+                                             <!-- <div class="card-footer text-center">
                                                     <small class="text-muted"><a id="_10" class="text-muted" data-toggle="modal" data-target="#initiatePull" href="#" onmouseover="cacheData(this.id)">Last retrieved <br> {{cache_10}}</a></small>
-                                                </div>
+                                                </div> -->
                                          </div>
  
                                      </div>
@@ -525,9 +531,10 @@
                          </div>
                      </div> -->
 
-                     <br>
+                     <br><br>
                      <!-- <br> -->
     </div>
+
 
           
           <!-- Modal Last Retrieved -->
@@ -558,12 +565,17 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
+
+
+
                     <h5 class="modal-title" id="exampleModalLabel">Initiate New Request</h5>
                     <button id = "new-scrape-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" id="modal-body-text">
+                
+
                     <div class="container-fluid">
                             <div class="row"> 
                                 <div class="col">   
@@ -603,6 +615,11 @@
                                     <br>
                                     </div>
                                 </div>
+
+                                  <!-- Load Bar 2 -->
+                                  <div id="load-bar-2" class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                                  </div>
                     </div>
                 </div>
                 <div class="modal-footer" id="modal-cancel">
