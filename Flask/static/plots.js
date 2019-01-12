@@ -38,13 +38,46 @@ document.getElementById("total-likes").innerHTML = `${total_likes} Total Likes`;
 document.getElementById("likes-per-view").innerHTML = `${likes_per_view_round} Likes Per 1000 Views`;
 
   
-  data = [{
+data = [{
     x: published,
     y: views ,
     mode: 'markers',
-    type: 'scatter'}];
+    type: 'scatter',
+    opacity: 0.5,}];
 
-  Plotly.plot("plot-1", data);
+    var layout = {
+      title: {
+        text:'Test',
+        font: {
+          family: 'Courier New, monospace',
+          size: 24
+        },
+        xref: 'paper',
+        x: 0.05,
+      },
+      xaxis: {
+        title: {
+          text: 'Test',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        },
+      },
+      yaxis: {
+        title: {
+          text: 'Test',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        }
+      }
+    }
+
+  Plotly.plot("plot-1", data, layout);
 }
 
 // function plot_1(scrape_data){

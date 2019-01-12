@@ -68,7 +68,7 @@
                   <nav class="navbar navbar-light bg-light shadow" id="header-content">
                     <a class="navbar-brand data-header" href="{{analytics_base_url}}">
                     <br><br>
-                      <img src="{{artist_image}}" width="90" height="auto" class="d-inline-block align-top shadow" id="analytics-img" alt="">
+                      <img onmouseover="moreInfo()" src="{{artist_image}}" width="90" height="auto" class="d-inline-block align-top shadow" id="analytics-img" alt="">
                       &nbsp;{{artist_name}} 
                       <!-- <span class="text-muted">{{total_views}}</span>
                       <span class="text-muted">{{subscribers}}</span>
@@ -77,19 +77,23 @@
                 
                     </a>
 
-                    <a href="/static/{{youtube_code}}" download>
+          
+                        <button style="position: absolute; right:132px;" type="button" id="_4" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull" onmouseover="cacheData(this.id)">Update Data</button>
+                            
+                    <!-- Export to CSV -->
+                    <a href="/static/{{youtube_code}}">
                         <button type="button" class="btn btn-sm btn-primary analytics_load_button">Export to CSV</button>
                         </a>
                   </nav>
                   <div id="sticky-header-fix"></div>
-            <br><br>
+            <br><br><br>
 
             <!-- Row 1 -->
         <div class="container">
             <div class="row">
                         <div class="col">
                             <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
-                                <a href="#" class="card-link" onclick="showTimeseries()">
+                                <a href="#" class="card-link" onclick="showTimeseries()" id="time-series">
                                     <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
                                     <div class="card-body">
                                         <p class="card-title text-center data-header">Time Series</p>
@@ -157,6 +161,8 @@
                 </div>                                        
                                        
         </div> 
+        </div>
+ 
             <br><br>
 
             <!-- Plots -->
@@ -165,38 +171,45 @@
 
             <div class="container-fluid">
                     <div class="row">
-                            <div class="col-7 mx-auto">
-                                    <div id = "plot-1"></div>
+                            <div class="col-10 mx-auto">
+                                    <div class="shadow" id = "plot-1"></div>
+                         
                             </div>
+                    <div class="row">
+                        <div class="col-2 mx=auto">
+                                <div id="select-plot-data">
+                                        <div class="card" style="width: 18rem;">
+                                                <div class="card-body">
+                                                        <div id="total-views"></div>
+                                                        <div id="total-likes"></div>
+                                                        <div id="likes-per-view"></div>
+                                                        <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                            
+                                                        <select id="selDataset" onchange="switch_data(this.value)">
+                                                                <option value="Views Time Series">Views Time Series</option>
+                                                                <option value="Duration Time Series">Duration Time Series</option>
+                                                                <option value="Likes Time Series">Likes Time Series</option>
+                                                                <option value="Views vs Views/Likes">Views vs Views/Likes</option>
+                                                        </select>
+                                                </div>
+                                        </div>       
+                                     
+                                    </div>           
+                               
+                                           
+                                               
+                                </div>   
+                         
+
                     </div>
-            </div>
+
+          </div>
+  </div>
+
+
     
-        </div>
-        <div id="select-plot-data">
-                <div id="total-views"></div>
-                <div id="total-likes"></div>
-                <div id="likes-per-view"></div>
-                    <script src="{{ url_for('static', filename='plots.js') }}"></script>
-                    
-                    <select id="selDataset" onchange="switch_data(this.value)">
-                            <option value="Views Time Series">Views Time Series</option>
-                            <option value="Duration Time Series">Duration Time Series</option>
-                            <option value="Likes Time Series">Likes Time Series</option>
-                            <option value="Views vs Views/Likes">Views vs Views/Likes</option>
-                    </select>
-            
-        </div>   
-    
+       
 
-
-
-
-
-
-
-
-        
-          
           <!-- Modal Last Retrieved -->
           <div class="modal fade" id="initiatePull" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

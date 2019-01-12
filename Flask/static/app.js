@@ -243,7 +243,8 @@ function cacheData(id){
 id_orig = id;
 scrape_date = document.getElementById(`${id}`).innerHTML.split(" ")[3];
 id = id.split("_")[1];
-analytics_url = document.getElementById(id).href;
+if (analytics_url !== null && analytics_url !== null){
+analytics_url = document.getElementById(id).href;}
 update_url = "/update?name=" + analytics_url.split("=")[1].split("&")[0];
 pull_url = "/pull?name=" + analytics_url.split("=")[1].split("&")[0];
 
@@ -330,7 +331,7 @@ function resetURL(){
     
 
     
-    progress_bar.style.visibility = "visible"; 
+ 
     progress_bar_2.style.visibility = "visible"; 
     ok_button = document.getElementById("new-scrape-ok-button");
     ok_button.innerHTML = "Please wait...";
@@ -397,11 +398,14 @@ function showTimeseries(){
             document.getElementById("select-plot-data").style.display = "none";}
 
 
-    else{
+    else {
         document.getElementById("plot-1").style.display = "block";
         document.getElementById("select-plot-data").style.display = "block";
 
         document.getElementById("select-plot-data").scrollIntoView();
+
+        // window.scrollTo(0, document.getElementById('select-plot-data').offsetTop - document.getElementById("time-series").offsetHeight);
+
 
         // x = top.pageXOffset;
         // y = top.pageYOffset;
@@ -412,10 +416,18 @@ function showTimeseries(){
 if (document.getElementById("plot-1") !== null){
 
     document.getElementById("plot-1").style.display = "none";
+   
     document.getElementById("select-plot-data").style.display = "none";
+    document.getElementById("select-plot-data").innerHTML += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
 
     
 
     
 }
 
+function moreInfo(){
+
+    document.getElementById("analytics-img").innerHTML += '<span class="text-muted">{{total_views}}</span><span class="text-muted">{{subscribers}}</span><span class="text-muted">{{total_views}}</span><span class="text-muted">{{total_views}}</span>'
+
+
+}
