@@ -18,7 +18,7 @@
 - asking to pull latest data - implementation - add to existing data or do full scrape? --
 - Analytics - avg likes/duration/views/days between posts/ rolling averages/etc. -- 
 - Load More / Infinite scroll? -- 
-- Queue requests -- flask mega tutorial Celery/etc.
+- Queue requests -- flask mega tutorial Celery/etc. -- NO
 - Load Bar bug 2nd and 3rd decks -- 
 - Clean up SEARCH_NAME columns -- delete or something - GLOBAL VARIABLE?
 - Load percent in modal search -- 
@@ -28,6 +28,7 @@
 - Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
 - Search bar search ub -- works osmetimes, sometimes not enter vs press search --
 - nav bar expand when broser is small broken -- 
+- new pull does not redirect to query page, allows user to refresh and it will pull same artist again causing database integrity error
  -->
 
  <head>
@@ -531,7 +532,7 @@
                          </div>
                      </div> -->
 
-                     <br><br>
+                     <br>
                      <!-- <br> -->
     </div>
 

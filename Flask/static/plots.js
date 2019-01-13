@@ -25,7 +25,9 @@ function getData(data) {
     likes.push(scrape_data[i]["LIKES"]);
     likeview_ratio.push(likes[i]/views[i]);
     total_likes = total_likes + likes[i];
+    total_likes_str = total_likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     total_views = total_views + views[i];
+    total_views_str = total_views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 }
 
@@ -33,9 +35,9 @@ function getData(data) {
 likes_per_view = (total_likes/total_views)*1000;
 likes_per_view_round = Math.round((likes_per_view + 0.00001) * 100) / 100;
 
-document.getElementById("total-views").innerHTML = `${total_views} Total Views`;
-document.getElementById("total-likes").innerHTML = `${total_likes} Total Likes`;
-document.getElementById("likes-per-view").innerHTML = `${likes_per_view_round} Likes Per 1000 Views`;
+document.getElementById("total-views").innerHTML += `${total_views_str}`;
+document.getElementById("total-likes").innerHTML = `${total_likes_str}`;
+document.getElementById("likes-per-view").innerHTML = `${likes_per_view_round}`;
 
   
 data = [{
@@ -43,7 +45,9 @@ data = [{
     y: views ,
     mode: 'markers',
     type: 'scatter',
-    opacity: 0.5,}];
+    opacity: 0.5,
+    marker: {color:'red'}
+}];
 
     var layout = {
       title: {
@@ -77,7 +81,7 @@ data = [{
       }
     }
 
-  Plotly.plot("plot-1", data, layout);
+  Plotly.plot("plot-1", data, layout, { responsive: true });
 }
 
 // function plot_1(scrape_data){
@@ -103,8 +107,8 @@ data = [{
 function updatePlotly(newx, newy, layout) {
 
   // Note the extra brackets around 'newx' and 'newy'
-  Plotly.restyle("plot-1", "x", [newx], layout);
-  Plotly.restyle("plot-1", "y", [newy], layout);
+  Plotly.restyle("plot-1", "x", [newx], layout, { responsive: true });
+  Plotly.restyle("plot-1", "y", [newy], layout, { responsive: true });
 }
 
 function switch_data(data) {

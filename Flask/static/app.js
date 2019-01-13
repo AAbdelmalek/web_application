@@ -77,77 +77,6 @@ function getData(data) {
     }
 }
 
-//Search function
-function search(json) {
-   
-    deleteRows(row_count);
-
-    search_results = json;
-    var counter = 0;
-    row_count = search_results.length;
-
-    if (row_count === 1)
-    {
-        results.text(`${row_count} Video`);
-    }
-
-    else
-    {
-        results.text(`${row_count} Videos`);
-    }
-
-    if (search_results.length === 0)
-    {
-        row_count = 0;
-    }
-
-    else if (document.getElementById("table_results") !== null)
-    {
-        for(counter=0;counter<search_results.length;counter++)
-
-        {
-            
-            var table = document.getElementById("table_results");
-            var row = table.insertRow(counter+1);
-            
-            // var cell1 = row.insertCell(0);
-            // var cell2 = row.insertCell(1);
-            // var cell3 = row.insertCell(2);
-            // var cell4 = row.insertCell(3)
-            // var cell5 = row.insertCell(4);
-            // var cell6 = row.insertCell(5);          
-            var cell1 = row.insertCell(0); 
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-            var cell5 = row.insertCell(4);
-            var cell6 = row.insertCell(5);  
-            var cell7 = row.insertCell(6);  
-            // var cell14 = row.insertCell(13);  
-            // var cell15 = row.insertCell(14);    
-            var cell8 = row.insertCell(7);
-            
-            // cell1.innerHTML = search_results[counter]["ARTIST"];
-            // cell2.innerHTML = search_results[counter]["SCRAPE_DATE"];
-            // cell3.innerHTML = search_results[counter]["SEARCH_NAME"];
-            // cell4.innerHTML = search_results[counter]["JOINED"];
-            // cell5.innerHTML = search_results[counter]["SUBSCRIBERS"];
-            // cell6.innerHTML = search_results[counter]["TOTAL_VIEWS"];
-            cell1.innerHTML = search_results[counter]["PUBLISHED_STR"];
-            cell2.innerHTML = search_results[counter]["TITLE"];
-            cell3.innerHTML = search_results[counter]["CATEGORY"];
-            cell4.innerHTML = search_results[counter]["DURATION"];
-            cell5.innerHTML = search_results[counter]["VIEWS"];
-            cell6.innerHTML = search_results[counter]["LIKES"];
-            cell7.innerHTML = search_results[counter]["DISLIKES"];
-            // cell14.innerHTML = search_results[counter]["PAID"];
-            // cell15.innerHTML = search_results[counter]["FAMILY_FRIENDLY"];
-            cell8.innerHTML = search_results[counter]["URL"];
-            no_results.text("");
-        }      
-    }
-  }
-
 function analytics_load(){
     // if (analytics_loader.getAttribute("href") !== "#"){
 
@@ -402,7 +331,7 @@ function showTimeseries(){
         document.getElementById("plot-1").style.display = "block";
         document.getElementById("select-plot-data").style.display = "block";
 
-        document.getElementById("select-plot-data").scrollIntoView();
+        // document.getElementById("select-plot-data").scrollIntoView();
 
         // window.scrollTo(0, document.getElementById('select-plot-data').offsetTop - document.getElementById("time-series").offsetHeight);
 
@@ -413,17 +342,17 @@ function showTimeseries(){
 
 }
 
-if (document.getElementById("plot-1") !== null){
+// if (document.getElementById("plot-1") !== null){
 
-    document.getElementById("plot-1").style.display = "none";
+//     document.getElementById("plot-1").style.display = "none";
    
-    document.getElementById("select-plot-data").style.display = "none";
-    document.getElementById("select-plot-data").innerHTML += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
+//     document.getElementById("select-plot-data").style.display = "none";
+//     // document.getElementById("select-plot-data").innerHTML += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
 
     
 
     
-}
+// }
 
 function moreInfo(){
 

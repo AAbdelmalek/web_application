@@ -89,78 +89,111 @@
             <br><br><br>
 
             <!-- Row 1 -->
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                        <div class="col">
-                            <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
-                                <a href="#" class="card-link" onclick="showTimeseries()" id="time-series">
-                                    <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
-                                    <div class="card-body">
-                                        <p class="card-title text-center data-header">Time Series</p>
+                        <div class="col-1 ml-5 mr-3 mb-3">
+
+                            <!-- Time Series -->
+                                <div class="card shadow">
+                                        <a href="#" class="card-link" onclick="showTimeseries()" id="time-series">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
+                                    
+                                          <p class="card-title text-center data-header" id="info-btn">Time Series</p>
+                                        </a>
+                                      </div>
+                                    <br>
+                            <!-- Regression -->
+                                <div class="card shadow">
+                                    <a href="#" class="card-link" onclick="showRegression()" id="regression">
+                                    <img class="card-img-top" src="{{ url_for('static', filename='data-2r.jpg')}}" alt="Card image cap">
+                                
+                                        <p class="card-title text-center data-header" id="info-btn">Regression</p>
+                                    </a>
+                                    </div>                                      
+                                    <br>
+                            <!-- Bubble Charts -->
+                                <div class="card shadow">
+                                    <a href="#" class="card-link" onclick="showBubble()" id="bubble">
+                                    <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
+                                
+                                        <p class="card-title text-center data-header" id="info-btn">Bubble</p>
+                                    </a>
                                     </div>
-                                </a>
-                            </div>
+                                    <br>
+
+                            <!-- Extraneous -->
+                                <!-- <div class="card shadow">
+                                        <a href="#" class="card-link" onclick="showExtraneous()" id="bubble">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
+                                    
+                                            <p class="card-title text-center data-header" id="info-btn">Extraneous</p>
+                                        </a>
+                                        </div>
+                                        <br> -->
+
+
+
                         </div>
 
-                    <div class="col">
-                            <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
-                                    <a href="#" class="card-link">
-                                        <img class="card-img-top" src="{{ url_for('static', filename='data-2r.jpg')}}" alt="Card image cap">
-                                        <div class="card-body">
-                                            <p class="card-title text-center data-header">Regression</p>
-                                        </div>
-                                    </a>
+                        <!-- Plot 1 -->
+                            <div class="col-8">
+                                    <div class="shadow" id = "plot-1"></div>
+                         
                             </div>
-                    </div>
-           
-                    <div class="col">
-                        <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
-                                <a href="#" class="card-link">
-                                    <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
-                                    <div class="card-body">
-                                        <p class="card-title text-center data-header">Bubble Charts</p>
-                                    </div>
-                                </a>
-                            </div>
-                    </div>                                        
+
+
+                     <!-- Legend -->
+                            <div class="col-2">
+                                    <div id="select-plot-data">
+                                            <div class="card shadow">
+                                                    <div class="card-body">
+                                         
+                                                            <select class="form-control" id="selDataset" onchange="switch_data(this.value)">
+                                                                    <option value="Views Time Series">Views Time Series</option>
+                                                                    <option value="Duration Time Series">Duration Time Series</option>
+                                                                    <option value="Likes Time Series">Likes Time Series</option>
+                                                                    <option value="Views vs Views/Likes">Views vs Views/Likes</option>
+                                                            </select>
+                                                    </div>
+                                            </div>       
+                                        
+                                    </div>           
+                                <br>
+                                    <!-- <div class="card shadow">
+                                            <div class="card-body">
+                                        
+                                        <div id="more-info">
+                                                <div id="total-views"></div>
+                                                <div id="total-likes"></div>
+                                                <div id="likes-per-view"></div>
+                                                <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                            </div>
+                                        </div>       
+                                        
+                                    </div>     -->
+
+                                    <div class="card shadow">
+                                            <div class="card-header">
+                                             Profile
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                              <li class="list-group-item"><span id="total-views"></span><span class="text-muted"> Views</span></li>
+                                              <li class="list-group-item"><span id="total-likes"></span><span class="text-muted"> Likes</span></li>
+                                              <li class="list-group-item"><span id="likes-per-view"></span><span class="text-muted"> Likes per 1,000 Views</span></li>
+                                            </ul>
+                                            <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                          </div>
+
+                                                
+                            </div>   
+                         
+
+                   
+
+                                                
                                            
             </div>  
 
-            <div class="row">
-                    <div class="col">
-                        <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
-                            <a href="#" class="card-link" onclick="showTimeseries()">
-                                <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
-                                <div class="card-body">
-                                    <p class="card-title text-center data-header">Time Series</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                <div class="col">
-                        <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
-                                <a href="#" class="card-link">
-                                    <img class="card-img-top" src="{{ url_for('static', filename='data-2r.jpg')}}" alt="Card image cap">
-                                    <div class="card-body">
-                                        <p class="card-title text-center data-header">Grouped Data Set</p>
-                                    </div>
-                                </a>
-                        </div>
-                </div>
-       
-                <div class="col">
-                    <div class="card ml-5 mb-5 shadow" style="width: 16rem;">
-                            <a href="#" class="card-link">
-                                <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
-                                <div class="card-body">
-                                    <p class="card-title text-center data-header">Processed Data Set</p>
-                                </div>
-                            </a>
-                        </div>
-                </div>                                        
-                                       
-        </div> 
         </div>
  
             <br><br>
@@ -169,43 +202,45 @@
 
  
 
-            <div class="container-fluid">
+            <!-- <div class="container-fluid">
                     <div class="row">
                             <div class="col-10 mx-auto">
                                     <div class="shadow" id = "plot-1"></div>
                          
                             </div>
-                    <div class="row">
-                        <div class="col-2 mx=auto">
-                                <div id="select-plot-data">
-                                        <div class="card" style="width: 18rem;">
-                                                <div class="card-body">
-                                                        <div id="total-views"></div>
-                                                        <div id="total-likes"></div>
-                                                        <div id="likes-per-view"></div>
-                                                        <script src="{{ url_for('static', filename='plots.js') }}"></script>
-                                            
-                                                        <select id="selDataset" onchange="switch_data(this.value)">
-                                                                <option value="Views Time Series">Views Time Series</option>
-                                                                <option value="Duration Time Series">Duration Time Series</option>
-                                                                <option value="Likes Time Series">Likes Time Series</option>
-                                                                <option value="Views vs Views/Likes">Views vs Views/Likes</option>
-                                                        </select>
-                                                </div>
-                                        </div>       
-                                     
+                        <div class="row">
+                            <div class="col-2 mx=auto">
+                                    <div id="select-plot-data">
+                                            <div class="card" style="width: 18rem;">
+                                                    <div class="card-body">
+                                                            <div id="total-views"></div>
+                                                            <div id="total-likes"></div>
+                                                            <div id="likes-per-view"></div>
+                                                            <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                                
+                                                            <select id="selDataset" onchange="switch_data(this.value)">
+                                                                    <option value="Views Time Series">Views Time Series</option>
+                                                                    <option value="Duration Time Series">Duration Time Series</option>
+                                                                    <option value="Likes Time Series">Likes Time Series</option>
+                                                                    <option value="Views vs Views/Likes">Views vs Views/Likes</option>
+                                                            </select>
+                                                    </div>
+                                            </div>       
+                                        
                                     </div>           
-                               
-                                           
-                                               
-                                </div>   
+                                
+                                            
+                                                
+                            </div>   
                          
 
+                        </div>
+
                     </div>
+            </div> -->
 
-          </div>
-  </div>
-
+</div>
+</div>
 
     
        

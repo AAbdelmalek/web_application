@@ -271,8 +271,8 @@ font-size:9pt;
 
 .data-header{
 font-weight: 200 !important;
-font-size: 15pt;
-
+/* font-size: calc(6pt + 0.3vw); */
+font-size: 10pt;
 }
 
 #navbar-1-analytics{
@@ -296,3 +296,7 @@ border-radius: 15px;
 
 }
 
+#info-btn{
+margin-top: 10px;
+
+}
