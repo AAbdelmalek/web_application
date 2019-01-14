@@ -101,35 +101,68 @@
             <!-- Row 1 -->
         <div class="container-fluid">
             <div class="row">
-                        <div class="col-1 ml-5 mr-3 mb-3">
+                        <div class="col-2 ml-5 mr-2 mb-3">
+                                <!-- <div class="card shadow">
+                                        <div class="card-header">
+                                         Type
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                          <li class="list-group-item">Time Series</li>
+                                          <li class="list-group-item">Performance</li>
+                                          <li class="list-group-item">3D</li>                                        
+                                        </ul>
+              
+                                </div>
+                                <br> -->
+                              <div class="card shadow">
+                                        <div class="card-header">
+                                         Statistics
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                          <li class="list-group-item"><span id="variance"></span><span class="text-muted"> σ²</span></li>
+                                          <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li>
+                                        </ul>
+                                        <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                </div>
+                                <br>
 
-                            <!-- Time Series -->
                                 <div class="card shadow">
+                                        <div class="card-header">
+                                         Averages
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                          <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Views/Video</span></li>
+                                          <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
+                                        </ul>
+                                        <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                </div>
+                            <!-- Time Series -->
+                                <!-- <div class="card shadow">
                                         <a href="#" class="card-link" onclick="showTimeseries()" id="time-series">
                                         <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
                                     
                                           <p class="card-title text-center data-header" id="info-btn">Time Series</p>
                                         </a>
                                       </div>
-                                    <br>
-                            <!-- Regression -->
-                                <div class="card shadow">
-                                    <a href="#" class="card-link" onclick="showRegression()" id="regression">
+                                    <br> -->
+                            <!-- Performance -->
+                                <!-- <div class="card shadow">
+                                    <a href="#" class="card-link" onclick='showPerformance()' id="regression">
                                     <img class="card-img-top" src="{{ url_for('static', filename='data-2r.jpg')}}" alt="Card image cap">
                                 
-                                        <p class="card-title text-center data-header" id="info-btn">Regression</p>
+                                        <p class="card-title text-center data-header" id="info-btn">Performance</p>
                                     </a>
                                     </div>                                      
-                                    <br>
+                                    <br> -->
                             <!-- Bubble Charts -->
-                                <div class="card shadow">
+                                <!-- <div class="card shadow">
                                     <a href="#" class="card-link" onclick="showBubble()" id="bubble">
                                     <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
                                 
-                                        <p class="card-title text-center data-header" id="info-btn">Bubble</p>
+                                        <p class="card-title text-center data-header" id="info-btn">3D</p>
                                     </a>
                                     </div>
-                                    <br>
+                                    <br> -->
 
                             <!-- Extraneous -->
                                 <!-- <div class="card shadow">
@@ -145,11 +178,17 @@
 
                         </div>
 
-                        <!-- Plot 1 -->
-                            <div class="col-8">
+                        <!-- Plots -->
+                            <div class="col-7 mr-2">
                                     <div class="shadow" id = "plot-1"></div>
-                         
+                                    <div class="shadow" id = "plot-2"></div>
+                                    <div class="shadow" id = "plot-3"></div>
                             </div>
+
+
+                    
+
+                 
 
 
                      <!-- Legend -->
@@ -171,7 +210,45 @@
                                                     </div>
                                             </div>       
                                         
-                                    </div>           
+                                    </div>  
+                                    
+                                    <div id="select-plot-data-2">
+                                        <div class="card shadow">
+                                                <div class="card-header">
+                                                        Graph
+                                                       </div>
+                                                <div class="card-body">
+                                                      
+                                     
+                                                        <select class="form-control" id="selDataset" onchange="switch_data(this.value)">
+                                                                <option value="Views Time Series">Views vs Likes/1,000 Views</option>
+                                                                <option value="Duration Time Series">Other</option>
+                                                                <option value="Likes Time Series">Other</option>
+                                                                <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
+                                                        </select>
+                                                </div>
+                                        </div>                                                 
+                                    
+                                </div>  
+
+                                <div id="select-plot-data-3">
+                                        <div class="card shadow">
+                                                <div class="card-header">
+                                                        Graph
+                                                        </div>
+                                                <div class="card-body">
+                                                        
+                                        
+                                                        <select class="form-control" id="selDataset" onchange="switch_data(this.value)">
+                                                                <option value="Views Time Series">Views vs Time vs Likes</option>
+                                                                <option value="Duration Time Series">Other</option>
+                                                                <option value="Likes Time Series">Other</option>
+                                                                <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
+                                                        </select>
+                                                </div>
+                                        </div> 
+                                        
+                                </div>
                                 <br>
                                     <!-- <div class="card shadow">
                                             <div class="card-body">
@@ -192,15 +269,32 @@
                                             </div>
                                             <ul class="list-group list-group-flush">
                                               <li class="list-group-item"><span id="total-views"></span><span class="text-muted"> Views</span></li>
+                                              <!-- <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Avg Views</span></li> -->
+
                                               <li class="list-group-item"><span id="total-likes"></span><span class="text-muted"> Likes</span></li>
-                                              <li class="list-group-item"><span id="likes-per-view"></span><span class="text-muted"> Likes per 1,000 Views</span></li>
+                                              <li class="list-group-item"><span id="likes-per-view"></span><span class="text-muted"> Likes/1,000 Views</span></li>
                                             </ul>
                                             <script src="{{ url_for('static', filename='plots.js') }}"></script>
-                                          </div>
+                                </div>
+
+                                <br>
+                                
+                                <!-- Statistics -->
+                                <!-- <div class="card shadow">
+                                        <div class="card-header">
+                                         Statistics
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                          <li class="list-group-item"><span id="variance"></span><span class="text-muted"> Variance</span></li>
+                                          <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li>
+                                        </ul>
+                                        <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                </div> -->
+
 
                                                 
-                            </div>   
-                         
+                                    </div>   
+                     
 
                    
 

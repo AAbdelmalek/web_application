@@ -29,7 +29,11 @@
 - Search bar search ub -- works osmetimes, sometimes not enter vs press search -- fixed, was a <form> tag issue with get request "?" -> switched to <div>
 - nav bar expand when broser is small broken -- 
 - new pull does not redirect to query page, allows user to refresh and it will pull same artist again causing database integrity error -- OK, made redirect function
- -->
+- Add other graphs to single select option dropdown --
+- Make statistics vary depending on selected chart --
+- Bug where you query within a page and then close then go to another page then query and press OKre turns old user  
+
+-->
 
  <head>
      <meta charset="utf-8" />
@@ -156,7 +160,7 @@
                       <div class="form-inline my-2 my-lg-2">
                         <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
                         <span class="input-group-btn">
-                            <a onclick="load_bar()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
+                            <a onclick="progressBar1()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
                     </span>
                 </div>
                     </div>

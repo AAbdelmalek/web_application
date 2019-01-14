@@ -151,17 +151,19 @@ function load_bar(){
 }
 
 function generateURL(){
-    search_loader.href = "#";
+    
     input = d3.event.target.value;
+    var userText = input.replace(/^\s+/, '').replace(/\s+$/, '');
     url = "/query?name=" + input.trim();
     // button_url = url + "&analytics=home";
     
-    if(url === "/query?name="){
+    
+    if(url === "/query?name=" && userText === ''){
         url = "#";
      
     }
 
-    if (window.location.href.includes("/query") == true){
+    if (window.location.href.includes("/query") == true && userText !== ''){
 
         var first_search = window.location.href.split("name=")[1].split("&")[0]
 
@@ -178,6 +180,11 @@ function generateURL(){
 
         }
 
+        else{
+
+            search_loader.href=url; 
+        }
+
     }
 
     else {
@@ -186,7 +193,7 @@ function generateURL(){
 
     }
     // document.getElementById("analytics_home_link").href =  button_url;
-    var userText = input.replace(/^\s+/, '').replace(/\s+$/, '');
+  
     if (event.keyCode === 13 && userText !== '' ) {
         // text was all whitespace
         load_bar();
@@ -238,10 +245,10 @@ window.scrollTo(0,document.body.offsetHeight);
 
 search_button.on("keyup", generateURL);
 
-if (d3.event !== null){
-input = d3.event.target.value;   
-search_button.on("change", search(input));
-}
+// if (d3.event !== null){
+// input = d3.event.target.value;   
+// search_button.on("change", search(input));
+// }
 
 // if (window.history.replaceState) {
 //     window.history.replaceState( null, null, window.location.href);
@@ -398,15 +405,20 @@ function myFunction() {
 
 function showTimeseries(){
 
-   if (document.getElementById("plot-1").style.display === "block") {
+   if (document.getElementById("plot-1").style.display === "none") {
+            document.getElementById("plot-1").style.display = "block";
+            document.getElementById("select-plot-data").style.display = "block";
+            document.getElementById("plot-2").style.display = "none";
+            document.getElementById("select-plot-data-2").style.display = "none";
+            document.getElementById("plot-3").style.display = "none";
+            document.getElementById("select-plot-data-3").style.display = "none";
 
-            document.getElementById("plot-1").style.display = "none";
-            document.getElementById("select-plot-data").style.display = "none";}
+            // document.getElementById("select-plot-data").style.display = "none";}
 
 
-    else {
-        document.getElementById("plot-1").style.display = "block";
-        document.getElementById("select-plot-data").style.display = "block";
+    // else {
+    //     document.getElementById("plot-1").style.display = "block";
+    //     document.getElementById("select-plot-data").style.display = "block";
 
         // document.getElementById("select-plot-data").scrollIntoView();
 
@@ -418,6 +430,7 @@ function showTimeseries(){
     }
 
 }
+
 
 // if (document.getElementById("plot-1") !== null){
 
@@ -516,6 +529,20 @@ function redirect(code){
 
     }
 
+    else if (window.location.href.includes(code_fix) == false && window.location.href.includes("page") == true){
+    
+        // window.location.href = code_fix
+        
+    // window.location.href = code_fix + "&old=" + window.location.href.split("old=")[1]
+
+    // window.location.href = window.location.href + "&current=" + code_fix.split("/query?name=")[1];
+
+    // window.location.href = window.location.href.split("&old")[0] + "&old=" + code_fix.split("&")[0].split("/query?name=")[1] + "&page=1"
+
+    // http://127.0.0.1:5000/query?name=UCWOKPH3jOLZhZiKQMjl1Fmg&analytics=baseUCE6acMV3m35znLcf0JGNn7Q&page=1
+    // http://127.0.0.1:5000/query?name=diddly%20asmr&old=UCE6acMV3m35znLcf0JGNn7Q&page=1
+    }
+
 
 }
 // document.getElementById("button").addEventListener("keyup", enter());
@@ -530,3 +557,13 @@ function redirect(code){
 
 //     }
 // }
+
+function progressBar1(){
+
+
+    input = document.getElementById("button").value;
+
+    if (input.trim() !== ""){
+    progress_bar.style.visibility = "visible"; };
+
+}
