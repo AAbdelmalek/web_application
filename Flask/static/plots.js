@@ -7,7 +7,7 @@ var likeview_ratio = [];
 var total_likes = 0;
 var total_views = 0;
 var likes_per_view = 0;
-
+var layout;
 
 function getData(data) {
 
@@ -45,38 +45,42 @@ data = [{
     y: views ,
     mode: 'markers',
     type: 'scatter',
-    opacity: 0.5,
+    opacity: 0.6,
     marker: {color:'red'}
 }];
 
-    var layout = {
+    layout = {
+      // showlegend: true,
+      // legend: {
+      //   x: 1,
+      //   y: 1},
       title: {
-        text:'Test',
-        font: {
-          family: 'Courier New, monospace',
-          size: 24
-        },
+        text:'Views vs Time',
+        // font: {
+        //   family: 'Courier New, monospace',
+        //   size: 24
+        // },
         xref: 'paper',
-        x: 0.05,
+        x: 0.5,
       },
       xaxis: {
         title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
+          text: 'Date',
+          // font: {
+          //   family: 'Courier New, monospace',
+          //   size: 18,
+          //   color: '#7f7f7f'
+          // }
         },
       },
       yaxis: {
         title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
+          text: 'Views',
+          // font: {
+          //   family: 'Courier New, monospace',
+          //   size: 18,
+          //   color: '#7f7f7f'
+          // }
         }
       }
     }
@@ -121,6 +125,7 @@ function switch_data(data) {
   var x = [];
   var y = [];
 
+
   // Convert JSON to Arrays
   // for (var i = 0; i<scrape_data.length; i++){
 
@@ -129,48 +134,152 @@ function switch_data(data) {
   // }
   // Fill the x and y arrays as a function of the selected dataset
   switch (data) {
-  case "Views Time Series":
+  case "Views vs Time":
     x = published;
     y = views;
-    var layout = {
+    layout = {
       title: 'Views Time Series',
       xaxis: {
         title: 'Published Date',
-        titlefont: {
-          family: 'Courier New, monospace',
-          size: 18,
-          color: '#7f7f7f'
-        }
+        // titlefont: {
+        //   family: 'Courier New, monospace',
+        //   size: 18,
+        //   color: '#7f7f7f'
+        // }
       },
       yaxis: {
         title: 'Views',
-        titlefont: {
-          family: 'Courier New, monospace',
-          size: 18,
-          color: '#7f7f7f'
-        }
+        // titlefont: {
+        //   family: 'Courier New, monospace',
+        //   size: 18,
+        //   color: '#7f7f7f'
+        // }
       }
     };
     break;
   case "Duration Time Series":
     x = published
     y = duration;
+    layout = {
+      // showlegend: true,
+      // legend: {
+      //   x: 1,
+      //   y: 1},
+      title: {
+        text:'Duration vs Time',
+        // font: {
+        //   family: 'Courier New, monospace',
+        //   size: 24
+        // },
+        xref: 'paper',
+        x: 0.5,
+      },
+      xaxis: {
+        title: {
+          text: 'Test',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        },
+      },
+      yaxis: {
+        title: {
+          text: 'Test',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        }
+      }
+    }
     break;
   case "Likes Time Series":
     x = published;
     y = likes;
+    layout = {
+      // showlegend: true,
+      // legend: {
+      //   x: 1,
+      //   y: 1},
+      title: {
+        text:'Likes vs Time',
+        // font: {
+        //   family: 'Courier New, monospace',
+        //   size: 24
+        // },
+        xref: 'paper',
+        x: 0.5,
+      },
+      xaxis: {
+        title: {
+          text: 'Date',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        },
+      },
+      yaxis: {
+        title: {
+          text: 'Likes',
+          font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+          }
+        }
+      }
+    }
     break;
-  case "Views vs Views/Likes":
-    x = views;
-    y = likeview_ratio;
-    break;
+  // case "Views vs Views/Likes":
+  //   x = views;
+  //   y = likeview_ratio;
+  //   var layout = {showlegend: true,
+  //     legend: {
+  //       x: 1,
+  //       y: 1},
+  //     title: {
+  //       text:'Views vs Views/Likes',
+  //       // font: {
+  //       //   family: 'Courier New, monospace',
+  //       //   size: 24
+  //       // },
+  //       xref: 'paper',
+  //       x: 0.5,
+  //     },
+  //     xaxis: {
+  //       title: {
+  //         text: 'Test',
+  //         font: {
+  //           family: 'Courier New, monospace',
+  //           size: 18,
+  //           color: '#7f7f7f'
+  //         }
+  //       },
+  //     },
+  //     yaxis: {
+  //       title: {
+  //         text: 'Test',
+  //         font: {
+  //           family: 'Courier New, monospace',
+  //           size: 18,
+  //           color: '#7f7f7f'
+  //         }
+  //       }
+  //     }
+  //   }
+    // break;
   default:
     x = published;
     y = views;
     x = published;
     y = views;
-    var layout = {
-      title: 'Views Time Series',
+    layout = {
+      title: 'Views vs Time',
       xaxis: {
         title: 'Published Date',
         titlefont: {

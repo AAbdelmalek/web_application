@@ -15,16 +15,10 @@
      <script src="{{ url_for('static', filename='plotly-latest.min.js') }}"></script>
  </head>
 
-<body>
-    <div id="bg">  
+<body id="bg">
+    <div >  
                 
-    
-         
-            <!-- Load Bar 1 -->
-                <!-- <div id="load-bar" class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-                </div> 
-            <br> -->
+
                 <!-- Nav Bar -->
                 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" id="navbar-1-analytics">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,11 +48,11 @@
                  
         
                       </ul>
-                      <form class="form-inline my-2 my-lg-2">
+                      <div class="form-inline my-2 my-lg-2">
                         <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
                         <span class="input-group-btn">
                             <a onclick="load_bar()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
-                    </span>
+                        </div>
                       </form>
                     </div>
                   </nav>
@@ -66,27 +60,43 @@
                
                   <!-- Header Info -->
                   <nav class="navbar navbar-light bg-light shadow" id="header-content">
+                    
                     <a class="navbar-brand data-header" href="{{analytics_base_url}}">
-                    <br><br>
+                            <br><br>
                       <img onmouseover="moreInfo()" src="{{artist_image}}" width="90" height="auto" class="d-inline-block align-top shadow" id="analytics-img" alt="">
-                      &nbsp;{{artist_name}} 
+                            &nbsp;{{artist_name}} 
+                    </a> 
                       <!-- <span class="text-muted">{{total_views}}</span>
                       <span class="text-muted">{{subscribers}}</span>
                       <span class="text-muted">{{total_views}}</span>
                       <span class="text-muted">{{total_views}}</span> -->
                 
-                    </a>
+               
+                    <!-- <span class="text-muted text-right">Last retrieved {{scrape_date}}</span> -->
 
-          
-                        <button style="position: absolute; right:132px;" type="button" id="_4" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull" onmouseover="cacheData(this.id)">Update Data</button>
-                            
+                    <!-- Update Data -->
+                    <a id="update-data"></a>     
+                    <!-- <button style="position: absolute; right:132px;" type="button" id="update-data" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button> -->
+                       
                     <!-- Export to CSV -->
                     <a href="/static/{{youtube_code}}">
                         <button type="button" class="btn btn-sm btn-primary analytics_load_button">Export to CSV</button>
                         </a>
+                        
                   </nav>
+     <!-- Load Bar 1 -->
+     <div id="load-bar-3" class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+        </div> 
+       
+
+
                   <div id="sticky-header-fix"></div>
+                          
+
             <br><br><br>
+       
+
 
             <!-- Row 1 -->
         <div class="container-fluid">
@@ -146,13 +156,17 @@
                             <div class="col-2">
                                     <div id="select-plot-data">
                                             <div class="card shadow">
+                                                    <div class="card-header">
+                                                            Graph
+                                                           </div>
                                                     <div class="card-body">
+                                                          
                                          
                                                             <select class="form-control" id="selDataset" onchange="switch_data(this.value)">
                                                                     <option value="Views Time Series">Views Time Series</option>
                                                                     <option value="Duration Time Series">Duration Time Series</option>
                                                                     <option value="Likes Time Series">Likes Time Series</option>
-                                                                    <option value="Views vs Views/Likes">Views vs Views/Likes</option>
+                                                                    <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
                                                             </select>
                                                     </div>
                                             </div>       
@@ -313,6 +327,8 @@
                                         <br>
                                         {{total_views_int_new_scrape}} All-Time Views
                                         <br>
+                                        {{videos_to_get}} Uploads
+                                        <br>
                                         Joined {{joined_convert_new_scrape}}
                                         
                                 
@@ -344,8 +360,13 @@
                     </div>
                   </footer> -->
     </body>
+    
     <script>getData({{data|tojson}})</script>
+
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
-     <!-- <script>newScrape({{not_found_in_db}},"{{youtube_code_new_scrape}}")</script> -->
+    <script>updateData("{{scrape_date}}")</script>
+    <script>redirect("{{analytics_base_url}}")</script>
+    <script>newScrape({{not_found_in_db}},"{{youtube_code_new_scrape}}")</script>
+
  
  </html>

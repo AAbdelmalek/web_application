@@ -26,6 +26,7 @@ joined_convert_new_scrape = ""
 artist_image_new_scrape = ""
 global_search_name = ""
 cancel = 0
+videos_to_get = 0
 
 # Initialize Flask
 app = Flask(__name__)
@@ -673,7 +674,8 @@ def newPull():
 	artist_image=artist_image,\
 	total_videos = total_videos_str,\
 	analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
-	youtube_code = csv_filepath)
+	youtube_code = csv_filepath,
+	scrape_date = scrape_date_str)
 
 		
 # 	except:
@@ -740,7 +742,7 @@ subscribers_int_new_scrape=subscribers_int_new_scrape,\
 total_views_int_new_scrape=total_views_int_new_scrape,\
 joined_convert_new_scrape=joined_convert_new_scrape,\
 artist_image_new_scrape = artist_image_new_scrape,\
-cancel=cancel):
+cancel=cancel,videos_to_get=videos_to_get):
 
 	# Set Variables, Render Home Page
 	json_data = []
@@ -1212,11 +1214,19 @@ cancel=cancel):
 	total_views_0 =f"{total_views_0} All-Time Views", joined_0=f"Joined {joined_0}",\
 	artist_image_0 = artist_image_0,\
 	total_videos_0 = total_videos_str_0,\
-	analytics_base_url_0=analytics_base_url_0)
+	analytics_base_url_0=analytics_base_url_0,\
+	videos_to_get = videos_to_get)
 
 # Query String
 @app.route("/query")
-def search():
+def search(not_found_in_db = not_found_in_db, youtube_code_new_scrape=\
+youtube_code_new_scrape, artist_name_new_scrape=artist_name_new_scrape,\
+subscribers_int_new_scrape=subscribers_int_new_scrape,\
+total_views_int_new_scrape=total_views_int_new_scrape,\
+joined_convert_new_scrape=joined_convert_new_scrape,\
+artist_image_new_scrape = artist_image_new_scrape,\
+cancel=cancel):
+
 	# Get Search Key Value
 	name_key = request.args['name']
 	input_name = '''{}'''.format(name_key)
@@ -1285,7 +1295,8 @@ def search():
 		artist_image=artist_image,\
 		total_videos = total_videos_str,\
 		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
-		youtube_code = csv_filepath)
+		youtube_code = csv_filepath,
+		scrape_date = scrape_date_str)
 
 	# Convert Date from Jan 1, 1999 format to datetime object
 	converted_date = ""
@@ -1435,11 +1446,77 @@ def search():
 		total_views_int_new_scrape = format(total_views_int,",")
 		joined_convert_new_scrape = str(joined_convert).split(" ")[0]
 		artist_image_new_scrape = artist_image
+		# Make 1000 the actual totoal uploads
+		videos_to_get = format(1000,",")
 
-		return home(not_found_in_db, youtube_code_new_scrape,\
-		artist_name_new_scrape, subscribers_int_new_scrape,\
-		total_views_int_new_scrape,joined_convert_new_scrape,\
-		artist_image_new_scrape)
+		which_page = request.args.get("page")
+		page = '''{}'''.format(which_page)
+		print(f"PAGE IS EQUAL TO: {page}")
+
+		if page == "1":
+			print("i am within the page conditional")
+			# return search(not_found_in_db, youtube_code_new_scrape,\
+			# artist_name_new_scrape, subscribers_int_new_scrape,\
+			# total_views_int_new_scrape,joined_convert_new_scrape,\
+			# artist_image_new_scrape)
+
+		# Checking Database to See if Data was Previously Scraped
+			df_cache = []
+			artist_1_table = []
+			artist_2_table = []
+
+			# Searching for input Artist
+			name_key = request.args.get('old')
+			input_name = '''{}'''.format(name_key)
+			artist_db_name = input_name
+
+			df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
+			{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
+			{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
+			{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
+			INNER JOIN {artist_db_name} \
+			ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
+
+			artist_name = df_cache.loc[0,"ARTIST"]
+			scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+			cache = f"{scrape_date} scrape"
+			json_data = df_cache.to_json(orient="records")
+			scrape_date_str = str(scrape_date).split(" ")[0]
+			total_videos_str = str(df_cache.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+			number_scraped = int(len(df_cache))
+			original_name = df_cache.loc[0,"ARTIST"]
+			analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
+			subscribers = format(df_cache.loc[0,"SUBSCRIBERS"],",")
+			joined = df_cache.loc[0,"JOINED"]
+			#table_name_search = df_cache.loc[0,"TABLE_NAME"]
+			search_table_name = df_cache.loc[0, "SEARCH_NAME"]
+			total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
+			artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
+			csv_filepath = artist_db_name.replace("_replaced_","-") + "_scrape.csv"
+
+			return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
+			artist_name=artist_name,\
+			subscribers = f"{subscribers_str} Subscribers",\
+			total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+			artist_image=artist_image,\
+			total_videos = total_videos_str,\
+			analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
+			youtube_code = csv_filepath,
+			scrape_date = scrape_date_str,\
+			not_found_in_db = not_found_in_db,\
+			youtube_code_new_scrape=youtube_code_new_scrape, artist_name_new_scrape=artist_name_new_scrape,\
+			subscribers_int_new_scrape=subscribers_int_new_scrape,\
+			total_views_int_new_scrape=total_views_int_new_scrape,\
+			joined_convert_new_scrape=joined_convert_new_scrape,\
+			artist_image_new_scrape = artist_image_new_scrape,\
+			cancel=cancel, videos_to_get = videos_to_get)
+
+		else:
+			return home(not_found_in_db, youtube_code_new_scrape,\
+			artist_name_new_scrape, subscribers_int_new_scrape,\
+			total_views_int_new_scrape,joined_convert_new_scrape,\
+			artist_image_new_scrape,videos_to_get)
 
 	if len(df_cache) != 0:
 		# Search Result Information
@@ -1471,7 +1548,8 @@ def search():
 		artist_image=artist_image,\
 		total_videos = total_videos_str,\
 		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
-		youtube_code = csv_filepath)
+		youtube_code = csv_filepath,
+		scrape_date = scrape_date_str, not_found_in_db=0)
 
 	# except:
 		# # Creating Bad Requests Table

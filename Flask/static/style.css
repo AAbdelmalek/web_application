@@ -298,5 +298,17 @@ border-radius: 15px;
 
 #info-btn{
 margin-top: 10px;
+/* font-size: calc(1pt+2vw) !important; */
 
+}
+
+#selDataset{
+
+font-size: 11pt;
+
+
+}
+
+#load-bar-3{
+  height:6px;
 }

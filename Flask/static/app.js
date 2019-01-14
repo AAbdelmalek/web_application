@@ -2,8 +2,9 @@
 var search_button = d3.select("#button");
 var progress_bar = document.getElementById("load-bar");
 var progress_bar_2 = document.getElementById("load-bar-2");
+var progress_bar_3 = document.getElementById("load-bar-3");
 var analytics_loader = document.getElementsByClassName("analytics_load_button");
-var search_loader = document.getElementById("loader_search")
+var search_loader = document.getElementById("loader_search");
 var link_button = document.getElementById("search");
 var i = 0;
 var no_results = d3.select(".no_results");
@@ -26,6 +27,9 @@ var counter = 4;
 //window.scrollTo(0,document.body.scrollHeight);
 var new_deck = document.getElementById(`deck-${counter}`);
 var infinite = document.getElementById("infinite_scroll");
+
+
+search_loader.href = "#";
 
 if (progress_bar_2 !== null ){
     progress_bar_2.style.visibility = "hidden"; 
@@ -56,6 +60,10 @@ new_deck.style.display = "none";
 if (progress_bar !== null ){
     progress_bar.style.visibility = "hidden"; 
 }
+
+if (progress_bar_3 !== null ){
+    progress_bar_3.style.visibility = "hidden"; 
+}
 // loading_warning.style.visibility = "hidden";
 
 // Get JSON Data from Flask
@@ -85,23 +93,65 @@ function analytics_load(){
 }
 
 function search_progress_bar(){
-    if (search_loader.getAttribute("href") !== "#"){
+    if (search_loader.getAttribute("href") !== "#" && search_loader.getAttribute("href").includes("analytics") == False ){
 
         progress_bar.style.visibility = "visible";   
     }
+
+    else if (search_loader.getAttribute("href") !== "#" && search_loader.getAttribute("href").includes("analytcs") == True || search_loader.getAttribute("href").includes("old") == True ){
+
+        progress_bar_3.style.visibility = "visible";   
+    }
+
+
 }
 
 function load_bar(){
-  if (loader_search.getAttribute("href") !== "#"){
+  if (window.location.href.includes("old") == false && window.location.href.includes("analytics")== false){
 
             progress_bar.style.visibility = "visible"; 
             // loading_warning.style.visibility = "visible";
             document.getElementById("DS").href = "#";
             window.location.href = url;
   }   
+
+
+//   else if (search_loader.getAttribute("href") === "#"){
+
+//     console.log("the link is #")
+//     window.location.href = "#";
+//   }
+
+  else {
+
+
+    progress_bar_3.style.visibility = "visible"; 
+
+    var first_search = window.location.href.split("name=")[1].split("&")[0]
+
+
+    if (window.location.href.includes("old") == false && window.location.href.includes("analytics=base") == true){
+
+    window.location.href = url + "&old=" + first_search + "&page=1";
+    }
+
+    else if (window.location.href.includes("old") == true) {
+
+        var second_search = window.location.href.split("old=")[1].split("&page=")[0];
+         window.location.href = url + "&old=" + second_search + "&page=1";
+
+    }
+
+
+
+
+
+  }
+
 }
 
 function generateURL(){
+    search_loader.href = "#";
     input = d3.event.target.value;
     url = "/query?name=" + input.trim();
     // button_url = url + "&analytics=home";
@@ -111,12 +161,41 @@ function generateURL(){
      
     }
 
-    search_loader.href=url;
-    // document.getElementById("analytics_home_link").href =  button_url;
+    if (window.location.href.includes("/query") == true){
 
-    if (event.keyCode === 13 && input !== "") {
+        var first_search = window.location.href.split("name=")[1].split("&")[0]
+
+
+        if (window.location.href.includes("old") == false && window.location.href.includes("analytics=base") == true){
+
+        search_loader.href= url + "&old=" + first_search + "&page=1";
+        }
+
+        else if (window.location.href.includes("old") == true) {
+
+            var second_search = window.location.href.split("old=")[1].split("&page=")[0];
+            search_loader.href= url + "&old=" + second_search + "&page=1";
+
+        }
+
+    }
+
+    else {
+
+        search_loader.href=url; 
+
+    }
+    // document.getElementById("analytics_home_link").href =  button_url;
+    var userText = input.replace(/^\s+/, '').replace(/\s+$/, '');
+    if (event.keyCode === 13 && userText !== '' ) {
+        // text was all whitespace
         load_bar();
     }
+        // text has real content, now free of leading/trailing whitespace
+    
+    // if (event.keyCode === 13 && input !== "" && input.replace("") !== " ") {
+    //     load_bar();
+    // }
 }
 
 // window.onscroll = function(ev) {
@@ -172,8 +251,10 @@ function cacheData(id){
 id_orig = id;
 scrape_date = document.getElementById(`${id}`).innerHTML.split(" ")[3];
 id = id.split("_")[1];
-if (analytics_url !== null && analytics_url !== null){
+
+if (document.getElementById(id).href !== null){
 analytics_url = document.getElementById(id).href;}
+
 update_url = "/update?name=" + analytics_url.split("=")[1].split("&")[0];
 pull_url = "/pull?name=" + analytics_url.split("=")[1].split("&")[0];
 
@@ -194,28 +275,28 @@ days ago. Do you want to initiate an update request?`
 // = `The data for ${raw_name} is from ${scrape_date}. 
 // Do you want to initiate a new scrape request?`;
 
-getPullURL(update_url, days, id_orig);
+// getPullURL(update_url, days, id_orig);
 }
 
-function getPullURL(update_url, days, id_orig){
+// function getPullURL(update_url, days, id_orig){
 
-    last_retrieved_link = document.getElementById(id_orig);
+//     last_retrieved_link = document.getElementById(id_orig);
 
-    if (days < 100){
+//     if (days < 100){
         
-        last_retrieved_link.setAttribute("data-target", ""); 
-        last_retrieved_link.classList.add("retrieved-link");
-        // last_retrieved_link.remove();
-    }
+//         last_retrieved_link.setAttribute("data-target", ""); 
+//         last_retrieved_link.classList.add("retrieved-link");
+//         // last_retrieved_link.remove();
+//     }
 
-    else {
+//     else {
 
-       last_retrieved_link.setAttribute("data-target", "#initiatePull");  
+//        last_retrieved_link.setAttribute("data-target", "#initiatePull");  
 
-    }
+//     }
 
-    document.getElementById("pull-href").href = update_url;
-}
+//     document.getElementById("pull-href").href = update_url;
+// }
 
 function justLoad(){
 
@@ -247,7 +328,6 @@ function newScrape(not_found_in_db, youtube_code){
 
 }
 
-
 function resetURL(){
 
     // $("#new-scrape").modal("hide");
@@ -258,9 +338,6 @@ function resetURL(){
     //     backdrop : "static",
     //   });
     
-
-    
- 
     progress_bar_2.style.visibility = "visible"; 
     ok_button = document.getElementById("new-scrape-ok-button");
     ok_button.innerHTML = "Please wait...";
@@ -360,3 +437,96 @@ function moreInfo(){
 
 
 }
+
+function updateData(id){
+    
+    scrape_date = id;
+    id = id.split("_")[1];
+    
+    // if (document.getElementById(id).href !== null){
+    // analytics_url = document.getElementById(id).href;}
+
+    analytics_url = window.location.href.split("name=")[1].split("&")[0];
+    
+    update_url = "/update?name=" + analytics_url
+    pull_url = "/pull?name=" + analytics_url
+    
+    scrape_date_object = new Date(scrape_date + "Z");
+    today_date_object = Date.now();
+    
+    staleness = (Math.abs(today_date_object - scrape_date_object))/(1000*60*60*24);
+    days = Math.round(staleness);
+    
+    // console.log(scrape_date_object);
+    // console.log(today_date_object);
+    // console.log(staleness);
+    // console.log(days);
+    
+
+    getPullURL(update_url, days);
+}
+
+function getPullURL(update_url, days){
+
+    // last_retrieved_link = document.getElementById(id_orig);
+
+    if (days < 7){
+
+        document.getElementById("update-data").style.visibility = "hidden";
+
+
+
+        }
+
+
+    else {
+       document.getElementById("update-data").innerHTML = '<button style="position: fixed; right:132px; top:75px" type="button" id="update-data" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button>';
+    //    document.getElementById("update-data").parentElement.remove();
+       //    var el = document.getElementById("update-data");
+    //    var newEl = document.createElement('button');
+    //    newEl.id = "update-data";
+    //    newEl.style='position: absolute; right:132px;';
+    //    newEl.type = "buttton";
+    //    newEl.class = "btn btn-sm btn-secondary";
+    //    newEl.innerHTML="Update Data";
+    //    newEl.data-toggle = "modal"
+    //    newEl.data-target = "#initiatePull"
+    //    el.parentNode.replaceChild(newEl, el);
+       //    document.getElementById("update-data").style.visibility = "visible";
+       document.getElementById("pull-href").href = update_url;
+
+       document.getElementById("modal-body-text").innerHTML
+       = `The data for this content creator was retrieved ${days} 
+       days ago. Do you want to initiate an update request?`
+       // = `The data for ${raw_name} is from ${scrape_date}. 
+       // Do you want to initiate a new scrape request?`;
+
+    }
+
+    
+}
+
+
+function redirect(code){
+
+    code_fix = code.replace("amp;","");
+
+    if (window.location.href.includes(code_fix) == false && window.location.href.includes("page") == false){
+    window.location.href = code_fix;
+
+    }
+
+
+}
+// document.getElementById("button").addEventListener("keyup", enter());
+
+// event = document.getElementById("button").addEventListener("keyup", enter());
+
+// function enter(event){
+//     console.log(event);
+//     if (event.keyCode === 13) {
+
+//         window.location.href = "poopoo";
+
+//     }
+// }
