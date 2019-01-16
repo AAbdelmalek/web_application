@@ -36,7 +36,7 @@ position:fixed;
 }
 
 #load-bar{
-  height:8px;
+  height:6px;
 }
 
 input.form-control{
@@ -47,7 +47,7 @@ nav{
   border-style: solid;
   border-color: white white #E0E0E0 white;
   border-width: thin;
-  height: 60px;
+  /* height: 60px; */
   /* text-align:right;  */
   background-color:white;
 }
@@ -126,10 +126,10 @@ nav{
 font-size: 9pt;
 }
 
-#load-bar{
+/* #load-bar{
   vertical-align: super;
   height:18px;
-}
+} */
 
 .pic{
 vertical-align: sub;
@@ -312,3 +312,4 @@ font-size: 11pt;
 #load-bar-3{
   height:6px;
 }
+

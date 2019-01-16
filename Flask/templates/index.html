@@ -31,8 +31,23 @@
 - new pull does not redirect to query page, allows user to refresh and it will pull same artist again causing database integrity error -- OK, made redirect function
 - Add other graphs to single select option dropdown --
 - Make statistics vary depending on selected chart --
-- Bug where you query within a page and then close then go to another page then query and press OKre turns old user  
+- Chart js?
+- Bug where you query within a page and then close then go to another page then query and press OKre turns old user  -- OK added searches table to DB
 
+
+To DO 2:
+- Add other graphs to single select option dropdown --
+- Make statistics vary depending on selected chart --
+- Chart js?
+- Remove "old" key and stuff
+- Load percent in modal search -- 
+- Add exception error pages back to query and newPull -- 
+- Get comment numbers -- 
+- One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA
+- Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
+- timeout if too long request time
+- we dont support over 1000 videos
+- add try/excepts back to code
 -->
 
  <head>
@@ -117,10 +132,12 @@
          
          <br>
          <br>
+         <br>
+         
          
             <!-- Load Bar 1 -->
                 <div id="load-bar" class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                 </div> 
             <br>
 
@@ -647,6 +664,6 @@
     </body>
 
      <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
-     <script>newScrape({{not_found_in_db}},"{{youtube_code_new_scrape}}")</script>
+     <script>newScrape("{{not_found_in_db}}","{{youtube_code_new_scrape}}")</script>
  
  </html>

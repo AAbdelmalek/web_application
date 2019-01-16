@@ -1285,6 +1285,19 @@ cancel=cancel):
 		artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 		csv_filepath = input_name.replace("_replaced_","-") + "_scrape.csv"
 
+		# Create Searches Table If Not Exists
+		connection.execute("CREATE TABLE IF NOT EXISTS searches(\
+		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+		SCRAPE_DATE DATETIME,\
+		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+		ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
+		)")
+
+		# Insert Into Searches Table
+		connection.execute(f"INSERT INTO searches \
+		(SCRAPE_DATE, ARTIST, ARTIST_CODE)\
+		VALUES ('{scrape_date}', '{artist_name}','{artist_db_name}')")
+
 		print("Got artist data from database...")
 		
 		# Return HTML
@@ -1466,9 +1479,13 @@ cancel=cancel):
 			artist_2_table = []
 
 			# Searching for input Artist
-			name_key = request.args.get('old')
-			input_name = '''{}'''.format(name_key)
-			artist_db_name = input_name
+			# name_key = request.args.get('old')
+			# input_name = '''{}'''.format(name_key)
+			# artist_db_name = input_name
+
+			artists_table = pd.read_sql("SELECT * FROM SEARCHES ORDER BY ID DESC LIMIT 1", connection) 
+
+			artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
 
 			df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
@@ -1536,6 +1553,19 @@ cancel=cancel):
 		total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
 		artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 		csv_filepath = artist_db_name.replace("_replaced_","-") + "_scrape.csv"
+
+		# Create Searches Table If Not Exists
+		connection.execute("CREATE TABLE IF NOT EXISTS searches(\
+		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+		SCRAPE_DATE DATETIME,\
+		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+		ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
+		)")
+
+		# Insert Into Searches Table
+		connection.execute(f"INSERT INTO searches \
+		(SCRAPE_DATE, ARTIST, ARTIST_CODE)\
+		VALUES ('{scrape_date}', '{original_name}','{artist_db_name}')")
 
 		connection.execute(f"INSERT INTO requests \
 		(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\

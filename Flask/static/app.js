@@ -27,7 +27,7 @@ var counter = 4;
 //window.scrollTo(0,document.body.scrollHeight);
 var new_deck = document.getElementById(`deck-${counter}`);
 var infinite = document.getElementById("infinite_scroll");
-
+var not_found_in_db;
 
 search_loader.href = "#";
 
@@ -313,12 +313,12 @@ function justLoad(){
 
 function newScrape(not_found_in_db, youtube_code){
 
-    if (not_found_in_db === 0){
+    if (not_found_in_db === "0" || not_found_in_db === "" ){
         $("#new-scrape").modal("hide");
         $('#new-scrape').data('bs.modal',null); 
     }
 
-    else if (not_found_in_db === 2){ 
+    else if (not_found_in_db === "2"){ 
         window.location.href = "/";
     }
 
@@ -493,7 +493,7 @@ function getPullURL(update_url, days){
 
 
     else {
-       document.getElementById("update-data").innerHTML = '<button style="position: fixed; right:132px; top:75px" type="button" id="update-data" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button>';
+       document.getElementById("update-data").innerHTML = '<a href="#"><button type="button" id="update-data" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button></a>';
     //    document.getElementById("update-data").parentElement.remove();
        //    var el = document.getElementById("update-data");
     //    var newEl = document.createElement('button');

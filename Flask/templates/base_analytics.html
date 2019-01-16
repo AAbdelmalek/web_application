@@ -460,7 +460,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
     <script>updateData("{{scrape_date}}")</script>
     <script>redirect("{{analytics_base_url}}")</script>
-    <script>newScrape({{not_found_in_db}},"{{youtube_code_new_scrape}}")</script>
+    <script>newScrape("{{not_found_in_db}}","{{youtube_code_new_scrape}}")</script>
 
  
  </html>
