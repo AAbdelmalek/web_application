@@ -669,8 +669,8 @@ def newPull():
 
 	return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 	artist_name=artist_name,\
-	subscribers = f"{subscribers_str} Subscribers",\
-	total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+	subscribers = subscribers_str,\
+	total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
 	artist_image=artist_image,\
 	total_videos = total_videos_str,\
 	analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
@@ -1303,8 +1303,8 @@ cancel=cancel):
 		# Return HTML
 		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
-		subscribers = f"{subscribers_str} Subscribers",\
-		total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+		subscribers = subscribers_str,\
+		total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
 		artist_image=artist_image,\
 		total_videos = total_videos_str,\
 		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
@@ -1514,8 +1514,8 @@ cancel=cancel):
 
 			return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\
-			subscribers = f"{subscribers_str} Subscribers",\
-			total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+			subscribers = subscribers_str,\
+			total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
 			artist_image=artist_image,\
 			total_videos = total_videos_str,\
 			analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
@@ -1573,8 +1573,8 @@ cancel=cancel):
 		
 		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
-		subscribers = f"{subscribers_str} Subscribers",\
-		total_views=f"{total_views_str} All-Time Views", joined=f"Joined {joined_str}",\
+		subscribers = subscribers_str,\
+		total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
 		artist_image=artist_image,\
 		total_videos = total_videos_str,\
 		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
