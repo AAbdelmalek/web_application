@@ -64,7 +64,7 @@
                     <a class="navbar-brand data-header" href="{{analytics_base_url}}">
                             <br><br>
                       <img onmouseover="moreInfo()" src="{{artist_image}}" width="90" height="auto" class="d-inline-block align-top shadow" id="analytics-img" alt="">
-                            &nbsp;{{artist_name}} 
+                            <span id="profile-name">&nbsp;{{artist_name}}&nbsp;</span> 
                     </a> 
                       <!-- <span class="text-muted">{{total_views}}</span>
                       <span class="text-muted">{{subscribers}}</span>
@@ -80,7 +80,7 @@
                        
                     <!-- Export to CSV -->
                     <a href="/static/{{youtube_code}}">
-                        <button type="button" class="btn btn-sm btn-primary analytics_load_button navbar-right">Export to CSV</button>
+                        <button style="background-color:'red';" type="button" class="btn btn-sm btn-primary analytics_load_button navbar-right">Export to CSV</button>
                         </a>
                         
                   </nav>
@@ -92,15 +92,16 @@
 
 
                   <div id="sticky-header-fix"></div>
-                          
 
-            <br><br><br>
+            <br>
+      
+            <br>
        
 
 
 
             <!-- Row 1 -->
-        <div class="container-fluid">
+        <div class="container-fluid mt-2">
             <div class="row">
                         <div class="col-2 ml-5 mr-2 mb-3">
                                 <!-- <div class="card shadow">
@@ -115,25 +116,31 @@
               
                                 </div>
                                 <br> -->
-                              <div class="card shadow">
+
+                        <div class="card shadow mx-auto">
+                                        <div class="card-header">
+                                                Profile
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                                <li class="list-group-item"><span id="total-views"></span><span class="text-muted"> Views</span></li>
+                                                <!-- <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Avg Views</span></li> -->
+
+                                                <li class="list-group-item"><span id="total-likes"></span><span class="text-muted"> Likes</span></li>
+                                                <li class="list-group-item"><span id="subscribers">{{subscribers}}</span><span class="text-muted"> Subscribers</span></li>
+                                                <!-- <li class="list-group-item"><span id="subscribers">{{joined}}</span><span class="text-muted"> Joined</span></li> -->
+                                        </ul>
+                                </div>
+
+                                <br>
+
+                                <div class="card shadow mx-auto">
                                         <div class="card-header">
                                          Statistics
                                         </div>
                                         <ul class="list-group list-group-flush">
-                                          <li class="list-group-item"><span id="variance"></span><span class="text-muted"> σ²</span></li>
-                                          <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li>
-                                        </ul>
-                                        <!-- <script src="{{ url_for('static', filename='plots.js') }}"></script> -->
-                                </div>
-                                <br>
-
-                                <div class="card shadow">
-                                        <div class="card-header">
-                                         Averages
-                                        </div>
-                                        <ul class="list-group list-group-flush">
                                           <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Views/Video</span></li>
                                           <li class="list-group-item"><span id="likes-per-view"></span><span class="text-muted"> Likes/1,000 Views</span></li>
+                                          <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li>
                                           <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
                                         </ul>
                                         <!-- <script src="{{ url_for('static', filename='plots.js') }}"></script> -->
@@ -185,7 +192,7 @@
                                     <div class="shadow" id = "plot-1"></div>
                                     <div class="shadow" id = "plot-2"></div>
                                     <div class="shadow" id = "plot-3"></div>
-                                    <div class="shadow" id = "timeseries"></div>
+                                    <div class="shadow mx-auto" id = "timeseries"></div>
                             </div>
 
 
@@ -196,30 +203,58 @@
 
                      <!-- Legend -->
                             <div class="col-2">
-                                        <button onclick=normalize_data() type="button" class="btn btn-outline-dark">Denormalize</button>
-
-                                        <br><br>
+                                 
                                     <div id="select-plot-data"> 
-                                            <div class="card shadow">
+                                            <div class="card shadow mx-auto">
                                                     <div class="card-header">
-                                                            Graph
+                                                            Graphs
                                                            </div>
                                                     <div class="card-body">
-                                                          
                                          
-                                                            <select class="form-control" id="selDataset" onchange="switch_data(this.value)">
+                                                            <select class="form-control form-control-sm" id="selDataset" onchange="switch_data(this.value)">
                                                                     <option value="Views Time Series">Views Time Series</option>
                                                                     <option value="Duration Time Series">Duration Time Series</option>
                                                                     <option value="Likes Time Series">Likes Time Series</option>
+                                                                    <option value="Likes/View Ratio">Like/View Ratio</option>
+                                                                    <option value="Bubble">Bubble</option>
+
                                                                     <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
                                                             </select>
                                                     </div>
                                             </div>       
                                         
                                     </div>  
-                                    
+
+                                    <br>
+
+                                    <div class="card shadow mx-auto">
+                                                <div class="card-header">
+                                                 Tools
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                  <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Denormalize</button></li>
+                                                  <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Expand</button></li>
+                                                  <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Rangeslider</button></li>
+
+                                                  <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
+                                                </ul>
+                                                <!-- <script src="{{ url_for('static', filename='plots.js') }}"></script> -->
+                                        </div>
+
+                                <br>
+                                
+                                <!-- <div class="card shadow mx-auto">
+                                                <div class="card-header">
+                                                        Standard Deviation
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item"><span id="variance"></span><span class="text-muted"> σ²</span></li> 
+                                                        <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li>
+                                                </ul>
+                                        </div> -->
+                                
                                     <div id="select-plot-data-2">
-                                        <div class="card shadow">
+                                        <div class="card shadow mx-auto">
                                                 <div class="card-header">
                                                         Graph
                                                        </div>
@@ -238,7 +273,7 @@
                                 </div>  
 
                                 <div id="select-plot-data-3">
-                                        <div class="card shadow">
+                                        <div class="card shadow mx-auto">
                                                 <div class="card-header">
                                                         Graph
                                                         </div>
@@ -269,13 +304,12 @@
                                         
                                     </div>     -->
 
-                                    <div class="card shadow">
+                                    <!-- <div class="card shadow mx-auto">
                                             <div class="card-header">
                                              Profile
                                             </div>
                                             <ul class="list-group list-group-flush">
                                               <li class="list-group-item"><span id="total-views"></span><span class="text-muted"> Views</span></li>
-                                              <!-- <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Avg Views</span></li> -->
 
                                               <li class="list-group-item"><span id="total-likes"></span><span class="text-muted"> Likes</span></li>
                                               <li class="list-group-item"><span id="subscribers">{{subscribers}}</span><span class="text-muted"> Subscribers</span></li>
@@ -283,7 +317,7 @@
                                             </ul>
                                 </div>
 
-                                <br>
+                                <br> -->
                                 
                                 <!-- Statistics -->
                                 <!-- <div class="card shadow">
@@ -467,6 +501,7 @@
     <script>updateData("{{scrape_date}}")</script>
     <script>redirect("{{analytics_base_url}}")</script>
     <script>newScrape("{{not_found_in_db}}","{{youtube_code_new_scrape}}")</script>
+    <script>rating("{{total_views}}")</script>
 
  
  </html>

@@ -567,3 +567,29 @@ function progressBar1(){
     progress_bar.style.visibility = "visible"; };
 
 }
+
+function rating(views){
+
+    total_views = parseInt(views.split(" ")[0]);
+    console.log(total_views)
+
+    if (total_views > 1000000 && total_views < 10000000){
+
+        document.getElementById("profile-name").innerHTML += "&nbsp;⭑";
+
+    }
+
+    else if (total_views > 10000000 && total_views < 100000000){
+
+        document.getElementById("profile-name").innerHTML += "&nbsp;⭑&nbsp;⭑";
+
+    }
+
+    else if (total_views > 100000000){
+
+        document.getElementById("profile-name").innerHTML += "&nbsp;⭑&nbsp;⭑&nbsp;⭑";
+
+    }
+
+
+}

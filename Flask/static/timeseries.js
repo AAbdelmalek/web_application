@@ -26,7 +26,7 @@ function getData(data) {
 
   for (var i = 0; i<scrape_data.length; i++){
 
-    normalize.push(i+1);
+    normalize.push(scrape_data.length-i);
     published.push(scrape_data[i]["PUBLISHED_STR"]);
     views.push(scrape_data[i]["VIEWS"]);
     duration.push(scrape_data[i]["DURATION"]);
@@ -34,7 +34,7 @@ function getData(data) {
     likeview_ratio.push(likes[i]/views[i]);
     total_likes = total_likes + likes[i];
     total_likes_str = total_likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    total_views = total_views + views[i];
+    total_views = total_views + parseInt(views[i]);
     total_views_str = total_views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 }
@@ -75,7 +75,7 @@ document.getElementById("total-likes").innerHTML = `${total_likes_str}`;
 document.getElementById("likes-per-view").innerHTML = `${likes_per_view_round}`;
 
 // Statistics Insertions into DOM
-document.getElementById("variance").innerHTML += `${variance_str}`;
+//document.getElementById("variance").innerHTML += `${variance_str}`;
 document.getElementById("stdev").innerHTML += `${stdev_str}`;
 document.getElementById("avg-views").innerHTML += `${views_avg}`;
   
@@ -87,8 +87,11 @@ data = [{
     // opacity: 0.6,
     marker: {
       size: 8,
-      opacity: 0.5,
-  }
+      opacity: 0.3,
+      color:'blue',
+      line:{color:'blue',
+      opacity:0.7},
+  },
 }];
 
 // var updatemenus=[
@@ -115,9 +118,9 @@ var layout = {
   title: 'Views Time Series',
   // updatemenus:updatemenus,
   xaxis: {
-    title: 'Video',
+    title: 'Time',
     autorange: true,
-    range: [normalize[0], normalize[normalize.length-1]],
+    // range: [0,normalize.length],
     // rangeselector: {buttons: [
     //     {
     //       count: 1,
@@ -142,7 +145,7 @@ var layout = {
   yaxis: {
     title: 'Views',
     autorange: true,
-    range: [Math.min(...views),Math.max(...views)],
+    // range: [Math.min(...views),Math.max(...views)],
     type: 'linear'
   }
 };
@@ -174,11 +177,12 @@ var layout = {
 
 // }
 
-function updatePlotly(newx, newy, layout) {
+function updatePlotly(data, layout) {
 
   // Note the extra brackets around 'newx' and 'newy'
-  Plotly.restyle("timeseries", "x", [newx], layout, { responsive: true });
-  Plotly.restyle("timeseries", "y", [newy], layout, { responsive: true });
+  Plotly.newPlot("timeseries", data, layout, { responsive: true });
+  // Plotly.restyle("timeseries", "x", [newx], layout);
+  // Plotly.restyle("timeseries", "y", [newy], layout);
 }
 
 function switch_data(data) {
@@ -201,107 +205,211 @@ function switch_data(data) {
   // Fill the x and y arrays as a function of the selected dataset
   switch (data) {
   case "Views vs Time":
-    x = normalize;
-    y = views;
+  data=[{
+    x : normalize,
+    y : views,
+    mode: 'lines+markers',
+    type: 'scatter',
+    // opacity: 0.6,
+    marker: {
+      size: 8,
+      opacity: 0.3,
+      color:'blue',
+      line:{color:'blue',
+      opacity:0.7},
+  },}]
+
     layout = {
       title: 'Views Time Series',
+      // updatemenus:updatemenus,
       xaxis: {
-        title: 'Published Date',
-        // titlefont: {
-        //   family: 'Courier New, monospace',
-        //   size: 18,
-        //   color: '#7f7f7f'
-        // }
+        title: 'Time',
+        autorange: true,
+        // range: [0,normalize.length],
+        // rangeselector: {buttons: [
+        //     {
+        //       count: 1,
+        //       label: '1m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {
+        //       count: 6,
+        //       label: '6m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {step: 'all'}
+        //   ]},
+        rangeslider: {range: [normalize.length, normalize.length-10]},
+        type: 'linear',
+    
+    
       },
+    
       yaxis: {
         title: 'Views',
-        // titlefont: {
-        //   family: 'Courier New, monospace',
-        //   size: 18,
-        //   color: '#7f7f7f'
-        // }
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
       }
     };
+    
     break;
   case "Duration Time Series":
-    x = normalize;
-    y = duration;
+  data=[{
+    x : normalize,
+    y : duration,
+    mode: 'lines+markers',
+    type: 'scatter',
+    // opacity: 0.6,
+    marker: {
+      size: 8,
+      opacity: 0.3,
+      color:'blue',
+      line:{color:'blue',
+      opacity:0.7},
+  },}]
     layout = {
-      autosize:1,
-      // showlegend: true,
-      // legend: {
-      //   x: 1,
-      //   y: 1},
-      title: {
-        text:'Duration vs Time',
-        // font: {
-        //   family: 'Courier New, monospace',
-        //   size: 24
-        // },
-        xref: 'paper',
-        x: 0.5,
-      },
+      title: 'Duration Time Series',
+      // updatemenus:updatemenus,
       xaxis: {
-        title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        },
+        title: 'Time',
+        autorange: true,
+        // range: [0,normalize.length],
+        // rangeselector: {buttons: [
+        //     {
+        //       count: 1,
+        //       label: '1m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {
+        //       count: 6,
+        //       label: '6m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {step: 'all'}
+        //   ]},
+        rangeslider: {range: [normalize.length, normalize.length-10]},
+        type: 'linear',
+    
+    
       },
+    
       yaxis: {
-        title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        }
+        title: 'Duration (mins)',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
       }
-    }
+    };
+    
     break;
   case "Likes Time Series":
-    x = normalize;
-    y = likes;
-    layout = {
-      autosize:1,
-      // showlegend: true,
-      // legend: {
-      //   x: 1,
-      //   y: 1},
-      title: {
-        text:'Likes vs Time',
-        // font: {
-        //   family: 'Courier New, monospace',
-        //   size: 24
-        // },
-        xref: 'paper',
-        x: 0.5,
-      },
-      xaxis: {
-        title: {
-          text: 'Date',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        },
-      },
-      yaxis: {
-        title: {
-          text: 'Likes',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        }
-      }
+  data=[{
+    x : normalize,
+    y : likes,
+    mode: 'lines+markers',
+    type: 'scatter',
+    // opacity: 0.6,
+    marker: {
+      size: 8,
+      opacity: 0.3,
+      color:'blue',
+      line:{color:'blue',
+      opacity:0.7},
+  },}]
+
+  var layout = {
+    title: 'Likes Time Series',
+    // updatemenus:updatemenus,
+    xaxis: {
+      title: 'Time',
+      autorange: true,
+      // range: [0,normalize.length],
+      // rangeselector: {buttons: [
+      //     {
+      //       count: 1,
+      //       label: '1m',
+      //       step: 'month',
+      //       stepmode: 'backward'
+      //     },
+      //     {
+      //       count: 6,
+      //       label: '6m',
+      //       step: 'month',
+      //       stepmode: 'backward'
+      //     },
+      //     {step: 'all'}
+      //   ]},
+      rangeslider: {range: [normalize.length, normalize.length-10]},
+      type: 'linear',
+  
+  
+    },
+  
+    yaxis: {
+      title: 'Likes',
+      autorange: true,
+      // range: [Math.min(...views),Math.max(...views)],
+      type: 'linear'
     }
+  };
+    break;
+    case "Bubble":
+    data = [{
+      x: normalize,
+      y: views ,
+      mode: 'markers',
+      marker: {
+        size: likes,
+        sizemode: 'area',
+        // color:'#0099CC',
+        color:"#2AD341",
+        sizeref: size,
+        },
+      type: 'scatter',
+      opacity: 0.6,
+
+    }];
+  
+    var layout = {
+      title: 'Views Time Series with Likes',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Time',
+        autorange: true,
+        // range: [0,normalize.length],
+        // rangeselector: {buttons: [
+        //     {
+        //       count: 1,
+        //       label: '1m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {
+        //       count: 6,
+        //       label: '6m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {step: 'all'}
+        //   ]},
+        rangeslider: {range: [normalize.length, normalize.length-10]},
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Views',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
+      }
+    };
     break;
   // case "Views vs Views/Likes":
   //   x = views;
@@ -341,33 +449,107 @@ function switch_data(data) {
   //     }
   //   }
     // break;
-  default:
-    x = normalize;
-    y = views;
-    layout = {
+    case "Likes/View Ratio":
+    data=[{x :views,
+    y : likeview_ratio,
+    mode: 'lines+markers',
+    type: 'scatter',
+    // opacity: 0.6,
+    marker: {
+      size: 8,
+      opacity: 0.3,
+      color:'blue',
+      line:{color:'blue',
+      opacity:0.7},
+  },}]
+    var layout = {
       autosize:1,
-      title: 'Views vs Time',
+      legend: {
+        x: 1,
+        y: 1},
+      title: {
+        text:'Likes/View vs Views',
+      },
       xaxis: {
-        title: 'Published Date',
-        titlefont: {
-          family: 'Courier New, monospace',
-          size: 18,
-          color: '#7f7f7f'
-        }
+        title: {
+          text: 'Views',
+        },
       },
       yaxis: {
-        title: 'Views',
-        titlefont: {
-          family: 'Courier New, monospace',
-          size: 18,
-          color: '#7f7f7f'
+        title: {
+          text: 'Likes/View',
         }
       }
-    };
+    }
+    break;
+  default:
+  data=[{
+    x : normalize,
+    y : views,
+    mode: 'lines+markers',
+    type: 'scatter',
+    // opacity: 0.6,
+    marker: {
+      size: 8,
+      opacity: 0.3,
+      color:'blue',
+      line:{color:'blue',
+      opacity:0.7},
+  },
+  }]
+
+  var layout = {
+    title: 'Views Time Series',
+    // updatemenus:updatemenus,
+    xaxis: {
+      title: 'Time',
+      autorange: true,
+      // range: [0,normalize.length],
+      // rangeselector: {buttons: [
+      //     {
+      //       count: 1,
+      //       label: '1m',
+      //       step: 'month',
+      //       stepmode: 'backward'
+      //     },
+      //     {
+      //       count: 6,
+      //       label: '6m',
+      //       step: 'month',
+      //       stepmode: 'backward'
+      //     },
+      //     {step: 'all'}
+      //   ]},
+      rangeslider: {range: [normalize.length, normalize.length-10]},
+      type: 'linear',
+  
+  
+    },
+  
+    yaxis: {
+      title: 'Views',
+      autorange: true,
+      // range: [Math.min(...views),Math.max(...views)],
+      type: 'linear'
+    }
+  };
     break;
   }
 
-  updatePlotly(x, y, layout);
+    if (document.getElementById("normalize").innerHTML === "Denormalize"){
+
+    x = normalize;
+  
+    }
+  
+    else if (document.getElementById("normalize").innerHTML === "Normalize"){
+  
+      x = published;
+  
+    }
+
+  updatePlotly(data, layout);
+
 }
 
 
@@ -622,28 +804,19 @@ function switch_data_performance(data) {
       xaxis: {
         title: {
           text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
         },
       },
       yaxis: {
         title: {
           text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
+
         }
       }
     }
     break;
     default:
     x = views;
-    y = likeview_ratio;
+    y = normalize;
     var layout = {
       autosize:1,
       legend: {
@@ -655,27 +828,17 @@ function switch_data_performance(data) {
         //   family: 'Courier New, monospace',
         //   size: 24
         // },
-        xref: 'paper',
-        x: 0.5,
+
       },
       xaxis: {
         title: {
           text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
         },
       },
       yaxis: {
         title: {
           text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
+
         }
       }
     }
@@ -772,8 +935,40 @@ function getBubbleData(published,views,likes, duration, total_likes) {
 
 function normalize_data(){
 
-  
+  if (document.getElementById("normalize").innerHTML === "Denormalize"){
 
-  Plotly.restyle("timeseries", "x", [published], { responsive: true })
+  Plotly.restyle("timeseries", "x", [published], { responsive: true });
+
+  document.getElementById("normalize").innerHTML = "Normalize";
+
+  }
+
+  else if (document.getElementById("normalize").innerHTML === "Normalize"){
+
+    Plotly.restyle("timeseries", "x", [normalize], { responsive: true });
+
+    document.getElementById("normalize").innerHTML = "Denormalize";
+
+  }
 
 }
+
+// function normalize_option(){
+
+//   if (document.getElementById("normalize").innerHTML === "Denormalize"){
+
+//     Plotly.restyle("timeseries", "x", [published], { responsive: true });
+  
+//     }
+  
+//     // else if (document.getElementById("normalize").innerHTML === "Normalize"){
+  
+//     //   Plotly.restyle("timeseries", "x", [normalize], { responsive: true });
+  
+//     // }
+
+
+
+
+
+// }

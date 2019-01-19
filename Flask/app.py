@@ -1299,11 +1299,13 @@ cancel=cancel):
 		VALUES ('{scrape_date}', '{artist_name}','{artist_db_name}')")
 
 		print("Got artist data from database...")
+
+		subscribers_format = format(subscribers_str,",")
 		
 		# Return HTML
 		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
-		subscribers = subscribers_str,\
+		subscribers = subscribers_format,\
 		total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
 		artist_image=artist_image,\
 		total_videos = total_videos_str,\
