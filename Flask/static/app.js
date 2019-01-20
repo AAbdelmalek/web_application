@@ -493,7 +493,7 @@ function getPullURL(update_url, days){
 
 
     else {
-       document.getElementById("update-data").innerHTML = '<button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button>';
+       document.getElementById("update-data").innerHTML = '<button style="position:absolute;right:133px;top:14px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button>';
     //    document.getElementById("update-data").parentElement.remove();
        //    var el = document.getElementById("update-data");
     //    var newEl = document.createElement('button');

@@ -103,7 +103,7 @@
             <!-- Row 1 -->
         <div class="container-fluid mt-2">
             <div class="row">
-                        <div class="col-2 ml-5 mr-2 mb-3">
+                        <div class="col-2 ml-5 mr-2 mb-3" id="hide-me">
                                 <!-- <div class="card shadow">
                                         <div class="card-header">
                                          Type
@@ -117,7 +117,7 @@
                                 </div>
                                 <br> -->
 
-                        <div class="card shadow mx-auto">
+                        <div class="card shadow mx-auto" id="profile">
                                         <div class="card-header">
                                                 Profile
                                         </div>
@@ -133,14 +133,14 @@
 
                                 <br>
 
-                                <div class="card shadow mx-auto">
+                                <div class="card shadow mx-auto" id="statistics">
                                         <div class="card-header">
                                          Statistics
                                         </div>
                                         <ul class="list-group list-group-flush">
                                           <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Views/Video</span></li>
                                           <li class="list-group-item"><span id="likes-per-view"></span><span class="text-muted"> Likes/1,000 Views</span></li>
-                                          <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li>
+                                          <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li> -->
                                           <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
                                         </ul>
                                         <!-- <script src="{{ url_for('static', filename='plots.js') }}"></script> -->
@@ -188,7 +188,7 @@
                         </div>
 
                         <!-- Plots -->
-                            <div class="col-7 mr-2">
+                            <div class="col-7 mr-2" id="plot-resize">
                                     <div class="shadow" id = "plot-1"></div>
                                     <div class="shadow" id = "plot-2"></div>
                                     <div class="shadow" id = "plot-3"></div>
@@ -215,8 +215,8 @@
                                                                     <option value="Views Time Series">Views Time Series</option>
                                                                     <option value="Duration Time Series">Duration Time Series</option>
                                                                     <option value="Likes Time Series">Likes Time Series</option>
-                                                                    <option value="Likes/View Ratio">Like/View Ratio</option>
-                                                                    <option value="Bubble">Bubble</option>
+                                                                    <option value="Likes/View Ratio">Likes/View Ratio</option>
+                                                                    <option value="Bubble">Views Time Series with Likes</option>
 
                                                                     <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
                                                             </select>
@@ -233,8 +233,8 @@
                                                 </div>
                                                 <ul class="list-group list-group-flush">
                                                   <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Denormalize</button></li>
-                                                  <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Expand</button></li>
-                                                  <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Rangeslider</button></li>
+                                                  <li class="list-group-item"><button id="expand" style="min-width:100px" onclick=expand() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Expand</button></li>
+                                                  <li class="list-group-item"><button id="rangelsider" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Rangeslider</button></li>
 
                                                   <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
                                                 </ul>

@@ -13,7 +13,10 @@ var stdev = [];
 var variance_num = 0;
 var stdev_num = 0;
 var normalize = [];
-
+var normalize_ordered = [];
+var perf_views = [];
+var perf_ratio = []; 
+var list = [];
 
 function getData(data) {
 
@@ -26,6 +29,7 @@ function getData(data) {
 
   for (var i = 0; i<scrape_data.length; i++){
 
+    normalize_ordered.push(i);
     normalize.push(scrape_data.length-i);
     published.push(scrape_data[i]["PUBLISHED_STR"]);
     views.push(scrape_data[i]["VIEWS"]);
@@ -76,7 +80,7 @@ document.getElementById("likes-per-view").innerHTML = `${likes_per_view_round}`;
 
 // Statistics Insertions into DOM
 //document.getElementById("variance").innerHTML += `${variance_str}`;
-document.getElementById("stdev").innerHTML += `${stdev_str}`;
+// document.getElementById("stdev").innerHTML += `${stdev_str}`;
 document.getElementById("avg-views").innerHTML += `${views_avg}`;
   
 data = [{
@@ -149,6 +153,8 @@ var layout = {
     type: 'linear'
   }
 };
+
+  likeViewRatio(views,likeview_ratio);
 
   Plotly.plot("timeseries", data, layout, { responsive: true });
 
@@ -450,8 +456,8 @@ function switch_data(data) {
   //   }
     // break;
     case "Likes/View Ratio":
-    data=[{x :views,
-    y : likeview_ratio,
+    data=[{x :normalize_ordered,
+    y : perf_ratio,
     mode: 'lines+markers',
     type: 'scatter',
     // opacity: 0.6,
@@ -462,25 +468,41 @@ function switch_data(data) {
       line:{color:'blue',
       opacity:0.7},
   },}]
-    var layout = {
-      autosize:1,
-      legend: {
-        x: 1,
-        y: 1},
-      title: {
-        text:'Likes/View vs Views',
-      },
-      xaxis: {
-        title: {
-          text: 'Views',
-        },
-      },
-      yaxis: {
-        title: {
-          text: 'Likes/View',
-        }
-      }
+  var layout = {
+    title: 'Likes/View Ratio vs Views',
+    // updatemenus:updatemenus,
+    xaxis: {
+      title: 'Views',
+      autorange: true,
+      // range: [0,normalize.length],
+      // rangeselector: {buttons: [
+      //     {
+      //       count: 1,
+      //       label: '1m',
+      //       step: 'month',
+      //       stepmode: 'backward'
+      //     },
+      //     {
+      //       count: 6,
+      //       label: '6m',
+      //       step: 'month',
+      //       stepmode: 'backward'
+      //     },
+      //     {step: 'all'}
+      //   ]},
+      rangeslider: {range: [normalize.length, normalize.length-10]},
+      type: 'linear',
+  
+  
+    },
+  
+    yaxis: {
+      title: 'Likes/View',
+      autorange: true,
+      // range: [Math.min(...views),Math.max(...views)],
+      type: 'linear'
     }
+  };
     break;
   default:
   data=[{
@@ -967,8 +989,69 @@ function normalize_data(){
   
 //     // }
 
-
-
-
-
 // }
+
+
+function expand(){
+
+if (document.getElementById("hide-me").style.display !== "none"){
+
+    document.getElementById("hide-me").style.display = "none";
+
+    document.getElementById("plot-resize").classList.remove("col-7");
+
+    document.getElementById("plot-resize").classList.add("col-9");
+
+    document.getElementById("plot-resize").classList.add("ml-5");
+
+    document.getElementById("plot-resize").classList.remove("mr-2");
+
+    document.getElementById("plot-resize").classList.add("mr-3");
+
+    document.getElementById("expand").innerHTML =  "Collapse";
+}
+
+else{
+
+    document.getElementById("hide-me").style.display = "block";
+
+    document.getElementById("plot-resize").classList.remove("col-9");
+
+    document.getElementById("plot-resize").classList.add("col-7");
+
+    document.getElementById("plot-resize").classList.remove("ml-5");
+
+    document.getElementById("plot-resize").classList.remove("mr-3");
+
+    document.getElementById("plot-resize").classList.add("mr-2");
+
+    document.getElementById("expand").innerHTML =  "Expand";
+
+}
+
+}
+
+function likeViewRatio(views,likeview_ratio){
+
+perf_views = views;
+perf_ratio = likeview_ratio;
+
+//1) combine the arrays:
+list = [];
+for (var j = 0; j < perf_views.length; j++) 
+    list.push({'perf_views': perf_views[j], 'perf_ratio': perf_ratio[j]});
+
+//2) sort:
+list.sort(function(a, b) {
+    return ((a.perf_views < b.perf_views) ? -1 : ((a.perf_views == b.perf_views) ? 0 : 1));
+    //Sort could be modified to, for example, sort on the age 
+    // if the name is the same.
+});
+
+//3) separate them back out:
+for (var k = 0; k < list.length; k++) {
+    perf_views[k] = list[k].perf_views;
+    perf_ratio[k] = list[k].perf_ratio;
+}
+
+}
