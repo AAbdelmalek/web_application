@@ -40,7 +40,7 @@
                             <a class="nav-link" href="">About<span class="sr-only"></span></a>
                         </li>
                       </ul>
-                      <button style="position:absolute;left:265px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Report Bug</button>
+                      <button style="position:absolute;left:265px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Feedback</button>
 
                       <div class="form-inline my-2 my-lg-2">
                         <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
@@ -120,7 +120,7 @@
                                                 <!-- <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Avg Views</span></li> -->
 
                                                 <li class="list-group-item"><span id="total-likes"></span><span class="text-muted"> Likes</span></li>
-                                                <li class="list-group-item"><span id="subscribers">{{subscribers}}</span><span class="text-muted"> Subscribers</span></li>
+                                                <li class="list-group-item" id="subscribers-tab"><span id="subscribers">{{subscribers}}</span><span class="text-muted"> Subscribers</span></li>
                                                 <!-- <li class="list-group-item"><span id="subscribers">{{joined}}</span><span class="text-muted"> Joined</span></li> -->
                                         </ul>
                                 </div>
@@ -493,7 +493,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="bugModalLabel">Report Bug</h5>
+                      <h5 class="modal-title" id="bugModalLabel">Feedback</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -507,13 +507,14 @@
                         </div>
                         <div class="form-group">
                           <label for="message-text" class="col-form-label">Message (255 character limit):</label>
-                          <textarea maxlength="255" onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"></textarea>
+                          <textarea style="font-size:10pt;" maxlength="255" onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"
+                          placeholder="Send us feature requests, issues, etc..."></textarea>
                         </div> 
               
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" formmethod="post" class="btn btn-sm btn-primary">Report</button>
+                      <button onclick="return emptyBug()" type="submit" formmethod="post" class="btn btn-sm btn-primary">Send</button>
                   </form>
                     </div>
                   </div>
@@ -530,6 +531,7 @@
     <script>redirect("{{analytics_base_url}}")</script>
     <script>newScrape("{{not_found_in_db}}","{{youtube_code_new_scrape}}")</script>
     <script>rating("{{total_views}}")</script>
+    <script>subscribers("{{subscribers}}")</script>
 
  
  </html>

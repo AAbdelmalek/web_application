@@ -1086,3 +1086,27 @@ for (var k = 0; k < list.length; k++) {
 }
 
 }
+
+function subscribers(subs){
+
+
+  if (subs === "0"){
+
+    // document.getElementById("subscribers").innerHTML = "N/A";
+
+    document.getElementById('subscribers-tab').style.display = "none";
+
+  }
+
+
+}
+
+function emptyBug() {
+  var x;
+  x = document.getElementById("message-text").value;
+  console.log(x)
+  if (x == "") {
+   
+      return false;
+  };
+}
