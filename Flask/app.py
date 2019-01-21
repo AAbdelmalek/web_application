@@ -16,6 +16,7 @@ from numpy import random
 from os.path import join, dirname, realpath
 from flask import request
 import atexit
+from sqlalchemy import text
 pymysql.install_as_MySQLdb()
 not_found_in_db = 0
 youtube_code_new_scrape = ""
@@ -30,6 +31,34 @@ videos_to_get = 0
 
 # Initialize Flask
 app = Flask(__name__)
+
+# Report Bug Route
+@app.route("/reportbug", methods=['POST'])
+def reportBug():	
+	bug = request.form['reportedbug']
+	date = datetime.now().strftime("%Y-%m-%d")
+
+	# Connect to Database Server
+	connection = create_engine('mysql://root:Mars@127.0.0.1')
+
+	# Creating database if not exists
+	connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
+	connection.execute("USE web_app_dev")
+
+	# Create Bugs Table
+	connection.execute('CREATE TABLE IF NOT EXISTS bugs(\
+	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+	DATE VARCHAR(255) CHARACTER SET UTF8MB4,\
+	BUG VARCHAR(255) CHARACTER SET UTF8MB4)')
+
+	sql = text('INSERT INTO BUGS (DATE, BUG) VALUES (:date,:msg)')
+
+	# Insert Bug
+	# connection.execute(f"INSERT INTO BUGS (DATE, BUG) VALUES ('{date}','{bug}')")
+	connection.execute(sql,date=date,msg=bug)
+	print(bug)
+
+	return home()
 
 # Cancel Scrape Request
 @app.route("/cancel")
@@ -75,7 +104,7 @@ def newPull():
 	CREATE TABLE IF NOT EXISTS requests(\
 	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 	SCRAPE_DATE DATETIME,\
-	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
+	SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
 	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 	ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 	)")
@@ -539,7 +568,7 @@ def newPull():
 	CREATE TABLE IF NOT EXISTS {youtube_code} (\
 	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 	SCRAPE_DATE DATETIME,\
-	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
+	SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
 	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 	PUBLISHED DATE,\
 	PUBLISHED_STR VARCHAR(255),\
@@ -561,7 +590,7 @@ def newPull():
 	CREATE TABLE IF NOT EXISTS artists(\
 	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 	SCRAPE_DATE DATETIME,\
-	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
+	SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
 	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 	TOTAL_VIDEOS INT,\
 	JOINED DATE,\
@@ -576,7 +605,7 @@ def newPull():
 	CREATE TABLE IF NOT EXISTS requests(\
 	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 	SCRAPE_DATE DATETIME,\
-	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
+	SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
 	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 	ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 	)")
@@ -685,9 +714,9 @@ def newPull():
 # 		CREATE TABLE IF NOT EXISTS bad_requests(\
 # 		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 # 		SCRAPE_DATE DATETIME,\
-# 		ARTIST_CODE VARCHAR(355) CHARACTER SET UTF8MB4,\
-# 		SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
-# 		SITE VARCHAR(355) CHARACTER SET UTF8MB4\
+# 		ARTIST_CODE varchar(255) CHARACTER SET UTF8MB4,\
+# 		SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
+# 		SITE varchar(255) CHARACTER SET UTF8MB4\
 # 		)")
 
 # 		connection.execute(f"INSERT INTO bad_requests \
@@ -762,7 +791,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	CREATE TABLE IF NOT EXISTS requests(\
 	ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 	SCRAPE_DATE DATETIME,\
-	SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
+	SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
 	ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 	ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 	)")
@@ -1591,9 +1620,9 @@ cancel=cancel):
 		# CREATE TABLE IF NOT EXISTS bad_requests(\
 		# ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
 		# SCRAPE_DATE DATETIME,\
-		# ARTIST_CODE VARCHAR(355) CHARACTER SET UTF8MB4,\
-		# SEARCH_NAME VARCHAR(355) CHARACTER SET UTF8MB4,\
-		# SITE VARCHAR(355) CHARACTER SET UTF8MB4\
+		# ARTIST_CODE varchar(255) CHARACTER SET UTF8MB4,\
+		# SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
+		# SITE varchar(255) CHARACTER SET UTF8MB4\
 		# )")
 
 		# connection.execute(f"INSERT INTO bad_requests \

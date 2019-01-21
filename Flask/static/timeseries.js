@@ -17,6 +17,7 @@ var normalize_ordered = [];
 var perf_views = [];
 var perf_ratio = []; 
 var list = [];
+var which_data = "Views Time Series";
 
 function getData(data) {
 
@@ -82,7 +83,7 @@ document.getElementById("likes-per-view").innerHTML = `${likes_per_view_round}`;
 //document.getElementById("variance").innerHTML += `${variance_str}`;
 // document.getElementById("stdev").innerHTML += `${stdev_str}`;
 document.getElementById("avg-views").innerHTML += `${views_avg}`;
-  
+
 data = [{
     x: normalize,
     y: views ,
@@ -192,6 +193,7 @@ function updatePlotly(data, layout) {
 }
 
 function switch_data(data) {
+  which_data = data;
   // if (data.length > 0 ){
   //   scrape_data = JSON.parse(data);
   //   plot_1(scrape_data);
@@ -502,6 +504,8 @@ function switch_data(data) {
       // range: [Math.min(...views),Math.max(...views)],
       type: 'linear'
     }
+    
+
   };
     break;
   default:
@@ -957,19 +961,45 @@ function getBubbleData(published,views,likes, duration, total_likes) {
 
 function normalize_data(){
 
-  if (document.getElementById("normalize").innerHTML === "Denormalize"){
+  if(which_data !== "Likes/View Ratio"){
 
-  Plotly.restyle("timeseries", "x", [published], { responsive: true });
+    if (document.getElementById("normalize").innerHTML === "Denormalize"){
 
-  document.getElementById("normalize").innerHTML = "Normalize";
+    Plotly.restyle("timeseries", "x", [published], { responsive: true });
 
+    document.getElementById("normalize").innerHTML = "Normalize";
+
+    }
+
+    else if (document.getElementById("normalize").innerHTML === "Normalize"){
+
+      Plotly.restyle("timeseries", "x", [normalize], { responsive: true });
+
+      document.getElementById("normalize").innerHTML = "Denormalize";
+
+    }
   }
 
-  else if (document.getElementById("normalize").innerHTML === "Normalize"){
 
-    Plotly.restyle("timeseries", "x", [normalize], { responsive: true });
+  else{
 
-    document.getElementById("normalize").innerHTML = "Denormalize";
+    if (document.getElementById("normalize").innerHTML === "Denormalize"){
+
+      Plotly.restyle("timeseries", "x", [perf_views], { responsive: true });
+  
+      document.getElementById("normalize").innerHTML = "Normalize";
+  
+      }
+  
+      else if (document.getElementById("normalize").innerHTML === "Normalize"){
+  
+        Plotly.restyle("timeseries", "x", [normalize_ordered], { responsive: true });
+  
+        document.getElementById("normalize").innerHTML = "Denormalize";
+  
+      }
+
+
 
   }
 
@@ -1033,8 +1063,8 @@ else{
 
 function likeViewRatio(views,likeview_ratio){
 
-perf_views = views;
-perf_ratio = likeview_ratio;
+perf_views = views.slice();
+perf_ratio = likeview_ratio.slice();
 
 //1) combine the arrays:
 list = [];

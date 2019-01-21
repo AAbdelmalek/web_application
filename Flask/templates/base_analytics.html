@@ -39,15 +39,9 @@
                         <li class="nav-item disabled">
                             <a class="nav-link" href="">About<span class="sr-only"></span></a>
                         </li>
-                        <li class="nav-item disabled">
-                            <a class="nav-link" href="">Help<span class="sr-only"></span></a>
-                        </li>
-                        <li class="nav-item disabled">
-                            <a class="nav-link" href="">Resources<span class="sr-only"></span></a>
-                        </li>
-                 
-        
                       </ul>
+                      <button style="position:absolute;left:265px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Report Bug</button>
+
                       <div class="form-inline my-2 my-lg-2">
                         <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
                         <span class="input-group-btn">
@@ -61,11 +55,11 @@
                   <!-- Header Info -->
                   <nav class="navbar navbar-light bg-light shadow" id="header-content">
                     
-                    <a class="navbar-brand data-header" href="{{analytics_base_url}}">
-                            <br><br>
-                      <img onmouseover="moreInfo()" src="{{artist_image}}" width="90" height="auto" class="d-inline-block align-top shadow" id="analytics-img" alt="">
-                            <span id="profile-name">&nbsp;{{artist_name}}&nbsp;</span> 
-                    </a> 
+                        <a class="navbar-brand data-header" href="{{analytics_base_url}}">
+    
+                          <img style="position:absolute;top:12px;" src="{{artist_image}}" width="90" height="auto" class="d-inline" id="analytics-img" alt="">
+                                <span style="position:absolute;left:115px;top:17px" class="inline-block" id="profile-name">&nbsp;{{artist_name}}&nbsp;</span> 
+                        </a> 
                       <!-- <span class="text-muted">{{total_views}}</span>
                       <span class="text-muted">{{subscribers}}</span>
                       <span class="text-muted">{{total_views}}</span>
@@ -493,6 +487,40 @@
                       <span class="text-muted"></span>
                     </div>
                   </footer> -->
+
+<!-- Report Bug Modal -->
+<div class="modal fade" id="bugModal" tabindex="-1" role="dialog" aria-labelledby="bugModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="bugModalLabel">Report Bug</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{ url_for('reportBug') }}" method="post" id="bug-report">
+                      <div class="form-group"> 
+              
+                      <label for="recipient-name" class="col-form-label">Recipient:</label>
+                          <input type="text" class="form-control" id="recipient-name" readonly>
+                        </div>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Message:</label>
+                          <textarea onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"></textarea>
+                        </div> 
+              
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" formmethod="post" class="btn btn-sm btn-primary">Report</button>
+                  </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
     </body>
 
     <script src="{{ url_for('static', filename='timeseries.js') }}"></script>
