@@ -676,8 +676,8 @@ To DO 2:
             <input type="text" class="form-control" id="recipient-name" readonly>
           </div>
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"></textarea>
+            <label for="message-text" class="col-form-label">Message (255 character limit):</label>
+            <textarea maxlength="255" onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"></textarea>
           </div> 
 
       </div>
