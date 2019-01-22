@@ -183,9 +183,9 @@
 
                         <!-- Plots -->
                             <div class="col-7 mr-2" id="plot-resize">
-                                    <div class="shadow" id = "plot-1"></div>
+                                    <!-- <div class="shadow" id = "plot-1"></div>
                                     <div class="shadow" id = "plot-2"></div>
-                                    <div class="shadow" id = "plot-3"></div>
+                                    <div class="shadow" id = "plot-3"></div> -->
                                     <div class="shadow mx-auto" id = "timeseries"></div>
                             </div>
 
@@ -228,7 +228,7 @@
                                                 <ul class="list-group list-group-flush">
                                                   <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Denormalize</button></li>
                                                   <li class="list-group-item"><button id="expand" style="min-width:100px" onclick=expand() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Expand</button></li>
-                                                  <li class="list-group-item"><button id="rangelsider" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Rangeslider</button></li>
+                                                  <li class="list-group-item"><button id="rangelsider" style="min-width:100px" type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Rangeslider</button></li>
 
                                                   <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
                                                 </ul>
@@ -247,7 +247,7 @@
                                                 </ul>
                                         </div> -->
                                 
-                                    <div id="select-plot-data-2">
+                                    <!-- <div id="select-plot-data-2">
                                         <div class="card shadow mx-auto">
                                                 <div class="card-header">
                                                         Graph
@@ -259,14 +259,13 @@
                                                                 <option value="Views Time Series">Views vs Likes/1,000 Views</option>
                                                                 <option value="Duration Time Series">Other</option>
                                                                 <option value="Likes Time Series">Other</option>
-                                                                <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
                                                         </select>
                                                 </div>
                                         </div>                                                 
                                     
-                                </div>  
+                                </div>   -->
 
-                                <div id="select-plot-data-3">
+                                <!-- <div id="select-plot-data-3">
                                         <div class="card shadow mx-auto">
                                                 <div class="card-header">
                                                         Graph
@@ -278,12 +277,11 @@
                                                                 <option value="Views Time Series">Views vs Time vs Likes</option>
                                                                 <option value="Duration Time Series">Other</option>
                                                                 <option value="Likes Time Series">Other</option>
-                                                                <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
                                                         </select>
                                                 </div>
                                         </div> 
                                         
-                                </div>
+                                </div> -->
                                 <br>
                                     <!-- <div class="card shadow">
                                             <div class="card-body">
@@ -532,6 +530,7 @@
     <script>newScrape("{{not_found_in_db}}","{{youtube_code_new_scrape}}")</script>
     <script>rating("{{total_views}}")</script>
     <script>subscribers("{{subscribers}}")</script>
+    <script>clearSearch()</script>
 
  
  </html>

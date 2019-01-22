@@ -37,7 +37,7 @@ app = Flask(__name__)
 def reportBug():	
 	bug = request.form['reportedbug']
 	date = datetime.now().strftime("%Y-%m-%d")
-
+	# name = request.args["name"]
 	# Connect to Database Server
 	connection = create_engine('mysql://root:Mars@127.0.0.1')
 

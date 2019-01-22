@@ -18,6 +18,8 @@ var perf_views = [];
 var perf_ratio = []; 
 var list = [];
 var which_data = "Views Time Series";
+var x = [];
+var y = [];
 
 function getData(data) {
 
@@ -159,7 +161,7 @@ var layout = {
 
   Plotly.plot("timeseries", data, layout, { responsive: true });
 
-  
+
   getPerformanceData(views, likeview_ratio);
   getBubbleData(published,views,likes,duration, total_likes);
 }
@@ -200,8 +202,8 @@ function switch_data(data) {
   //   }
 
   // Initialize empty arrays to contain our axes
-  var x = [];
-  var y = [];
+  // var x = [];
+  // var y = [];
 
 
   // Convert JSON to Arrays
@@ -564,13 +566,13 @@ function switch_data(data) {
   }
 
     if (document.getElementById("normalize").innerHTML === "Denormalize"){
-
+      console.log("keep normalized");
     x = normalize;
   
     }
   
     else if (document.getElementById("normalize").innerHTML === "Normalize"){
-  
+      console.log("change to denormalized");
       x = published;
   
     }
@@ -580,114 +582,114 @@ function switch_data(data) {
 }
 
 
-function updatePlotlyPerformance(newx, newy, layout) {
+// function updatePlotlyPerformance(newx, newy, layout) {
 
-  // Note the extra brackets around 'newx' and 'newy'
-  Plotly.restyle("plot-2", "x", [newx], layout, { responsive: true });
-  Plotly.restyle("plot-2", "y", [newy], layout, { responsive: true });
-}
+//   // Note the extra brackets around 'newx' and 'newy'
+//   Plotly.restyle("plot-2", "x", [newx], layout, { responsive: true });
+//   Plotly.restyle("plot-2", "y", [newy], layout, { responsive: true });
+// }
 
-function switch_data_performance(data) {
-  // if (data.length > 0 ){
-  //   scrape_data = JSON.parse(data);
-  //   plot_1(scrape_data);
-  //   }
+// function switch_data_performance(data) {
+//   // if (data.length > 0 ){
+//   //   scrape_data = JSON.parse(data);
+//   //   plot_1(scrape_data);
+//   //   }
 
-  // Initialize empty arrays to contain our axes
-  var x = [];
-  var y = [];
+//   // Initialize empty arrays to contain our axes
+//   var x = [];
+//   var y = [];
 
 
-  // Convert JSON to Arrays
-  // for (var i = 0; i<scrape_data.length; i++){
+//   // Convert JSON to Arrays
+//   // for (var i = 0; i<scrape_data.length; i++){
 
-  //   x.push(scrape_data[i]["PUBLISHED_STR"]);
-  //   y.push(scrape_data[i]["VIEWS"]);
-  // }
-  // Fill the x and y arrays as a function of the selected dataset
-  switch (data) {
-  case "Views vs Views/Likes":
-    x = views;
-    y = likeview_ratio;
-    var layout = {
-      autosize:1,
-      legend: {
-        x: 1,
-        y: 1},
-      title: {
-        text:'Views vs Views/Likes',
-        // font: {
-        //   family: 'Courier New, monospace',
-        //   size: 24
-        // },
-        xref: 'paper',
-        x: 0.5,
-      },
-      xaxis: {
-        title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        },
-      },
-      yaxis: {
-        title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        }
-      }
-    }
-    break;
-    default:
-    x = views;
-    y = likeview_ratio;
-    var layout = {
-      autosize:1,
-      legend: {
-        x: 1,
-        y: 1},
-      title: {
-        text:'Views vs Views/Likes',
-        // font: {
-        //   family: 'Courier New, monospace',
-        //   size: 24
-        // },
-        xref: 'paper',
-        x: 0.5,
-      },
-      xaxis: {
-        title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        },
-      },
-      yaxis: {
-        title: {
-          text: 'Test',
-          font: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
-          }
-        }
-      }
-    }
-    break;
-  }
+//   //   x.push(scrape_data[i]["PUBLISHED_STR"]);
+//   //   y.push(scrape_data[i]["VIEWS"]);
+//   // }
+//   // Fill the x and y arrays as a function of the selected dataset
+//   switch (data) {
+//   case "Views vs Views/Likes":
+//     x = views;
+//     y = likeview_ratio;
+//     var layout = {
+//       autosize:1,
+//       legend: {
+//         x: 1,
+//         y: 1},
+//       title: {
+//         text:'Views vs Views/Likes',
+//         // font: {
+//         //   family: 'Courier New, monospace',
+//         //   size: 24
+//         // },
+//         xref: 'paper',
+//         x: 0.5,
+//       },
+//       xaxis: {
+//         title: {
+//           text: 'Test',
+//           font: {
+//             family: 'Courier New, monospace',
+//             size: 18,
+//             color: '#7f7f7f'
+//           }
+//         },
+//       },
+//       yaxis: {
+//         title: {
+//           text: 'Test',
+//           font: {
+//             family: 'Courier New, monospace',
+//             size: 18,
+//             color: '#7f7f7f'
+//           }
+//         }
+//       }
+//     }
+//     break;
+//     default:
+//     x = views;
+//     y = likeview_ratio;
+//     var layout = {
+//       autosize:1,
+//       legend: {
+//         x: 1,
+//         y: 1},
+//       title: {
+//         text:'Views vs Views/Likes',
+//         // font: {
+//         //   family: 'Courier New, monospace',
+//         //   size: 24
+//         // },
+//         xref: 'paper',
+//         x: 0.5,
+//       },
+//       xaxis: {
+//         title: {
+//           text: 'Test',
+//           font: {
+//             family: 'Courier New, monospace',
+//             size: 18,
+//             color: '#7f7f7f'
+//           }
+//         },
+//       },
+//       yaxis: {
+//         title: {
+//           text: 'Test',
+//           font: {
+//             family: 'Courier New, monospace',
+//             size: 18,
+//             color: '#7f7f7f'
+//           }
+//         }
+//       }
+//     }
+//     break;
+//   }
 
-  updatePlotlyPerformance(x, y, layout);
-}
+//   updatePlotlyPerformance(x, y, layout);
+// }
 
 function getPerformanceData(views, likeview_ratio) {
 //  if (document.getElementById("plot-1").style.visibility = "visible"){
@@ -744,53 +746,53 @@ function getPerformanceData(views, likeview_ratio) {
       }
     }
 
-Plotly.plot("plot-2", data, layout, { responsive: true });
+// Plotly.plot("plot-2", data, layout, { responsive: true });
 }
 
 
-if (document.getElementById("plot-2") !== null){
+// if (document.getElementById("plot-2") !== null){
 
-  document.getElementById("plot-2").style.display = "none"
-  document.getElementById("select-plot-data-2").style.display = "none";
-}
+//   document.getElementById("plot-2").style.display = "none"
+//   document.getElementById("select-plot-data-2").style.display = "none";
+// }
 
-if (document.getElementById("plot-3") !== null){
+// if (document.getElementById("plot-3") !== null){
 
-  document.getElementById("plot-3").style.display = "none"
-  document.getElementById("select-plot-data-3").style.display = "none";
-}
+//   document.getElementById("plot-3").style.display = "none"
+//   document.getElementById("select-plot-data-3").style.display = "none";
+// }
 
-function showPerformance(){
+// function showPerformance(){
 
-    document.getElementById("plot-1").style.display = "none";
-    document.getElementById("select-plot-data").style.display = "none";
-    document.getElementById("plot-2").style.display = "block";
-    document.getElementById("select-plot-data-2").style.display = "block";
-    document.getElementById("plot-3").style.display = "none";
-    document.getElementById("select-plot-data-3").style.display = "none";
+//     document.getElementById("plot-1").style.display = "none";
+//     document.getElementById("select-plot-data").style.display = "none";
+//     document.getElementById("plot-2").style.display = "block";
+//     document.getElementById("select-plot-data-2").style.display = "block";
+//     document.getElementById("plot-3").style.display = "none";
+//     document.getElementById("select-plot-data-3").style.display = "none";
     
 
-}
+// }
 
-function showBubble(){
+// function showBubble(){
 
-  document.getElementById("plot-3").style.display = "block";
-  document.getElementById("select-plot-data-3").style.display = "block";
-  document.getElementById("plot-1").style.display = "none";
-  document.getElementById("select-plot-data").style.display = "none";
-  document.getElementById("plot-2").style.display = "none";
-  document.getElementById("select-plot-data-2").style.display = "none";
+//   document.getElementById("plot-3").style.display = "block";
+//   document.getElementById("select-plot-data-3").style.display = "block";
+//   document.getElementById("plot-1").style.display = "none";
+//   document.getElementById("select-plot-data").style.display = "none";
+//   document.getElementById("plot-2").style.display = "none";
+//   document.getElementById("select-plot-data-2").style.display = "none";
   
 
-}
+// }
 
 
-function updateBubblePerformance(newx, newy, layout) {
+// function updateBubblePerformance(newx, newy, layout) {
 
-  // Note the extra brackets around 'newx' and 'newy'
-  Plotly.restyle("plot-3", "x", [newx], layout, { responsive: true });
-  Plotly.restyle("plot-3", "y", [newy], layout, { responsive: true });
-}
+//   // Note the extra brackets around 'newx' and 'newy'
+//   Plotly.restyle("plot-3", "x", [newx], layout, { responsive: true });
+//   Plotly.restyle("plot-3", "y", [newy], layout, { responsive: true });
+// }
 
 function switch_data_performance(data) {
   // if (data.length > 0 ){
@@ -936,7 +938,7 @@ function getBubbleData(published,views,likes, duration, total_likes) {
         }
       }
   
-  Plotly.plot("plot-3", data, layout, { responsive: true });
+  // Plotly.plot("plot-3", data, layout, { responsive: true });
   }
 
 // var trace1 = {
@@ -961,7 +963,7 @@ function getBubbleData(published,views,likes, duration, total_likes) {
 
 
 function normalize_data(){
-
+console.log(which_data);
   if(which_data !== "Likes/View Ratio"){
 
     if (document.getElementById("normalize").innerHTML === "Denormalize"){

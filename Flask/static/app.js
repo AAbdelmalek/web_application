@@ -596,14 +596,38 @@ function rating(views){
 
 function cancelFix(){
 
-if(window.location.href.includes("cancel") || window.location.href.includes("reportbug")){
+if(window.location.href.includes("cancel") && document.referrer.includes("page=1") === false){
 
     window.location.href = "/";
 
 }
 
+else if (window.location.href.includes("cancel") && document.referrer.includes("query"))
+window.history.go(-3);
+document.getElementById('button').value = '';
+
+
 
 }
+
+function clearSearch(){
+    document.getElementById('button').value = '';
+    
+}
+
+
+function reportingRedirect(){
+
+    if(window.location.href.includes("reportbug") && document.referrer.includes("query")){
+
+        window.history.go(-1);
+  }
+  else if(window.location.href.includes("reportbug")){
+
+    window.location.href = "/";
+  }
+}
+
 
 $('#bugModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
@@ -622,8 +646,6 @@ $('#bugModal').on('show.bs.modal', function (event) {
         event.preventDefault();
 
     }
-
-
 
 
   }
