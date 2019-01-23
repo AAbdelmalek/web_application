@@ -497,7 +497,7 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <form action="{{ url_for('reportBug') }}" method="post" id="bug-report">
+                      <form action="{{ url_for('reportBug') }}?db={{content_creator}}&page=1" method="post" id="bug-report">
                       <div class="form-group"> 
               
                       <label for="recipient-name" class="col-form-label">Recipient:</label>
@@ -531,6 +531,7 @@
     <script>rating("{{total_views}}")</script>
     <script>subscribers("{{subscribers}}")</script>
     <script>clearSearch()</script>
+    <script>reportingRedirect()</script>
 
  
  </html>

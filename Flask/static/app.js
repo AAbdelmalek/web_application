@@ -459,6 +459,8 @@ function updateData(id){
     // if (document.getElementById(id).href !== null){
     // analytics_url = document.getElementById(id).href;}
 
+    if (window.location.href.includes("reportbug") === false){
+
     analytics_url = window.location.href.split("name=")[1].split("&")[0];
     
     update_url = "/update?name=" + analytics_url
@@ -476,7 +478,7 @@ function updateData(id){
     // console.log(days);
     
 
-    getPullURL(update_url, days);
+    getPullURL(update_url, days);}
 }
 
 function getPullURL(update_url, days){
@@ -618,13 +620,14 @@ function clearSearch(){
 
 function reportingRedirect(){
 
-    if(window.location.href.includes("reportbug") && document.referrer.includes("query")){
+    if(window.location.href.includes("page=home")){
 
-        window.history.go(-1);
+        window.location.href = "/"
   }
-  else if(window.location.href.includes("reportbug")){
 
-    window.location.href = "/";
+  else if(window.location.href.includes("reportbug") && window.location.href.includes("page=1")){
+
+    window.location.href = "/query?name=" + window.location.href.split("db=")[1].split("&page=1")[0] + "&analytics=base";
   }
 }
 

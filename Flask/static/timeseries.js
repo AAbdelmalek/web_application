@@ -187,6 +187,7 @@ var layout = {
 // }
 
 function updatePlotly(data, layout) {
+  document.getElementById("normalize").innerHTML = "Denormalize";
 
   // Note the extra brackets around 'newx' and 'newy'
   Plotly.newPlot("timeseries", data, layout, { responsive: true });
@@ -565,17 +566,17 @@ function switch_data(data) {
     break;
   }
 
-    if (document.getElementById("normalize").innerHTML === "Denormalize"){
-      console.log("keep normalized");
-    x = normalize;
+    // if (document.getElementById("normalize").innerHTML === "Denormalize"){
+    //   console.log("keep normalized");
+    // x = normalize;
   
-    }
+    // }
   
-    else if (document.getElementById("normalize").innerHTML === "Normalize"){
-      console.log("change to denormalized");
-      x = published;
+    // else if (document.getElementById("normalize").innerHTML === "Normalize"){
+    //   console.log("change to denormalized");
+    //   x = published;
   
-    }
+    // }
 
   updatePlotly(data, layout);
 

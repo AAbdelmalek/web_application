@@ -33,9 +33,12 @@ videos_to_get = 0
 app = Flask(__name__)
 
 # Report Bug Route
-@app.route("/reportbug", methods=['POST'])
+@app.route("/reportbug", methods=['POST','GET'])
 def reportBug():	
 	bug = request.form['reportedbug']
+	page_key = request.args.get('page')
+	page = 	input_name = '''{}'''.format(page_key)
+
 	date = datetime.now().strftime("%Y-%m-%d")
 	# name = request.args["name"]
 	# Connect to Database Server
@@ -57,8 +60,11 @@ def reportBug():
 	# connection.execute(f"INSERT INTO BUGS (DATE, BUG) VALUES ('{date}','{bug}')")
 	connection.execute(sql,date=date,msg=bug)
 	print(bug)
+	if page == "home":
+		return home()
 
-	return home()
+	else:
+		return search()
 
 # Cancel Scrape Request
 @app.route("/cancel")
@@ -704,7 +710,7 @@ def newPull():
 	total_videos = total_videos_str,\
 	analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
 	youtube_code = csv_filepath,
-	scrape_date = scrape_date_str)
+	scrape_date = scrape_date_str, content_creator=artist_db_name)
 
 		
 # 	except:
@@ -1256,8 +1262,73 @@ joined_convert_new_scrape=joined_convert_new_scrape,\
 artist_image_new_scrape = artist_image_new_scrape,\
 cancel=cancel):
 
+	# Feedback Fix
+	content_creator_key = request.args.get('db')
+	content_creator = '''{}'''.format(content_creator_key)
+	print(content_creator)
+
+	if content_creator != "None":
+		# Connect to Database Server
+		connection = create_engine('mysql://root:Mars@127.0.0.1')
+
+		# Creating database if not exists
+		connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
+		connection.execute("USE web_app_dev")
+
+		df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+		{content_creator}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
+		{content_creator}.TITLE, {content_creator}.CATEGORY , {content_creator}.DURATION, {content_creator}.VIEWS, \
+		{content_creator}.LIKES, {content_creator}.DISLIKES, {content_creator}.PAID, {content_creator}.FAMILY_FRIENDLY, \
+		{content_creator}.URL, artists.ARTIST_IMAGE FROM artists \
+		INNER JOIN {content_creator} \
+		ON artists.ARTIST_CODE = {content_creator}.ARTIST_CODE", connection)
+
+		# Artist Information
+		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+		cache = f"{scrape_date} scrape"
+		json_data = df_cache.to_json(orient="records")
+		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+		scrape_date_str = str(scrape_date).split(" ")[0]
+		total_videos_str = str(df_cache.loc[0,"TOTAL_VIDEOS"]) + " Videos"
+		number_scraped = int(len(df_cache))
+		artist_name = df_cache.loc[0,"ARTIST"]
+		analytics_base_url = "/query?name=" + content_creator + "&analytics=base"
+		subscribers_str = df_cache.loc[0,"SUBSCRIBERS"]
+		joined_str = df_cache.loc[0,"JOINED"]
+		total_views_str = df_cache.loc[0,"TOTAL_VIEWS"]
+		artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
+		csv_filepath = content_creator + "_scrape.csv"
+
+		# Create Searches Table If Not Exists
+		connection.execute("CREATE TABLE IF NOT EXISTS searches(\
+		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+		SCRAPE_DATE DATETIME,\
+		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+		ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
+		)")
+
+		# Insert Into Searches Table
+		connection.execute(f"INSERT INTO searches \
+		(SCRAPE_DATE, ARTIST, ARTIST_CODE)\
+		VALUES ('{scrape_date}', '{artist_name}','{content_creator}')")
+
+		print("Got artist data from database...")
+
+		subscribers_format = format(subscribers_str,",")
+		
+		# Return HTML
+		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
+		artist_name=artist_name,\
+		subscribers = subscribers_format,\
+		total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
+		artist_image=artist_image,\
+		total_videos = total_videos_str,\
+		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
+		youtube_code = csv_filepath,
+		scrape_date = scrape_date_str, content_creator=content_creator)
+
 	# Get Search Key Value
-	name_key = request.args['name']
+	name_key = request.args.get('name')
 	input_name = '''{}'''.format(name_key)
 	global_search_name = input_name.replace("-","_replaced_")
 
@@ -1340,7 +1411,7 @@ cancel=cancel):
 		total_videos = total_videos_str,\
 		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
 		youtube_code = csv_filepath,
-		scrape_date = scrape_date_str)
+		scrape_date = scrape_date_str, content_creator=artist_db_name)
 
 	# Convert Date from Jan 1, 1999 format to datetime object
 	converted_date = ""
@@ -1558,7 +1629,7 @@ cancel=cancel):
 			total_views_int_new_scrape=total_views_int_new_scrape,\
 			joined_convert_new_scrape=joined_convert_new_scrape,\
 			artist_image_new_scrape = artist_image_new_scrape,\
-			cancel=cancel, videos_to_get = videos_to_get)
+			cancel=cancel, videos_to_get = videos_to_get, content_creator=artist_db_name)
 
 		else:
 			return home(not_found_in_db, youtube_code_new_scrape,\
@@ -1610,7 +1681,7 @@ cancel=cancel):
 		total_videos = total_videos_str,\
 		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
 		youtube_code = csv_filepath,
-		scrape_date = scrape_date_str, not_found_in_db=0)
+		scrape_date = scrape_date_str, not_found_in_db=0, content_creator=artist_db_name)
 
 	# except:
 		# # Creating Bad Requests Table
