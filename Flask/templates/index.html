@@ -36,20 +36,29 @@
 
 
 To DO 2:
-- !!!Build out update button capability
-- Set rangeslider to be 10 videos -- 
+Front-end
+- fix feedback button when resizing navabar -- 
 - Remove "old" key and stuff -- 
 - Load percent in modal search -- 
-- Add exception error pages back to query and newPull -- 
+- Set rangeslider to be 10 videos --
+- hover over image home page, bottom white with name is not clickable -- 
+- have scale auto change depending on data range -- 
+- expand button does not refresh size -- 
+- success alert submit feedback -- 
+
+Back-end
+- !!!Build out update button capability
 - Get comment numbers -- 
 - One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA --
 - Cranberries bug -- UC-kLG-pqsDB3y0jaUyNG2NA -- 
 - !!!Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
-- timeout if too long request time (or if >1000 videos?) --
-- hover over image home page, bottom white with name is not clickable --
-- have scale auto change depending on data range -- 
 - revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
-- change database name from web_app_dev
+
+ For Producion
+- timeout if too long request time (or if >1000 videos?) --
+- change database name from web_app_dev -- 
+- Add exception error pages back to query and newPull -- 
+- make sure all reirects and references to urls work -- 
 -->
 
  <head>
@@ -187,7 +196,7 @@ To DO 2:
             
         <!-- <br> -->
                         
-                     <br><br>
+                     <br>
          <!-- Load Alert -->
  
          <!-- <div class="row">
@@ -206,7 +215,7 @@ To DO 2:
       
 
                             <div class="row">
-                                <div class="col-8 mx-auto">
+                                <div class="col-8 mx-auto" style="top:8px;margin: 0 auto;">
 
                                     <!-- Card 1 -->
                                     <div class="card-deck">

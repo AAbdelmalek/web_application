@@ -3,6 +3,7 @@ from flask import Flask
 from flask import render_template
 from flask import url_for
 from flask import request
+from flask import redirect
 from bs4 import BeautifulSoup as bs
 import requests
 import numpy as np
@@ -14,7 +15,6 @@ import pymysql
 import time
 from numpy import random
 from os.path import join, dirname, realpath
-from flask import request
 import atexit
 from sqlalchemy import text
 pymysql.install_as_MySQLdb()
@@ -72,7 +72,31 @@ def end_program():
 	global cancel
 	cancel = 1
 	shutdown()
-	return home()
+
+	page_key = request.args.get("page")
+	page = '''{}'''.format(page_key)
+	print(page)
+
+	# name_key = request.args.get("name")
+	# name = '''{}'''.format(name_key)
+
+	# Connect to Database Server
+	connection = create_engine('mysql://root:Mars@127.0.0.1')
+
+	# Creating database if not exists
+	connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
+	connection.execute("USE web_app_dev")
+
+	artists_table = pd.read_sql("SELECT * FROM SEARCHES ORDER BY ID DESC LIMIT 1", connection) 
+
+	artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+
+	if page == "3":
+		return redirect(f'/query?name={artist_db_name}&analytics=base')
+
+	else:
+		return home()
+
 
 def shutdown():
 	global cancel

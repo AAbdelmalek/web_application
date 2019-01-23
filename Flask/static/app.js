@@ -313,7 +313,7 @@ function justLoad(){
 
 function newScrape(not_found_in_db, youtube_code){
 
-    if (not_found_in_db === "0" || not_found_in_db === "" ){
+    if ((not_found_in_db === "0" || not_found_in_db === "")){
         $("#new-scrape").modal("hide");
         $('#new-scrape').data('bs.modal',null); 
     }
@@ -366,7 +366,13 @@ function cancelRequest(){
     $("#new-scrape").modal("hide");
     $('#new-scrape').data('bs.modal',null); 
 
-    window.location.href = "/cancel";
+    if (window.location.href.includes("page")){
+
+        window.location.href = "/cancel?page=3&name=" + window.location.href.split("old=")[1].split("&page=1")[0];
+    }
+
+    else{
+        window.location.href = "/cancel";}
     
 
 }
@@ -596,21 +602,21 @@ function rating(views){
 
 }
 
-function cancelFix(){
+// function cancelFix(){
 
-if(window.location.href.includes("cancel") && document.referrer.includes("page=1") === false){
+// if(window.location.href.includes("cancel") && document.referrer.includes("page=1") === false){
 
-    window.location.href = "/";
+//     window.location.href = "/";
 
-}
+// }
 
-else if (window.location.href.includes("cancel") && document.referrer.includes("query"))
-window.history.go(-3);
-document.getElementById('button').value = '';
+// else if (window.location.href.includes("cancel") && document.referrer.includes("query"))
+// window.history.go(-3);
+// document.getElementById('button').value = '';
 
 
 
-}
+// }
 
 function clearSearch(){
     document.getElementById('button').value = '';
@@ -628,6 +634,11 @@ function reportingRedirect(){
   else if(window.location.href.includes("reportbug") && window.location.href.includes("page=1")){
 
     window.location.href = "/query?name=" + window.location.href.split("db=")[1].split("&page=1")[0] + "&analytics=base";
+  }
+
+  else if(window.location.href.includes("cancel") && window.location.href.includes("page=3")){
+
+    window.location.href = "/query?name=" + window.location.href.split("name=")[1] + "&analytics=base";
   }
 }
 
