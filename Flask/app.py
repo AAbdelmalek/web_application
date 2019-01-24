@@ -288,7 +288,13 @@ def newPull():
 		playlist_soup = bs(playlist_response.text, 'lxml')
 
 		# Get First Video URL as Starting Point
-		first_video = "https://www.youtube.com" + playlist_soup.find_all("a", class_="pl-video-title-link")[0].get("href").split("&")[0]
+		try:
+			first_video = "https://www.youtube.com" + playlist_soup.find_all("a", class_="pl-video-title-link")[0].get("href").split("&")[0]
+
+		except:
+			continue
+			# CRANBERRIES BUG
+
 		first_video_within_playlist = first_video + "&" + playlist_link.split("?")[1]
 
 	#     print(first_video_within_playlist)
@@ -302,63 +308,68 @@ def newPull():
 		print(f"Videos in playlist: {total_videos_in_playlist}")
 		total_videos_all = total_videos_all + total_videos_in_playlist
 		
-		number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) 
-		last_video_index = int(playlist_inside_soup.find_all("span", class_="index")[-1].text.replace("\n        ","").replace("\n    ",""))
-		last_shown_link = playlist_inside_soup.find_all("span", class_="index")[-1].find_next("a").get("href")
-		link_fix = "https://www.youtube.com" + last_shown_link
+		if total_videos_in_playlist == 1:
+			urls_all.append(first_video)
+			raise ValueError('The person only has one video.')
 
-	#     print("Getting urls...")
+		else:
+			number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) 
+			last_video_index = int(playlist_inside_soup.find_all("span", class_="index")[-1].text.replace("\n        ","").replace("\n    ",""))
+			last_shown_link = playlist_inside_soup.find_all("span", class_="index")[-1].find_next("a").get("href")
+			link_fix = "https://www.youtube.com" + last_shown_link
 
-		for i in range(total_videos_in_playlist):  
-			# shutdown() 
-			# if cancel == 1:
-			# 	cancel = 0
-			# 	raise RuntimeError
+		#     print("Getting urls...")
 
-			if i == 0:       
-				first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
-				url = "https://www.youtube.com" + first_link.find_next("a").get("href")
-				original_url = url.split("&")[0]
-				urls_all.append(original_url)
-				next_link = first_link
+			for i in range(total_videos_in_playlist):  
+				# shutdown() 
+				# if cancel == 1:
+				# 	cancel = 0
+				# 	raise RuntimeError
 
-			elif i == last_video_index:       
-				playlist_inside_request = requests.get(link_fix)
-				playlist_inside_soup = bs(playlist_inside_request.text, "lxml")
-				last_shown_link = playlist_inside_soup.find_all("span", class_="index")[-1].find_next("a").get("href")
-				link_fix = "https://www.youtube.com" + last_shown_link
-				last_video_index = int(playlist_inside_soup.find_all("span", class_="index")[-1].text.replace("\n        ","").replace("\n    ",""))
-				first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        {i+1}\n    ")
-
-				if first_link is None:           
-					next_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
-
-				else:          
+				if i == 0:       
+					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+					url = "https://www.youtube.com" + first_link.find_next("a").get("href")
+					original_url = url.split("&")[0]
+					urls_all.append(original_url)
 					next_link = first_link
 
-				next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
-				original_url = next_url.split("&")[0]
-				urls_all.append(original_url)
-				number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) - 1
+				elif i == last_video_index:       
+					playlist_inside_request = requests.get(link_fix)
+					playlist_inside_soup = bs(playlist_inside_request.text, "lxml")
+					last_shown_link = playlist_inside_soup.find_all("span", class_="index")[-1].find_next("a").get("href")
+					link_fix = "https://www.youtube.com" + last_shown_link
+					last_video_index = int(playlist_inside_soup.find_all("span", class_="index")[-1].text.replace("\n        ","").replace("\n    ",""))
+					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        {i+1}\n    ")
 
-			else:
+					if first_link is None:           
+						next_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
 
-				if i == 1:
-					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+					else:          
+						next_link = first_link
 
-				elif playlist_inside_soup.find("span", class_="index", text=f"\n        {i}\n    ") is None:
-					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+					next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
+					original_url = next_url.split("&")[0]
+					urls_all.append(original_url)
+					number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) - 1
 
 				else:
-					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        {i}\n    ")
 
-				next_link = first_link
-				next_link = next_link.find_next("span", class_="index")
-				next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
-				original_url = next_url.split("&")[0]
-				urls_all.append(original_url)
+					if i == 1:
+						first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+
+					elif playlist_inside_soup.find("span", class_="index", text=f"\n        {i}\n    ") is None:
+						first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+
+					else:
+						first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        {i}\n    ")
+
+					next_link = first_link
+					next_link = next_link.find_next("span", class_="index")
+					next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
+					original_url = next_url.split("&")[0]
+					urls_all.append(original_url)
 				
-		counter += 1
+			counter += 1
 
 #             request_duration = time.time() - start
 	#         if request_duration >  1000:
@@ -1585,7 +1596,7 @@ cancel=cancel):
 		total_views_int_new_scrape = format(total_views_int,",")
 		joined_convert_new_scrape = str(joined_convert).split(" ")[0]
 		artist_image_new_scrape = artist_image
-		# Make 1000 the actual totoal uploads
+		# Make 1000 the actual total uploads
 		videos_to_get = format(1000,",")
 
 		which_page = request.args.get("page")
