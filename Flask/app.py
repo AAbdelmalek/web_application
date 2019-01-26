@@ -28,9 +28,35 @@ artist_image_new_scrape = ""
 global_search_name = ""
 cancel = 0
 videos_to_get = 0
+infinite_counter = 12
 
 # Initialize Flask
 app = Flask(__name__)
+
+# Infinite Scroll
+@app.route("/infiniteScroll")
+def sendCard():
+
+	connection = create_engine('mysql://root:Mars@127.0.0.1')
+	connection.execute("USE web_app_dev")
+
+	global infinite_counter
+	# Get next 4 cards
+	artists_table = pd.read_sql(f"SELECT ARTISTS.ARTIST_CODE, ARTISTS.ARTIST, ARTISTS.ARTIST_IMAGE FROM ARTISTS \
+								  INNER JOIN REQUESTS ON REQUESTS.ARTIST_CODE = ARTISTS.ARTIST_CODE \
+								  ORDER BY REQUESTS.ID DESC LIMIT 4 OFFSET {infinite_counter};", connection) 
+
+	# artists_table = artists_table[["ARTIST","ARTIST_CODE"]]
+	# artist_0 = artists_table.loc[0,"ARTIST_CODE"]
+	# artist_1 = artists_table.loc[1,"ARTIST_CODE"]
+	# artist_2 = artists_table.loc[2,"ARTIST_CODE"]
+	# artist_3 = artists_table.loc[3,"ARTIST_CODE"]
+
+	json_data = artists_table.to_json(orient="records")
+	
+	infinite_counter = infinite_counter + 4
+
+	return json_data
 
 # Report Bug Route
 @app.route("/reportbug", methods=['POST','GET'])
@@ -331,7 +357,8 @@ def newPull():
 					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
 					url = "https://www.youtube.com" + first_link.find_next("a").get("href")
 					original_url = url.split("&")[0]
-					urls_all.append(original_url)
+					if original_url not in urls_all:
+						urls_all.append(original_url)
 					next_link = first_link
 
 				elif i == last_video_index:       
@@ -350,7 +377,10 @@ def newPull():
 
 					next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
 					original_url = next_url.split("&")[0]
-					urls_all.append(original_url)
+
+					if original_url not in urls_all:
+						urls_all.append(original_url)
+
 					number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) - 1
 
 				else:
@@ -368,7 +398,8 @@ def newPull():
 					next_link = next_link.find_next("span", class_="index")
 					next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
 					original_url = next_url.split("&")[0]
-					urls_all.append(original_url)
+					if original_url not in urls_all:
+						urls_all.append(original_url)
 				
 			counter += 1
 
@@ -818,6 +849,8 @@ artist_image_new_scrape = artist_image_new_scrape,\
 cancel=cancel,videos_to_get=videos_to_get):
 
 	# Set Variables, Render Home Page
+	global infinite_counter
+	infinite_counter = 12
 	json_data = []
 	json_data_1 = []
 	analytics_base_url = "#"

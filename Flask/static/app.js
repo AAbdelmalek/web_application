@@ -663,3 +663,123 @@ $('#bugModal').on('show.bs.modal', function (event) {
 
 
   }
+
+  function channelLink(){
+
+    var code = window.location.href.split("=")[1].split("&")[0].replace("_replaced_","-");
+
+    var new_link = "https://www.youtube.com/channel/" + code;
+
+    document.getElementById("channel-link").href = new_link;
+
+
+
+  }
+
+  function infiniteScroll(){
+    console.log("infinite scrolling :)");
+
+    d3.json("/infiniteScroll").then(function(data) {
+        
+
+        var analytics_base_url_0 = "/query?name=" + data[0]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_1 = "/query?name=" + data[1]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_2 = "/query?name=" + data[2]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_3 = "/query?name=" + data[3]["ARTIST_CODE"] + "&analytics=base";
+
+        var artist_name_0 = data[0]["ARTIST"];
+        var artist_name_1 = data[1]["ARTIST"];
+        var artist_name_2 = data[2]["ARTIST"];
+        var artist_name_3 = data[3]["ARTIST"];
+
+        var artist_image_0 = data[0]["ARTIST_IMAGE"];
+        var artist_image_1 = data[1]["ARTIST_IMAGE"];
+        var artist_image_2 = data[2]["ARTIST_IMAGE"];
+        var artist_image_3 = data[3]["ARTIST_IMAGE"];
+
+    
+        var new_deck = `<div class="container-fluid">
+                         
+
+                            <div class="row">
+                                <div class="col-8 mx-auto">
+
+                                    <!-- Card 1 -->
+                                    <div class="card-deck">
+                                        <div class="card shadow ml-3 mb-5">
+                                            <div class="zoom">
+                                                    <a href="${analytics_base_url_0}">
+                                                    <img class="card-img-top image" src="${artist_image_0}" alt="Card image cap">
+                                                    </a>
+                                            </div>
+
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">${artist_name_0}</h5>
+                                            </div>
+
+                                        </div>
+
+
+                                <!-- Card 2 -->
+                                <div class="card shadow ml-3 mb-5">
+                                       <div class="zoom">
+                                               <a href="${analytics_base_url_1}">
+                                               <img class="card-img-top image" src="${artist_image_1}" alt="Card image cap">
+                                               </a>
+                                       </div>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">${artist_name_1}</h5>
+
+                                    </div>
+                                    </div>
+
+                                <!-- Card 3 -->
+                                <div class="card shadow ml-3 mb-5">
+                                       <div class="zoom">
+                                               <a href="${analytics_base_url_2}">
+                                               <img class="card-img-top image" src="${artist_image_2}" alt="Card image cap">
+                                               </a>
+                                       </div>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">${artist_name_2}</h5>
+
+                                    </div>
+
+                                </div>
+                                <!-- Card 4 -->
+                                <div class="card shadow ml-3 mb-5">
+                                       <div class="zoom">
+                                               <a href="${analytics_base_url_3}">
+                                               <img class="card-img-top image" src="${artist_image_3}" alt="Card image cap">
+                                               </a>
+                                       </div>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">${artist_name_3}</h5>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>`
+
+
+        document.getElementById('new-deck').innerHTML += new_deck;        
+
+      });
+
+
+
+
+  }
+
+//   $(window).scroll(function(){
+//     console.log('SCROLL BODY')
+//     infiniteScroll();
+//   });

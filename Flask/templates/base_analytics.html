@@ -55,7 +55,7 @@
                   <!-- Header Info -->
                   <nav class="navbar navbar-light bg-light shadow" id="header-content">
                     
-                        <a class="navbar-brand data-header" href="{{analytics_base_url}}">
+                        <a class="navbar-brand data-header" href="#" id="channel-link" target="_blank">
     
                           <img style="position:absolute;top:12px;" src="{{artist_image}}" width="90" height="auto" class="d-inline" id="analytics-img" alt="">
                                 <span style="position:absolute;left:115px;top:17px" class="inline-block" id="profile-name">&nbsp;{{artist_name}}&nbsp;</span> 
@@ -529,6 +529,7 @@
     <script>subscribers("{{subscribers}}")</script>
     <script>clearSearch()</script>
     <script>reportingRedirect()</script>
+    <script>channelLink()</script>
 
  
  </html>
