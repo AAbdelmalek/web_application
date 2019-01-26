@@ -1106,7 +1106,7 @@ function subscribers(subs){
 
 function emptyBug() {
   var x;
-  x = document.getElementById("message-text").value;
+  x = document.getElementById("message-text").value.trim();
   console.log(x)
   if (x == "") {
    

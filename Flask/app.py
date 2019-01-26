@@ -95,7 +95,8 @@ def end_program():
 		return redirect(f'/query?name={artist_db_name}&analytics=base')
 
 	else:
-		return home()
+		# return home()
+		return redirect("/")
 
 
 def shutdown():
@@ -656,7 +657,7 @@ def newPull():
 		scrape_date = df.loc[i,"SCRAPE_DATE"]
 		search_name = df.loc[i,"SEARCH_NAME"]
 		table_name = artist_db_name
-		artist = df.loc[i,"ARTIST"].replace("`","")
+		artist = df.loc[i,"ARTIST"].replace("`","").replace("'"," ")
 		joined = df.loc[i,"JOINED"]
 		subscribers = df.loc[i,"SUBSCRIBERS"]
 		total_views = df.loc[i,"TOTAL_VIEWS"]
@@ -737,15 +738,17 @@ def newPull():
 	artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 	csv_filepath = input_name.replace("_replaced_","-") + "_scrape.csv"
 
-	return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
-	artist_name=artist_name,\
-	subscribers = subscribers_str,\
-	total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
-	artist_image=artist_image,\
-	total_videos = total_videos_str,\
-	analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
-	youtube_code = csv_filepath,
-	scrape_date = scrape_date_str, content_creator=artist_db_name)
+	return redirect(f'/query?name={artist_db_name}&analytics=base')
+
+	# return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
+	# artist_name=artist_name,\
+	# subscribers = subscribers_str,\
+	# total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
+	# artist_image=artist_image,\
+	# total_videos = total_videos_str,\
+	# analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
+	# youtube_code = csv_filepath,
+	# scrape_date = scrape_date_str, content_creator=artist_db_name)
 
 		
 # 	except:
@@ -1706,17 +1709,19 @@ cancel=cancel):
 
 		connection.execute(f"INSERT INTO requests \
 		(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
-		VALUES ('{scrape_date}', '{input_name}', '{original_name}','{artist_db_name}')")
+		VALUES ('{scrape_date}', '{input_name}', '{original_name}','{artist_db_name}')")\
+
+		return redirect(f'/query?name={artist_db_name}&analytics=base&page=1')
 		
-		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
-		artist_name=artist_name,\
-		subscribers = subscribers_str,\
-		total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
-		artist_image=artist_image,\
-		total_videos = total_videos_str,\
-		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
-		youtube_code = csv_filepath,
-		scrape_date = scrape_date_str, not_found_in_db=0, content_creator=artist_db_name)
+		# return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
+		# artist_name=artist_name,\
+		# subscribers = subscribers_str,\
+		# total_views=f"{total_views_str} All-Time Views", joined=joined_str,\
+		# artist_image=artist_image,\
+		# total_videos = total_videos_str,\
+		# analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
+		# youtube_code = csv_filepath,
+		# scrape_date = scrape_date_str, not_found_in_db=0, content_creator=artist_db_name)
 
 	# except:
 		# # Creating Bad Requests Table
