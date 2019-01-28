@@ -964,7 +964,7 @@ function getBubbleData(published,views,likes, duration, total_likes) {
 
 
 function normalize_data(){
-console.log(which_data);
+// console.log(which_data);
   if(which_data !== "Likes/View Ratio"){
 
     if (document.getElementById("normalize").innerHTML === "Denormalize"){
@@ -1107,7 +1107,7 @@ function subscribers(subs){
 function emptyBug() {
   var x;
   x = document.getElementById("message-text").value.trim();
-  console.log(x)
+  // console.log(x)
   if (x == "") {
    
       return false;

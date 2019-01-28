@@ -46,17 +46,16 @@ Front-end
 - success alert submit feedback -- 
 - hover data point, show video link or video title -- 
 - build table to view raw data? -- next version?
+- make infinite scroll pretty -- 
 
 Back-end
 - !!!Build out update button capability
 - Get comment numbers -- 
 - UCjDLIm-vRiuKClRKlPd6JzQ error
-- Cranberries bug -- UC-kLG-pqsDB3y0jaUyNG2NA -- 
+- Cranberries bug -- UC-kLG-pqsDB3y0jaUyNG2NA -- also another case UCMTIdRhOM9GPbY9aXV0oFWg, SZA UCO5IQ70V7l-XpHW40HwaGsw
 - !!!Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
 - revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
             - this may be fixed, duplicate videos might be in other playlists, so now we dont append a duplicate url to the search list
-- set up route to serve json percent complete value -- 
-- set up route to serve cards for load more button or infinite scroll -- 
 
  For Production
 - timeout if too long request time (or if >1000 videos?) --
@@ -68,6 +67,9 @@ Back-end
 Done:
 - One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA -- Made this error out - no point if one video, nothing to analyze
 - Remove "old" key and stuff -- use return redirect on the backend -- this still happens when searching from analytics page
+- set up route to serve json percent complete value -- DONE, works
+- set up route to serve cards for load more button or infinite scroll -- DONE, a little ugly though
+- avicii bug where it excepts finding a weird channel/playlist first searching - FIXED< will cycle through until finds good artist (max 10 tries)
 
 
 -->
@@ -154,7 +156,7 @@ Done:
          
 
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" style="top:0px">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="top:0px">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                       <span class="navbar-toggler-icon"></span>
                     </button>
@@ -207,7 +209,7 @@ Done:
             
         <!-- <br> -->
                         
-                     <br>
+                     <br><br><br><br>
          <!-- Load Alert -->
  
          <!-- <div class="row">
@@ -573,7 +575,7 @@ Done:
                     </div>                   
                      <br>
                      <br>
-                     <button onclick="infiniteScroll()" type="button" class="btn btn-sm btn-light mx-auto">Load More</button>
+                     <!-- <button onclick="infiniteScroll()" type="button" class="btn btn-sm btn-light mx-auto">Load More</button> -->
 
 
                      <!-- <div class="container-fluid">
@@ -671,7 +673,7 @@ Done:
 
                                   <!-- Load Bar 2 -->
                                   <div id="load-bar-2" class="progress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                                    <div id="scrape-load-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                                   </div>
                     </div>
                 </div>

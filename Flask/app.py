@@ -29,9 +29,21 @@ global_search_name = ""
 cancel = 0
 videos_to_get = 0
 infinite_counter = 12
+percent_complete = 0
 
 # Initialize Flask
 app = Flask(__name__)
+
+# Load Progress
+@app.route("/loading")
+def percent():
+	global percent_complete
+	percent_series = pd.Series({"PERCENT_COMPLETE":percent_complete})
+	print(percent_series)
+	percent_json = percent_series.to_json(orient="records")
+
+	return percent_json
+
 
 # Infinite Scroll
 @app.route("/infiniteScroll")
@@ -118,9 +130,11 @@ def end_program():
 	artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
 
 	if page == "3":
+		
 		return redirect(f'/query?name={artist_db_name}&analytics=base')
 
 	else:
+		# raise ValueError("Cancelling this")
 		# return home()
 		return redirect("/")
 
@@ -520,6 +534,7 @@ def newPull():
 			family_friendly.append(family)
 			
 			# Percent Complete
+			global percent_complete
 			percent_complete = round(((i+1) / (len(urls_all)))*100,0)
 
 			percent_complete_str = str(percent_complete)
@@ -1521,10 +1536,21 @@ cancel=cancel):
 	start_url = "https://www.youtube.com/results?search_query=" + search_name
 
 	print(start_url)
-
 	get_youtube_url_response = requests.get(start_url)
-	youtube_name_soup = bs(get_youtube_url_response.text, "lxml")
-	raw_youtube_name_link = youtube_name_soup.find_all("div", class_="yt-lockup-byline")[0].a.get("href")
+
+	for x in range(10):
+		try:
+			print("1")
+			youtube_name_soup = bs(get_youtube_url_response.text, "lxml")
+			raw_youtube_name_link = youtube_name_soup.find_all("div", class_="yt-lockup-byline")[x].a.get("href")
+			break
+
+		except:
+			print("2")
+			print("Exception when pulling first video to get artists...using next")
+			# youtube_name_soup = bs(get_youtube_url_response.text, "lxml")
+			# raw_youtube_name_link = youtube_name_soup.find_all("div", class_="yt-lockup-byline")[x+1].a.get("href")
+
 	videos_link = "https://www.youtube.com" + raw_youtube_name_link + "/videos"
 	about_link = "https://www.youtube.com" + raw_youtube_name_link + "/about"
 
@@ -1812,5 +1838,5 @@ def test(cancel):
 			return home()
 
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
 

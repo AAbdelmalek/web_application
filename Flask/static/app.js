@@ -28,6 +28,8 @@ var counter = 4;
 var new_deck = document.getElementById(`deck-${counter}`);
 var infinite = document.getElementById("infinite_scroll");
 var not_found_in_db;
+var scroller = 0;
+var counter = 0;
 
 search_loader.href = "#";
 
@@ -358,6 +360,8 @@ function resetURL(){
 
     document.getElementById("new-scrape-close").style.visibility = "hidden";
 
+    percentComplete();
+
 
 }
 
@@ -677,11 +681,10 @@ $('#bugModal').on('show.bs.modal', function (event) {
   }
 
   function infiniteScroll(){
-    console.log("infinite scrolling :)");
 
     d3.json("/infiniteScroll").then(function(data) {
         
-
+        if (data[0] != undefined && data[1] != undefined && data[2] != undefined && data[3] != undefined){ 
         var analytics_base_url_0 = "/query?name=" + data[0]["ARTIST_CODE"] + "&analytics=base";
         var analytics_base_url_1 = "/query?name=" + data[1]["ARTIST_CODE"] + "&analytics=base";
         var analytics_base_url_2 = "/query?name=" + data[2]["ARTIST_CODE"] + "&analytics=base";
@@ -770,16 +773,48 @@ $('#bugModal').on('show.bs.modal', function (event) {
                 </div>`
 
 
-        document.getElementById('new-deck').innerHTML += new_deck;        
+        document.getElementById('new-deck').innerHTML += new_deck;   
+        }     
 
       });
+    
 
+  }
+
+
+  $(window).scroll(function(){
+    var scroll_ratio = (window.pageYOffset/document.documentElement.scrollHeight);
+
+    if (scroll_ratio >= 0.2+scroller){
+        counter = counter + 1;
+        scroller = 0.01*counter;
+
+        infiniteScroll();
+
+    }
+  
+  });
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+async function percentComplete(){
+
+    for (var i = 0 ; i < 1000; i++){
+      
+    await sleep(1000);
+
+    d3.json("/loading").then(async function(percent){
+
+        var percent_complete = percent;
+        // console.log(percent);
+
+        document.getElementById("scrape-load-bar").style.cssText = `width : ${percent_complete}%`;
+
+
+    })}
 
 
 
   }
-
-//   $(window).scroll(function(){
-//     console.log('SCROLL BODY')
-//     infiniteScroll();
-//   });
