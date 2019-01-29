@@ -155,7 +155,7 @@ def shutdown():
 # New Scrape Request
 @app.route("/pull")
 def newPull():
-
+	global percent_complete
 	# try:
 
 	# Start Clock, Set Variables
@@ -322,6 +322,7 @@ def newPull():
 		# print(cancel)
 		if cancel == 1:
 			cancel = 0
+			percent_complete = 100
 			raise ValueError('A cancel request was submitted, cancelling process.')
 		
 		print(f"Getting {playlist_names[counter]} urls now...")
@@ -465,6 +466,7 @@ def newPull():
 		# print(cancel)
 		if cancel == 1:
 			cancel = 0
+			percent_complete = 100
 			raise ValueError('A cancel request was submitted, cancelling process.')
 	
 		# print(cancel)
@@ -547,7 +549,7 @@ def newPull():
 			family_friendly.append(family)
 			
 			# Percent Complete
-			global percent_complete
+			
 			percent_complete = round(((i+1) / (len(urls_all)))*100,0)
 
 			percent_complete_str = str(percent_complete)
@@ -1840,15 +1842,15 @@ cancel=cancel):
 		# reason = 'Magic 8-ball says, "' + eight_ball[random_int] + '."'
 		# return render_template("uh-oh.html", data = json_data, reason=reason)
 		
-def test(cancel):
-	if cancel == 1:
-		# print(f"Cancel: {cancel}")
-		# cancel = 0
-		# app.run(port=8001)
-		try:
-			return app.run()
-		except:
-			return home()
+# def test(cancel):
+# 	if cancel == 1:
+# 		# print(f"Cancel: {cancel}")
+# 		# cancel = 0
+# 		# app.run(port=8001)
+# 		try:
+# 			return app.run()
+# 		except:
+# 			return home()
 
 if __name__ == "__main__":
 	app.run(debug=True)

@@ -52,6 +52,7 @@ Back-end
 - Get comment numbers -- 
 - avicii "bug"?
 - !!!Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
+                - cancelling when going into each video/url is fine
 - revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
             - this may be fixed, duplicate videos might be in other playlists, so now we dont append a duplicate url to the search list
 
@@ -71,6 +72,8 @@ Done:
 - avicii bug where it excepts finding a weird channel/playlist first searching - FIXED< will cycle through until finds good artist (max 10 tries)
 - Cranberries bug -- UC-kLG-pqsDB3y0jaUyNG2NA -- also another case UCMTIdRhOM9GPbY9aXV0oFWg, SZA UCO5IQ70V7l-XpHW40HwaGsw - fixed
 - UCjDLIm-vRiuKClRKlPd6JzQ error - replaced apostrophe in name so DB doesnt get mad
+- cancelled percentage continues into next pull -- fixed, percent_complete = 100 at each cancel
+- fixed load bar not showing on home page again -- 
 
 OOS/Other Ideas
 - build table to view raw data? -- next version?
@@ -205,15 +208,15 @@ OOS/Other Ideas
                   </nav>
 
                   
-
+                  <br><br><br>
             <!-- Load Bar 1 -->
             <div id="load-bar" class="progress">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
             </div> 
             
         <!-- <br> -->
-                        
-                     <br><br><br><br>
+        <br>
+                     <!-- <br><br><br><br> -->
          <!-- Load Alert -->
  
          <!-- <div class="row">
