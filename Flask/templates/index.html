@@ -38,28 +38,26 @@
 To DO 2:
 Front-end
 - fix feedback button when resizing navabar -- 
-- Load percent in modal search -- 
 - Set rangeslider to be 10 videos --
 - hover over image home page, bottom white with name is not clickable -- 
 - have scale auto change depending on data range -- 
 - expand button does not refresh size -- 
 - success alert submit feedback -- 
+- cancel red alert --
 - hover data point, show video link or video title -- 
-- build table to view raw data? -- next version?
 - make infinite scroll pretty -- 
 
 Back-end
 - !!!Build out update button capability
 - Get comment numbers -- 
-- UCjDLIm-vRiuKClRKlPd6JzQ error
-- Cranberries bug -- UC-kLG-pqsDB3y0jaUyNG2NA -- also another case UCMTIdRhOM9GPbY9aXV0oFWg, SZA UCO5IQ70V7l-XpHW40HwaGsw
+- avicii "bug"?
 - !!!Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
 - revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
             - this may be fixed, duplicate videos might be in other playlists, so now we dont append a duplicate url to the search list
 
  For Production
-- timeout if too long request time (or if >1000 videos?) --
-- change database name from web_app_dev -- 
+- timeout if too long request time (or if >1000 videos?) -- lets timeout if videos over 500
+- change database name from web_app_dev and connection password etc --
 - Add exception error pages back to query and newPull -- 
 - make sure all reirects and references to urls work -- 
 
@@ -68,9 +66,15 @@ Done:
 - One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA -- Made this error out - no point if one video, nothing to analyze
 - Remove "old" key and stuff -- use return redirect on the backend -- this still happens when searching from analytics page
 - set up route to serve json percent complete value -- DONE, works
+- Load percent in modal search -- DONE
 - set up route to serve cards for load more button or infinite scroll -- DONE, a little ugly though
 - avicii bug where it excepts finding a weird channel/playlist first searching - FIXED< will cycle through until finds good artist (max 10 tries)
+- Cranberries bug -- UC-kLG-pqsDB3y0jaUyNG2NA -- also another case UCMTIdRhOM9GPbY9aXV0oFWg, SZA UCO5IQ70V7l-XpHW40HwaGsw - fixed
+- UCjDLIm-vRiuKClRKlPd6JzQ error - replaced apostrophe in name so DB doesnt get mad
 
+OOS/Other Ideas
+- build table to view raw data? -- next version?
+- dark mode --
 
 -->
 

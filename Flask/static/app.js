@@ -670,7 +670,7 @@ $('#bugModal').on('show.bs.modal', function (event) {
 
   function channelLink(){
 
-    var code = window.location.href.split("=")[1].split("&")[0].replace("_replaced_","-");
+    var code = window.location.href.split("=")[1].split("&")[0].replace("_replaced_","-").replace("_replaced_","-");
 
     var new_link = "https://www.youtube.com/channel/" + code;
 
@@ -807,7 +807,7 @@ async function percentComplete(){
 
     d3.json("/loading").then(async function(percent){
 
-        var percent_complete = percent;
+        var percent_complete = percent["PERCENT_COMPLETE"];
         // console.log(percent);
 
         document.getElementById("scrape-load-bar").style.cssText = `width : ${percent_complete}%`;

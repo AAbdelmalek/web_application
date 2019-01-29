@@ -29,7 +29,7 @@ global_search_name = ""
 cancel = 0
 videos_to_get = 0
 infinite_counter = 12
-percent_complete = 0
+percent_complete = 100
 
 # Initialize Flask
 app = Flask(__name__)
@@ -40,7 +40,7 @@ def percent():
 	global percent_complete
 	percent_series = pd.Series({"PERCENT_COMPLETE":percent_complete})
 	print(percent_series)
-	percent_json = percent_series.to_json(orient="records")
+	percent_json = percent_series.to_json(orient="index")
 
 	return percent_json
 
@@ -108,6 +108,8 @@ def reportBug():
 @app.route("/cancel")
 def end_program():
 	global cancel
+	global percent_complete
+	percent_complete = 100
 	cancel = 1
 	shutdown()
 
@@ -288,6 +290,8 @@ def newPull():
 		if name.text != "\nUploads\n" or name.text != "\nLiked videos\n":
 			playlist_names.append(name.text.replace("\n",""))
 			
+	extra_playlists = videos_soup.find_all("span",class_="branded-page-module-title")
+	
 	playlist_names.append("Uploads")
 
 	# Getting ALL Playlist URLS
@@ -334,7 +338,6 @@ def newPull():
 
 		except:
 			continue
-			# CRANBERRIES BUG
 
 		first_video_within_playlist = first_video + "&" + playlist_link.split("?")[1]
 
@@ -348,7 +351,7 @@ def newPull():
 		total_videos_in_playlist = int(playlist_inside_soup.find("span", id="playlist-length").text.replace(" videos","").replace(" video","").replace(",",""))
 		print(f"Videos in playlist: {total_videos_in_playlist}")
 		total_videos_all = total_videos_all + total_videos_in_playlist
-		
+
 		if total_videos_in_playlist == 1:
 			urls_all.append(first_video)
 			raise ValueError('The person only has one video.')
@@ -425,6 +428,16 @@ def newPull():
 
 	# except:
 	#     print("Something went wrong getting video urls..")
+
+	# Cranberries Fix
+
+	if len(urls_all) == 0:
+		print("CRANBERRIES BUG")
+		print("One of those weird artists with no uploads playlist but still has videos")
+		[playlist_names_html.append(extra) for extra in extra_playlists]
+		extra_urls_span = videos_soup.find_all("span", class_="contains-addto")
+		extra_urls = []
+		urls_all = ["http://www.youtube.com" + url.a.get('href') for url in extra_urls_span]
 
 	# Going to Each Video and Extracting Data
 	published_on = []
