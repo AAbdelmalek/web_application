@@ -15,7 +15,7 @@ import pymysql
 import time
 from numpy import random
 from os.path import join, dirname, realpath
-import atexit
+# import atexit
 from sqlalchemy import text
 pymysql.install_as_MySQLdb()
 not_found_in_db = 0
@@ -111,7 +111,7 @@ def end_program():
 	global percent_complete
 	percent_complete = 100
 	cancel = 1
-	shutdown()
+	# shutdown()
 
 	page_key = request.args.get("page")
 	page = '''{}'''.format(page_key)
@@ -130,7 +130,7 @@ def end_program():
 	artists_table = pd.read_sql("SELECT * FROM SEARCHES ORDER BY ID DESC LIMIT 1", connection) 
 
 	artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
-
+	print(f"CANCEL VALUE IS {cancel}")
 	if page == "3":
 		
 		return redirect(f'/query?name={artist_db_name}&analytics=base')
@@ -156,6 +156,7 @@ def shutdown():
 @app.route("/pull")
 def newPull():
 	global percent_complete
+	global cancel
 	# try:
 
 	# Start Clock, Set Variables
@@ -316,14 +317,14 @@ def newPull():
 	total_videos_all = 0
 	for playlist_link in playlist_urls:    
 
-		global cancel
-		shutdown() 
+		# global cancel
+		# shutdown() 
 
-		# print(cancel)
-		if cancel == 1:
-			cancel = 0
-			percent_complete = 100
-			raise ValueError('A cancel request was submitted, cancelling process.')
+		# # print(cancel)
+		# if cancel == 1:
+		# 	cancel = 0
+		# 	percent_complete = 100
+		# 	raise ValueError('A cancel request was submitted, cancelling process.')
 		
 		print(f"Getting {playlist_names[counter]} urls now...")
 
@@ -367,9 +368,11 @@ def newPull():
 
 			for i in range(total_videos_in_playlist):  
 				# shutdown() 
-				# if cancel == 1:
-				# 	cancel = 0
-				# 	raise RuntimeError
+				# global cancel
+				if cancel == 1:
+					cancel = 0
+					print("Cancelling this scrape...")
+					raise ValueError('A cancel request was submitted, cancelling process.')
 
 				if i == 0:       
 					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
@@ -456,16 +459,13 @@ def newPull():
 	bump = 0
 
 	print(f"There are {len(urls_all)} total videos to get...")
-
+	# global cancel
 	for i in range(len(urls_all)):
 
-		shutdown() 
-		# if cancel == 1:
-		# 	cancel = 0
-		# 	raise RuntimeError
-		# print(cancel)
+		# shutdown() 
 		if cancel == 1:
 			cancel = 0
+			print("Cancelling this scrape...")
 			percent_complete = 100
 			raise ValueError('A cancel request was submitted, cancelling process.')
 	
@@ -798,7 +798,7 @@ def newPull():
 	total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
 	artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 	csv_filepath = input_name.replace("_replaced_","-") + "_scrape.csv"
-
+	print(f"CANCEL VALUE IS {cancel}")
 	return redirect(f'/query?name={artist_db_name}&analytics=base')
 
 	# return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
@@ -877,6 +877,8 @@ total_views_int_new_scrape=total_views_int_new_scrape,\
 joined_convert_new_scrape=joined_convert_new_scrape,\
 artist_image_new_scrape = artist_image_new_scrape,\
 cancel=cancel,videos_to_get=videos_to_get):
+
+	print(f"CANCEL VALUE IS {cancel}")
 
 	# Set Variables, Render Home Page
 	global infinite_counter
@@ -1416,7 +1418,7 @@ cancel=cancel):
 		print("Got artist data from database...")
 
 		subscribers_format = format(subscribers_str,",")
-		
+		print(f"CANCEL VALUE IS {cancel}")
 		# Return HTML
 		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
@@ -1502,7 +1504,7 @@ cancel=cancel):
 		print("Got artist data from database...")
 
 		subscribers_format = format(subscribers_str,",")
-		
+		print(f"CANCEL VALUE IS {cancel}")
 		# Return HTML
 		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
@@ -1725,7 +1727,7 @@ cancel=cancel):
 			total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
 			artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 			csv_filepath = artist_db_name.replace("_replaced_","-") + "_scrape.csv"
-
+			print(f"CANCEL VALUE IS {cancel}")
 			return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 			artist_name=artist_name,\
 			subscribers = subscribers_str,\
@@ -1783,8 +1785,10 @@ cancel=cancel):
 
 		connection.execute(f"INSERT INTO requests \
 		(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
-		VALUES ('{scrape_date}', '{input_name}', '{original_name}','{artist_db_name}')")\
-
+		VALUES ('{scrape_date}', '{input_name}', '{original_name}','{artist_db_name}')")
+		
+		print(f"CANCEL VALUE IS {cancel}")
+		
 		return redirect(f'/query?name={artist_db_name}&analytics=base&page=1')
 		
 		# return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\

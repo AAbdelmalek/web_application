@@ -36,6 +36,9 @@
 
 
 To DO 2:
+
+
+
 Front-end
 - fix feedback button when resizing navabar -- 
 - Set rangeslider to be 10 videos --
@@ -46,13 +49,12 @@ Front-end
 - cancel red alert --
 - hover data point, show video link or video title -- 
 - make infinite scroll pretty -- 
+- about page
+- load bar not fixed to top home page when nav bar squeezes
 
 Back-end
-- !!!Build out update button capability
 - Get comment numbers -- 
 - avicii "bug"?
-- !!!Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
-                - cancelling when going into each video/url is fine
 - revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
             - this may be fixed, duplicate videos might be in other playlists, so now we dont append a duplicate url to the search list
 
@@ -61,6 +63,11 @@ Back-end
 - change database name from web_app_dev and connection password etc --
 - Add exception error pages back to query and newPull -- 
 - make sure all reirects and references to urls work -- 
+
+
+
+
+
 
 
 Done:
@@ -74,11 +81,14 @@ Done:
 - UCjDLIm-vRiuKClRKlPd6JzQ error - replaced apostrophe in name so DB doesnt get mad
 - cancelled percentage continues into next pull -- fixed, percent_complete = 100 at each cancel
 - fixed load bar not showing on home page again -- 
+- !!!Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
+                - cancelling when going into each video/url is fine
+                SOLUTION: Keep it simple, global variable cancel, if cancel = 1, then raise value error. cancel = 1 when /cancel route accessed
 
 OOS/Other Ideas
 - build table to view raw data? -- next version?
 - dark mode --
-
+- Build out update button capability?
 -->
 
  <head>
@@ -213,7 +223,7 @@ OOS/Other Ideas
             <div id="load-bar" class="progress">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
             </div> 
-            
+         
         <!-- <br> -->
         <br>
                      <!-- <br><br><br><br> -->
@@ -577,6 +587,7 @@ OOS/Other Ideas
                      
 
                     <!-- Deck 4 -->
+                    <!-- <span id="loader-1"><img src="{{ url_for('static', filename='load.gif') }}" height="40" width="auto" style="display: block;margin-left: auto;margin-right: auto;"></span> -->
                     <div id="new-deck">
 
                     </div>                   

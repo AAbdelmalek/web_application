@@ -680,9 +680,10 @@ $('#bugModal').on('show.bs.modal', function (event) {
 
   }
 
-  function infiniteScroll(){
-
-    d3.json("/infiniteScroll").then(function(data) {
+function infiniteScroll(){
+    counter = counter + 1;
+    // for(var i = 0;i<1*counter;i++){
+    d3.json("/infiniteScroll").then(async function(data) {
         
         if (data[0] != undefined && data[1] != undefined && data[2] != undefined && data[3] != undefined){ 
         var analytics_base_url_0 = "/query?name=" + data[0]["ARTIST_CODE"] + "&analytics=base";
@@ -701,7 +702,8 @@ $('#bugModal').on('show.bs.modal', function (event) {
         var artist_image_3 = data[3]["ARTIST_IMAGE"];
 
     
-        var new_deck = `<div class="container-fluid">
+        var new_deck = `
+                        <div class="container-fluid">
                          
 
                             <div class="row">
@@ -770,30 +772,60 @@ $('#bugModal').on('show.bs.modal', function (event) {
                         </div>
                         </div>
                     </div>
-                </div>`
+                </div>
+
+                `
+                //<span id="loader-${counter+1}"><img src="/static/load.gif" height="40" width="auto" style="display: block;margin-left: auto;margin-right: auto;"></span>
 
 
-        document.getElementById('new-deck').innerHTML += new_deck;   
+                // await sleep(2000);
+                // console.log(counter);
+                // document.getElementById(`loader-${counter}`).style.display = "none";        
+                document.getElementById('new-deck').innerHTML += new_deck; 
+
         }     
 
       });
     
-
+    // }
   }
 
 
-  $(window).scroll(function(){
-    var scroll_ratio = (window.pageYOffset/document.documentElement.scrollHeight);
+//   $(window).scroll(function(){
+//     var scroll_ratio = (window.pageYOffset/document.documentElement.scrollHeight);
 
-    if (scroll_ratio >= 0.2+scroller){
-        counter = counter + 1;
-        scroller = 0.01*counter;
+//     if (scroll_ratio >= 0.2+scroller){
+//         counter = counter + 1;
+//         scroller = 0.01*counter;
 
-        infiniteScroll();
+//         infiniteScroll();
 
-    }
+//     }
   
-  });
+//   });
+
+// $(window).scroll(function(){
+//     var scroll_ratio = (window.pageYOffset/document.documentElement.scrollHeight);
+//     console.log(`ratio${scroll_ratio}`);
+//     // console.log(0.21+scroller);
+//     // if (scroll_ratio >= 0.20+scroller){
+        
+//     //     counter = counter + 0.10;
+//     //     scroller = 0.01+counter*counter
+        
+//     //     infiniteScroll();
+
+//     // }
+  
+//   });
+
+  $(window).scroll(function() {
+    if($(window).scrollTop() + $(window).height() > $(document).height()-10) {
+        
+        infiniteScroll();
+    }
+ });
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
