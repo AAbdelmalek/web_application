@@ -36,7 +36,7 @@ position:fixed;
 }
 
 #load-bar{
-  height:6px;
+  height:7px;
 }
 
 input.form-control{
@@ -307,17 +307,16 @@ margin-top: 10px;
 
 font-size: 11pt;
 
-
 }
 
 #load-bar-3{
-  height:6px;
+  height:7px;
 }
 
-body{
-  min-width:850px;        /* Suppose you want minimum width of 1000px */
+.min-width{
+  min-width:1000px;        /* Suppose you want minimum width of 1000px */
   width: auto !important;  /* Firefox will set width as auto */
-  width:850px;            /* As IE6 ignores !important it will set width as 1000px; */
+  width:1000px;            /* As IE6 ignores !important it will set width as 1000px; */
 }
 
 .fix{

@@ -53,6 +53,9 @@ Front-end
 - load bar not fixed to top home page when nav bar squeezes
 
 Back-end
+- Build out update button capability
+   - make cancel button and running button
+   - total vid, joined, subs, etc, not correct on new updated data - most likely getting this from artists table
 - Get comment numbers -- 
 - avicii "bug"?
 - revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
@@ -84,11 +87,12 @@ Done:
 - !!!Cancel bug: one cancel then the next cancels automatically, third is OK -- only happens when gettings urls vs going into each video??
                 - cancelling when going into each video/url is fine
                 SOLUTION: Keep it simple, global variable cancel, if cancel = 1, then raise value error. cancel = 1 when /cancel route accessed
+- last scrape date is NOT SORTING along with other columns!??! -- needed to reset_index, loc was grabbing old index numbers
+- csv gets overwritten with new videso scraped - make sure new csv is right format - query db for full data
 
 OOS/Other Ideas
 - build table to view raw data? -- next version?
 - dark mode --
-- Build out update button capability?
 -->
 
  <head>

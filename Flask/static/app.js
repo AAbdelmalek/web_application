@@ -33,6 +33,12 @@ var counter = 0;
 
 search_loader.href = "#";
 
+if(document.getElementById("update-scrape-load") !==null){
+
+
+    document.getElementById("update-scrape-load").style.visibility = "hidden";
+}
+
 if (progress_bar_2 !== null ){
     progress_bar_2.style.visibility = "hidden"; 
 }
@@ -462,7 +468,7 @@ function moreInfo(){
 }
 
 function updateData(id){
-    
+    console.log(`scrape date: ${id}`)
     scrape_date = id;
     id = id.split("_")[1];
     
@@ -521,7 +527,7 @@ function getPullURL(update_url, days){
        document.getElementById("pull-href").href = update_url;
 
        document.getElementById("modal-body-text").innerHTML
-       = `The data for this content creator was retrieved ${days} 
+       += `The data for this content creator was retrieved ${days} 
        days ago. Do you want to initiate an update request?`
        // = `The data for ${raw_name} is from ${scrape_date}. 
        // Do you want to initiate a new scrape request?`;
@@ -781,7 +787,8 @@ function infiniteScroll(){
                 // await sleep(2000);
                 // console.log(counter);
                 // document.getElementById(`loader-${counter}`).style.display = "none";        
-                document.getElementById('new-deck').innerHTML += new_deck; 
+                if(document.getElementById('new-deck') != null){
+                document.getElementById('new-deck').innerHTML += new_deck; }
 
         }     
 
@@ -827,6 +834,18 @@ function infiniteScroll(){
  });
 
 
+function updateScrape(){
+
+
+document.getElementById("update-scrape-load").style.visibility = "visible";
+
+
+
+    updatePercentComplete();
+}
+
+
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -850,3 +869,23 @@ async function percentComplete(){
 
 
   }
+
+  async function updatePercentComplete(){
+
+    for (var i = 0 ; i < 1000; i++){
+      
+    await sleep(1000);
+
+    d3.json("/loading").then(async function(percent){
+
+        var percent_complete = percent["PERCENT_COMPLETE"];
+        // console.log(percent);
+
+        document.getElementById("update-scrape-load").style.cssText = `width : ${percent_complete}%;height:7px`;
+
+
+    })}
+
+
+
+  } 

@@ -152,6 +152,655 @@ def shutdown():
 	# return test(cancel)
 	return cancel
 
+# Update Stale Data
+@app.route("/update")
+def newScrape():
+	global percent_complete
+	global cancel
+
+	def convertDate(raw_date):
+
+		try:
+			converted_date = ""
+			number_month = raw_months.get(raw_date[0])
+			date_str = (str(number_month) + "/" + raw_date[1] + "/" + raw_date[2]).replace(",", "")
+			converted_date = datetime.strptime(date_str, '%m/%d/%Y')
+			return converted_date
+
+		except:
+			print(f"{raw_date} Convert function date is not valid.")
+
+	converted_input_date = datetime.strptime("1944-06-06", '%Y-%m-%d')
+
+	
+	# Get Search Key Value
+	# Get Search Key Value
+	name_key = request.args['name']
+	input_name = '''{}'''.format(name_key)
+	youtube_code = input_name.replace("_replaced_","-")
+
+	# Convert Date from Jan 1, 1999 format to datetime object
+	raw_months = {"Jan": 1, "Feb": 2, "Mar" : 3, "Apr" : 4, 
+				"May" : 5, "Jun" : 6, "Jul" : 7, "Aug" : 8,
+				"Sep" : 9, "Oct" : 10, "Nov" : 11, "Dec" : 12}
+
+	#table_name = youtube_code_orig.replace("-","")
+	search_name = input_name.replace("-","_replaced_")
+
+	# Get Scrape Date
+	scrape_date = datetime.now().strftime("%Y-%m-%d")
+	scrape_datetime = datetime.utcnow()
+
+	# try:
+	# First Links
+	videos_link = "https://www.youtube.com/channel/" + youtube_code + "/videos"
+	about_link = "https://www.youtube.com/channel/" + youtube_code + "/about"
+
+	print(videos_link)
+	print(about_link)
+
+	# Get About Information
+	about_html = requests.get(about_link)
+
+	# Parse HTML
+	about_soup = bs(about_html.text, "lxml")
+
+	# Artist Image
+	artist_image = about_soup.find("img", class_="channel-header-profile-image").get("src")
+
+	# Artist Information
+	try:
+		artist_name = about_soup.find("meta", property="og:title").get("content")
+
+		subscribers = about_soup.find_all("span", class_="about-stat")[0].text
+		subscribers_str = subscribers.split(" ")[0]
+
+		try:
+			subscribers_int = int(subscribers.split(" ")[0].replace(",",""))
+
+		except:
+			subscribers_int = 0
+
+		total_views = about_soup.find_all("span", class_="about-stat")[1].text
+		total_views_str = total_views[3:len(total_views)].split(" ")[0]
+
+		try:
+			total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
+			joined = about_soup.find_all("span", class_="about-stat")[2].text
+			joined_temp = joined.split(" ")[1:4]
+			joined_convert = convertDate(joined_temp)
+			joined_str = str(joined_convert).split(" ")[0]
+
+		except:
+			total_views = about_soup.find_all("span", class_="about-stat")[0].text
+			total_views_str = total_views[3:len(total_views)].split(" ")[0]
+			total_views_int = int(total_views[3:len(total_views)].split(" ")[0].replace(",",""))
+
+			joined = about_soup.find_all("span", class_="about-stat")[1].text
+			joined_temp = joined.split(" ")[1:4]
+			joined_convert = convertDate(joined_temp)
+			joined_str = str(joined_convert).split(" ")[0]
+
+		print(f"Artist: {artist_name}")
+		print(f"Subscribers: {subscribers_int}")
+		print(f"Views: {total_views_int}")
+		print(f"Joined: {joined_convert}")
+
+	except:
+		print("Something went wrong getting artist information..")
+
+	# Setting Table Name
+	artist_db_name = youtube_code.replace("-","_replaced_")
+
+	# Youtube Code
+	youtube_code = input_name
+
+	# Getting ALL Playlist Names
+	videos_response=requests.get(videos_link)
+	videos_soup = bs(videos_response.text,"lxml")
+	videos_soup.find_all("span",class_="branded-page-module-title-text")
+
+	playlist_names_html = videos_soup.find_all("span",class_="branded-page-module-title-text")
+	playlist_names = []
+
+	for name in playlist_names_html:
+
+		if name.text != "\nUploads\n" or name.text != "\nLiked videos\n":
+			playlist_names.append(name.text.replace("\n",""))
+			
+	extra_playlists = videos_soup.find_all("span",class_="branded-page-module-title")
+	
+	playlist_names.append("Uploads")
+
+	# Getting ALL Playlist URLS
+	playlist_urls_html = videos_soup.find_all("a",class_="branded-page-module-title-link")
+	playlist_urls = []
+	playlist_uploads_link = "https://www.youtube.com" + "/playlist?list=UU" + youtube_code[2:]
+
+	for playlist in playlist_urls_html:
+
+		if "/user/" not in playlist.get("href"):
+			playlist_urls.append("https://www.youtube.com" + playlist.get("href"))
+			
+	playlist_urls.append(playlist_uploads_link)
+
+	print(f"Found {len(playlist_urls)} playlists:")
+
+	for i in range(len(playlist_urls)):
+		print(f"{playlist_names[i]}: {playlist_urls[i]}")
+
+	urls_all = []
+	counter = 0
+	total_videos_all = 0
+	for playlist_link in playlist_urls:    
+
+		# global cancel
+		# shutdown() 
+
+		# # print(cancel)
+		# if cancel == 1:
+		# 	cancel = 0
+		# 	percent_complete = 100
+		# 	raise ValueError('A cancel request was submitted, cancelling process.')
+		
+		print(f"Getting {playlist_names[counter]} urls now...")
+
+		# Get Playlist Response
+		playlist_response = requests.get(playlist_link)
+
+		# Create Playlist Soup Object
+		playlist_soup = bs(playlist_response.text, 'lxml')
+
+		# Get First Video URL as Starting Point
+		try:
+			first_video = "https://www.youtube.com" + playlist_soup.find_all("a", class_="pl-video-title-link")[0].get("href").split("&")[0]
+
+		except:
+			continue
+
+		first_video_within_playlist = first_video + "&" + playlist_link.split("?")[1]
+
+	#     print(first_video_within_playlist)
+
+		# Create Soup Object for First Video Inside Playlist
+		playlist_inside_request = requests.get(first_video_within_playlist) 
+
+		playlist_inside_soup = bs(playlist_inside_request.text, "lxml")
+		
+		total_videos_in_playlist = int(playlist_inside_soup.find("span", id="playlist-length").text.replace(" videos","").replace(" video","").replace(",",""))
+		print(f"Videos in playlist: {total_videos_in_playlist}")
+		total_videos_all = total_videos_all + total_videos_in_playlist
+
+		if total_videos_in_playlist == 1:
+			urls_all.append(first_video)
+			raise ValueError('The person only has one video.')
+
+		else:
+			number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) 
+			last_video_index = int(playlist_inside_soup.find_all("span", class_="index")[-1].text.replace("\n        ","").replace("\n    ",""))
+			last_shown_link = playlist_inside_soup.find_all("span", class_="index")[-1].find_next("a").get("href")
+			link_fix = "https://www.youtube.com" + last_shown_link
+
+		#     print("Getting urls...")
+
+			for i in range(total_videos_in_playlist):  
+				# shutdown() 
+				# global cancel
+				if cancel == 1:
+					cancel = 0
+					print("Cancelling this scrape...")
+					raise ValueError('A cancel request was submitted, cancelling process.')
+
+				if i == 0:       
+					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+					url = "https://www.youtube.com" + first_link.find_next("a").get("href")
+					original_url = url.split("&")[0]
+					if original_url not in urls_all:
+						urls_all.append(original_url)
+					next_link = first_link
+
+				elif i == last_video_index:       
+					playlist_inside_request = requests.get(link_fix)
+					playlist_inside_soup = bs(playlist_inside_request.text, "lxml")
+					last_shown_link = playlist_inside_soup.find_all("span", class_="index")[-1].find_next("a").get("href")
+					link_fix = "https://www.youtube.com" + last_shown_link
+					last_video_index = int(playlist_inside_soup.find_all("span", class_="index")[-1].text.replace("\n        ","").replace("\n    ",""))
+					first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        {i+1}\n    ")
+
+					if first_link is None:           
+						next_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+
+					else:          
+						next_link = first_link
+
+					next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
+					original_url = next_url.split("&")[0]
+
+					if original_url not in urls_all:
+						urls_all.append(original_url)
+
+					number_of_videos_in_page = len(playlist_inside_soup.find_all("span", class_="index")) - 1
+
+				else:
+
+					if i == 1:
+						first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+
+					elif playlist_inside_soup.find("span", class_="index", text=f"\n        {i}\n    ") is None:
+						first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        ▶\n    ")
+
+					else:
+						first_link = playlist_inside_soup.find("span", class_="index", text=f"\n        {i}\n    ")
+
+					next_link = first_link
+					next_link = next_link.find_next("span", class_="index")
+					next_url = "https://www.youtube.com" + next_link.find_next("a").get("href")
+					original_url = next_url.split("&")[0]
+					if original_url not in urls_all:
+						urls_all.append(original_url)
+				
+			counter += 1
+
+#             request_duration = time.time() - start
+	#         if request_duration >  1000:
+	#             json_data = []
+	#             reason = "The request took too long to complete."
+	#             return render_template("uh-oh.html", data = json_data, reason=reason)
+
+	# except:
+	#     print("Something went wrong getting video urls..")
+
+	# Cranberries Fix
+
+	if len(urls_all) == 0:
+		print("CRANBERRIES BUG")
+		print("One of those weird artists with no uploads playlist but still has videos")
+		[playlist_names_html.append(extra) for extra in extra_playlists]
+		extra_urls_span = videos_soup.find_all("span", class_="contains-addto")
+		extra_urls = []
+		urls_to_get = ["http://www.youtube.com" + url.a.get('href') for url in extra_urls_span]
+
+	connection = create_engine('mysql://root:Mars@127.0.0.1')
+	connection.execute("USE web_app_dev")
+	urls_update = pd.read_sql(f"SELECT URL FROM {input_name}",connection)
+	urls_update_list = urls_update['URL'].tolist()
+	urls_to_get = list(set(urls_all).difference(urls_update_list))
+
+	if len(urls_to_get) != 0:
+
+		# Going to Each Video and Extracting Data
+		published_on = []
+		published_on_str = []
+		raw_published_on = []
+		views = []
+		date = []
+		duration_videos = []
+		likes = []
+		dislikes = []
+		title_videos = []
+		categories = []
+		paid_list = []
+		family_friendly = []
+		bump = 0
+
+		print(f"There are {len(urls_to_get)} total videos to get...")
+		# global cancel
+		for i in range(len(urls_to_get)):
+
+			# shutdown() 
+			if cancel == 1:
+				cancel = 0
+				print("Cancelling this scrape...")
+				percent_complete = 100
+				raise ValueError('A cancel request was submitted, cancelling process.')
+		
+			# print(cancel)
+
+			# shutdown()
+			
+			# if cancel == 1:
+
+			# 	# cancel = 0
+			# 	raise ValueError('A cancel request was submitted, cancelling process.')
+
+			try:
+				video_url = urls_to_get[i]
+				video_response = requests.get(video_url)
+				video_soup = bs(video_response.text, 'lxml')
+
+				# Publish Date
+				raw_publish_date = video_soup.find("div", id="watch-uploader-info").text
+				raw_published_on.append(raw_publish_date)
+
+				# Handle All Raw Dates "Premiered", ""Published", "Streamed", "X Hours Ago"
+				publish_date_format = raw_publish_date.split(" ")[len(raw_publish_date.split(" "))-3:len(raw_publish_date.split(" "))]
+
+				if publish_date_format[1] == "hours":
+					publish_date_convert = datetime.strptime(scrape_date, '%Y-%m-%d')
+
+				else:
+					publish_date_convert = convertDate(publish_date_format)
+
+				# Break if Date Less than Input Date Range
+				if publish_date_convert < converted_input_date:
+					break
+
+				else:
+					published_on.append(publish_date_convert)
+					published_on_str.append(str(publish_date_convert).split(" ")[0])
+
+				# Title
+				title = video_soup.find("title").text.replace(" - YouTube", "")
+				title_videos.append(title)
+
+				# Views
+				string_views = video_soup.find("div", id="watch7-views-info").text.replace(" views", "").replace(",","").replace("\n","")
+				int_views = int(string_views)
+				views.append(int_views)
+
+				#Duration
+				duration = video_soup.find("meta", itemprop="duration").get("content").replace("PT","").split("M")
+				duration_mins = int(video_soup.find("meta", itemprop="duration").get("content").replace("PT","").split("M")[0])
+				duration_secs = int(duration[1].replace("S",""))
+				total_duration = round(duration_mins + duration_secs/60,2)
+				duration_videos.append(total_duration)
+
+				# Likes
+				string_likes = video_soup.find("button", title="I like this").text
+				if string_likes != "":
+					int_likes = int(string_likes.replace(",",""))
+					likes.append(int_likes)
+				else:
+					likes.append(0)
+
+				# Dislikes
+				string_dislikes = video_soup.find("button", title="I dislike this").text
+				if string_dislikes != "":
+					int_dislikes = int(string_dislikes.replace(",",""))
+					dislikes.append(int_dislikes)
+				else:
+					dislikes.append(0)
+
+				# Category
+				category = video_soup.find("h4", class_="title", text="\n      Category\n    ").find_next("a").text
+				categories.append(category)
+
+				# Paid
+				paid = video_soup.find("meta", itemprop="paid").get("content")
+				paid_list.append(paid)
+
+				# Family Friendly
+				family = video_soup.find("meta", itemprop="isFamilyFriendly").get("content")
+				family_friendly.append(family)
+				
+				# Percent Complete
+				
+				percent_complete = round(((i+1) / (len(urls_to_get)))*100,0)
+
+				percent_complete_str = str(percent_complete)
+
+				print(f"{percent_complete}% complete...")
+
+		#         request_duration = time.time() - start
+		#         if request_duration >  1000:
+		#             json_data = []
+		#             reason = "The request took too long to complete."
+		#             return render_template("uh-oh.html", data = json_data, reason=reason)
+
+			# Remove any data apended to lists during an exception, account for smaller list size after removal vs. i
+			except:
+				print(f"Skipped {video_url}...")
+				try:
+					published_on.pop(i-bump)
+				except:
+					pass            
+				try:
+					raw_published_on.pop(i-bump)
+				except:
+					pass            
+				try:
+					views.pop(i-bump)
+				except:
+					pass            
+				try:
+					date.pop(i-bump)
+				except:
+					pass            
+				try:
+					duration_videos.pop(i-bump)
+				except:
+					pass            
+				try:
+					likes.pop(i-bump)
+				except:
+					pass
+				try:
+					dislikes.pop(i-bump)
+				except:
+					pass
+				try:
+					title_videos.pop(i-bump)
+				except:
+					pass
+				try:
+					categories.pop(i-bump)
+				except:
+					pass
+				try:
+					paid_list.pop(i-bump)
+				except:
+					pass
+				try:    
+					family_friendly.pop(i-bump)
+				except:
+					pass
+				try:
+					urls_to_get.pop(i-bump)
+				except:
+					pass
+				try:
+					published_on_str.pop(i-bump)
+				except:
+					pass
+				bump = bump + 1
+				continue
+
+		urls_to_date = urls_to_get[0:len(published_on)]
+
+		youtube_code = input_name.replace("-","_replaced_")
+
+		# Create DataFrame
+		df = pd.DataFrame({"ARTIST" : artist_name,
+						"SCRAPE_DATE" : scrape_datetime,
+						"SEARCH_NAME" : input_name,
+						"TOTAL_VIDEOS" : total_videos_all,
+						"JOINED" : joined_convert,
+						"SUBSCRIBERS" : subscribers_int,
+						"TOTAL_VIEWS" : total_views_int,
+						"PUBLISHED": published_on,
+						"PUBLISHED_STR" : published_on_str,
+						"TITLE" : title_videos,
+						"CATEGORY" : categories,
+						"DURATION" : duration_videos,
+						"VIEWS" : views,
+						"LIKES" : likes,
+						"DISLIKES" : dislikes,
+						"PAID" : paid_list,
+						"FAMILY_FRIENDLY" : family_friendly,
+						"URL" : urls_to_date,
+						"ARTIST_IMAGE": artist_image,
+						"ARTIST_CODE" : youtube_code,
+						})
+
+		# print(df["PUBLISHED"])
+
+		df = df.sort_values(by=["PUBLISHED"], ascending=False).reset_index()
+
+		# print(df["PUBLISHED"])
+
+		# Saving to CSV
+		# df_csv = df[["ARTIST","SCRAPE_DATE","TOTAL_VIDEOS","JOINED","SUBSCRIBERS","TOTAL_VIEWS",\
+		# "PUBLISHED","TITLE","CATEGORY","DURATION","VIEWS","LIKES","DISLIKES","PAID","FAMILY_FRIENDLY",\
+		# "URL","ARTIST_CODE"]].set_index("ARTIST")
+
+		static_path = join(dirname(realpath(__file__)), 'static')
+
+		# Saving to JSON
+		json_data = df.to_json(orient="records")
+
+		# Insert Data into Database
+		print("Inserting data into database...")
+		# Creating table for videos
+		connection.execute(f"\
+		CREATE TABLE IF NOT EXISTS {youtube_code} (\
+		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+		SCRAPE_DATE DATETIME,\
+		SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
+		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+		PUBLISHED DATE,\
+		PUBLISHED_STR VARCHAR(255),\
+		TITLE VARCHAR(255) CHARACTER SET UTF8MB4,\
+		CATEGORY VARCHAR(255) CHARACTER SET UTF8MB4,\
+		DURATION FLOAT,\
+		VIEWS BIGINT,\
+		LIKES INT,\
+		DISLIKES INT,\
+		COMMENTS INT,\
+		PAID VARCHAR(255) CHARACTER SET UTF8MB4,\
+		FAMILY_FRIENDLY VARCHAR(255) CHARACTER SET UTF8MB4,\
+		URL VARCHAR(255) CHARACTER SET UTF8MB4,\
+		ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
+		)")
+
+		# Creating Table for Artist data
+		connection.execute("\
+		CREATE TABLE IF NOT EXISTS artists(\
+		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+		SCRAPE_DATE DATETIME,\
+		SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
+		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+		TOTAL_VIDEOS INT,\
+		JOINED DATE,\
+		SUBSCRIBERS INT,\
+		TOTAL_VIEWS BIGINT,\
+		ARTIST_IMAGE VARCHAR(255) CHARACTER SET UTF8MB4,\
+		ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL UNIQUE\
+		)")
+
+		# Creating Table for Requests
+		connection.execute("\
+		CREATE TABLE IF NOT EXISTS requests(\
+		ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+		SCRAPE_DATE DATETIME,\
+		SEARCH_NAME varchar(255) CHARACTER SET UTF8MB4,\
+		ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
+		ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
+		)")
+
+		# Getting df values and inserting into appropriate tables
+		for i in range(len(df)):
+			scrape_date = df.loc[i,"SCRAPE_DATE"]
+			search_name = df.loc[i,"SEARCH_NAME"]
+			table_name = artist_db_name
+			artist = df.loc[i,"ARTIST"].replace("`","").replace("'"," ")
+			joined = df.loc[i,"JOINED"]
+			subscribers = df.loc[i,"SUBSCRIBERS"]
+			total_views = df.loc[i,"TOTAL_VIEWS"]
+			published = df.loc[i,"PUBLISHED"]
+			published_str = df.loc[i,"PUBLISHED_STR"]
+			title = df.loc[i,"TITLE"].replace("'","").replace('"',"").replace(']',"")\
+			.replace('[',"").replace('\\',"").replace("%","").replace("`","")
+			category = df.loc[i,"CATEGORY"]
+			duration = df.loc[i,"DURATION"]
+			views = df.loc[i,"VIEWS"]
+			likes = df.loc[i,"LIKES"]
+			dislikes = df.loc[i,"DISLIKES"]
+			paid = df.loc[i,"PAID"]
+			family_friendly = df.loc[i,"FAMILY_FRIENDLY"]
+			url =  df.loc[i,"URL"]
+			artist_code =  df.loc[i,"ARTIST_CODE"]
+
+			connection.execute(f"INSERT INTO {youtube_code}\
+			(SCRAPE_DATE, SEARCH_NAME, ARTIST, PUBLISHED, PUBLISHED_STR, TITLE, CATEGORY , DURATION,\
+			VIEWS, LIKES, DISLIKES, PAID, FAMILY_FRIENDLY, URL, ARTIST_CODE)\
+			VALUES ('{scrape_date}','{search_name}', '{artist}', '{published}', \
+			'{published_str}','{title}', '{category}',\
+			'{duration}', '{views}', '{likes}', '{dislikes}', '{paid}',\
+			'{family_friendly}', '{url}','{artist_code}')")
+
+		# if subscribers == "Not available":
+		# 	# connection.execute(f"INSERT INTO artists \
+		# 	# (SCRAPE_DATE, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
+		# 	# VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_all}', \
+		# 	# '{joined}', NULL,\
+		# 	# '{total_views}','{artist_image}', '{artist_code}')")
+
+		# 	# connection.execute(f"INSERT INTO requests \
+		# 	# (SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
+		# 	# VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
+
+		# else:
+		# 	# connection.execute(f"INSERT INTO artists \
+		# 	# (SCRAPE_DATE, SEARCH_NAME, ARTIST, TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, ARTIST_IMAGE, ARTIST_CODE)\
+		# 	# VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_all}',\
+		# 	# '{joined}', '{subscribers}', '{total_views}','{artist_image}','{artist_code}')")
+
+		# 	# connection.execute(f"INSERT INTO requests \
+		# 	# (SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
+		# 	# VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
+
+
+		print("Inserted data into database successfully...")
+
+		# Searching for input Artist
+		df_cache = pd.read_sql(f"SELECT artists.ARTIST, {artist_db_name}.SCRAPE_DATE, artists.TOTAL_VIDEOS, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+		{artist_db_name}.PUBLISHED_STR, \
+		{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
+		{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
+		{artist_db_name}.URL, artists.ARTIST_CODE, artists.ARTIST_IMAGE FROM artists \
+		INNER JOIN {artist_db_name} \
+		ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
+
+		df_cache = df_cache.sort_values(by="PUBLISHED_STR",ascending=False).reset_index()
+		df_cache.set_index("ARTIST")[["SCRAPE_DATE","TOTAL_VIDEOS","JOINED",\
+		"SUBSCRIBERS","TOTAL_VIEWS","PUBLISHED_STR","TITLE","CATEGORY","DURATION","VIEWS","LIKES","DISLIKES","PAID",\
+		"FAMILY_FRIENDLY","URL","ARTIST_CODE"]].to_csv(f"{static_path}/{input_name}_scrape.csv", encoding="utf-8")
+
+		# Artist 0 Information
+		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+		cache = f"{scrape_date} scrape"
+		json_data = df_cache.to_json(orient="records")
+		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+		scrape_date_str = str(scrape_date).split(" ")[0]
+		total_videos_str = format(df_cache.loc[1,"TOTAL_VIDEOS"],",") + " Videos"
+		number_scraped = int(len(df_cache))
+		artist_name = df_cache.loc[0,"ARTIST"]
+		analytics_base_url = "/query?name=" + artist_db_name + "&analytics=base"
+
+		if df_cache.loc[0,"SUBSCRIBERS"] != 0:
+			subscribers_str = format(df_cache.loc[0,"SUBSCRIBERS"],",")
+		
+		else:
+			subscribers_str = "N/A"
+
+		joined_str = df_cache.loc[0,"JOINED"]
+		total_views_str = format(df_cache.loc[0,"TOTAL_VIEWS"],",")
+		artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
+		csv_filepath = input_name.replace("_replaced_","-") + "_scrape.csv"
+		print(f"CANCEL VALUE IS {cancel}")
+
+		return redirect(f'/query?name={artist_db_name}&analytics=base')
+
+
+
+
+	else:
+		print("ALL VIDEOS UP TO DATE ALREADY")
+
+		# UPDATE SCRAPE DATE
+
+		return redirect(f'/query?name={artist_db_name}&analytics=base')
+
 # New Scrape Request
 @app.route("/pull")
 def newPull():
@@ -769,13 +1418,15 @@ def newPull():
 	print("Inserted data into database successfully...")
 
 	# Searching for input Artist
-	df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	df_cache = pd.read_sql(f"SELECT artists.ARTIST, {artist_db_name}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 	{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 	{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 	{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 	INNER JOIN {artist_db_name} \
 	ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
+
+	df_cache = df_cache.sort_values(by="PUBLISHED_STR",ascending=False).reset_index()
 
 	# Artist 0 Information
 	scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
@@ -799,6 +1450,7 @@ def newPull():
 	artist_image = df_cache.loc[0,"ARTIST_IMAGE"]
 	csv_filepath = input_name.replace("_replaced_","-") + "_scrape.csv"
 	print(f"CANCEL VALUE IS {cancel}")
+	
 	return redirect(f'/query?name={artist_db_name}&analytics=base')
 
 	# return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
@@ -856,18 +1508,6 @@ def newPull():
 # 		reason = 'Magic 8-ball says, "' + eight_ball[random_int] + '."'
 # 		return render_template("uh-oh.html", data = json_data, reason=reason)
 
-
-# # Update Stale Data
-# @app.route("/update")
-# def newScrape():
-
-# 	# Get Search Key Value
-# 	name_key = request.args['name']
-# 	input_name = '''{}'''.format(name_key)
-# 	input_name = input_name.replace("_replaced_","-")
-
-# 	return render_template("test.html", data=input_name)
-
 # Home Page
 @app.route("/")
 def home(not_found_in_db = not_found_in_db, youtube_code_new_scrape=\
@@ -923,7 +1563,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 
 	
 	# Get Artist 0 Info
-	artist_0_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_0_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_0}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_0}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 	{artist_0}.TITLE, {artist_0}.CATEGORY , {artist_0}.DURATION, {artist_0}.VIEWS, \
 	{artist_0}.LIKES, {artist_0}.DISLIKES, {artist_0}.PAID, {artist_0}.FAMILY_FRIENDLY, \
@@ -932,7 +1572,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.ARTIST_CODE = {artist_0}.ARTIST_CODE", connection)
 
 	# Get Artist DB Info
-	df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	df_cache = pd.read_sql(f"SELECT artists.ARTIST, {artist_db_name}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 	{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 	{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
@@ -941,7 +1581,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
 
 	# Get Artist 1 Info
-	artist_1_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_1_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_1}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_1}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_1}.TITLE, {artist_1}.CATEGORY , {artist_1}.DURATION, {artist_1}.VIEWS, \
 	{artist_1}.LIKES, {artist_1}.DISLIKES, {artist_1}.PAID, {artist_1}.FAMILY_FRIENDLY, \
@@ -950,7 +1590,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_1}.artist", connection)
 
 	# Get Artist 2 Info	
-	artist_2_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_2_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_2}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_2}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_2}.TITLE, {artist_2}.CATEGORY , {artist_2}.DURATION, {artist_2}.VIEWS, \
 	{artist_2}.LIKES, {artist_2}.DISLIKES, {artist_2}.PAID, {artist_2}.FAMILY_FRIENDLY, \
@@ -959,7 +1599,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_2}.artist", connection)
 
 	# Get Artist 3 Info	
-	artist_3_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_3_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_3}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_3}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_3}.TITLE, {artist_3}.CATEGORY , {artist_3}.DURATION, {artist_3}.VIEWS, \
 	{artist_3}.LIKES, {artist_3}.DISLIKES, {artist_3}.PAID, {artist_3}.FAMILY_FRIENDLY, \
@@ -968,7 +1608,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_3}.artist", connection)
 
 	# Get Artist 4 Info	
-	artist_4_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_4_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_4}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_4}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_4}.TITLE, {artist_4}.CATEGORY , {artist_4}.DURATION, {artist_4}.VIEWS, \
 	{artist_4}.LIKES, {artist_4}.DISLIKES, {artist_4}.PAID, {artist_4}.FAMILY_FRIENDLY, \
@@ -977,7 +1617,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_4}.artist", connection)
 
 	# Get Artist 5 Info	
-	artist_5_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_5_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_5}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_5}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_5}.TITLE, {artist_5}.CATEGORY , {artist_5}.DURATION, {artist_5}.VIEWS, \
 	{artist_5}.LIKES, {artist_5}.DISLIKES, {artist_5}.PAID, {artist_5}.FAMILY_FRIENDLY, \
@@ -986,7 +1626,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_5}.artist", connection)
 
 	# Get Artist 6 Info	
-	artist_6_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_6_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_6}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_6}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_6}.TITLE, {artist_6}.CATEGORY , {artist_6}.DURATION, {artist_6}.VIEWS, \
 	{artist_6}.LIKES, {artist_6}.DISLIKES, {artist_6}.PAID, {artist_6}.FAMILY_FRIENDLY, \
@@ -995,7 +1635,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_6}.artist", connection)
 
 	# Get Artist 7 Info	
-	artist_7_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_7_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_7}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_7}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_7}.TITLE, {artist_7}.CATEGORY , {artist_7}.DURATION, {artist_7}.VIEWS, \
 	{artist_7}.LIKES, {artist_7}.DISLIKES, {artist_7}.PAID, {artist_7}.FAMILY_FRIENDLY, \
@@ -1004,7 +1644,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_7}.artist", connection)
 
 	# Get Artist 8 Info	
-	artist_8_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_8_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_8}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_8}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_8}.TITLE, {artist_8}.CATEGORY , {artist_8}.DURATION, {artist_8}.VIEWS, \
 	{artist_8}.LIKES, {artist_8}.DISLIKES, {artist_8}.PAID, {artist_8}.FAMILY_FRIENDLY, \
@@ -1013,7 +1653,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_8}.artist", connection)
 
 	# Get Artist 9 Info	
-	artist_9_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_9_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_9}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_9}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_9}.TITLE, {artist_9}.CATEGORY , {artist_9}.DURATION, {artist_9}.VIEWS, \
 	{artist_9}.LIKES, {artist_9}.DISLIKES, {artist_9}.PAID, {artist_9}.FAMILY_FRIENDLY, \
@@ -1022,7 +1662,7 @@ cancel=cancel,videos_to_get=videos_to_get):
 	ON artists.artist = {artist_9}.artist", connection)
 
 	# Get Artist 10 Info	
-	artist_10_table = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+	artist_10_table = pd.read_sql(f"SELECT artists.ARTIST, {artist_10}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 	{artist_10}.PUBLISHED_STR, artists.TOTAL_VIDEOS, \
 	{artist_10}.TITLE, {artist_10}.CATEGORY , {artist_10}.DURATION, {artist_10}.VIEWS, \
 	{artist_10}.LIKES, {artist_10}.DISLIKES, {artist_10}.PAID, {artist_10}.FAMILY_FRIENDLY, \
@@ -1378,7 +2018,7 @@ cancel=cancel):
 		connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
 		connection.execute("USE web_app_dev")
 
-		df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+		df_cache = pd.read_sql(f"SELECT artists.ARTIST, {content_creator}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 		{content_creator}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 		{content_creator}.TITLE, {content_creator}.CATEGORY , {content_creator}.DURATION, {content_creator}.VIEWS, \
 		{content_creator}.LIKES, {content_creator}.DISLIKES, {content_creator}.PAID, {content_creator}.FAMILY_FRIENDLY, \
@@ -1386,8 +2026,11 @@ cancel=cancel):
 		INNER JOIN {content_creator} \
 		ON artists.ARTIST_CODE = {content_creator}.ARTIST_CODE", connection)
 
+		df_cache = df_cache.sort_values(by="PUBLISHED_STR",ascending=False).reset_index()
+
 		# Artist Information
 		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
+		
 		cache = f"{scrape_date} scrape"
 		json_data = df_cache.to_json(orient="records")
 		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
@@ -1419,6 +2062,7 @@ cancel=cancel):
 
 		subscribers_format = format(subscribers_str,",")
 		print(f"CANCEL VALUE IS {cancel}")
+
 		# Return HTML
 		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
@@ -1464,13 +2108,17 @@ cancel=cancel):
 		artist_db_name = input_name
 
 		# Get Artist Info
-		df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+		df_cache = pd.read_sql(f"SELECT artists.ARTIST, {artist_db_name}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 		{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 		{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 		{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 		{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 		INNER JOIN {artist_db_name} \
 		ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
+
+		print(df_cache[["TITLE","SCRAPE_DATE","PUBLISHED_STR"]].head())
+		df_cache = df_cache.sort_values(by=["PUBLISHED_STR"],ascending=False).reset_index()
+		print(df_cache[["TITLE","SCRAPE_DATE","PUBLISHED_STR"]].head())
 
 		# Artist Information
 		scrape_date = df_cache.loc[0,"SCRAPE_DATE"]
@@ -1505,6 +2153,7 @@ cancel=cancel):
 
 		subscribers_format = format(subscribers_str,",")
 		print(f"CANCEL VALUE IS {cancel}")
+		print(f'scrape date python is: {scrape_date}')
 		# Return HTML
 		return render_template("base_analytics.html", data=json_data, cache=scrape_date_str,\
 		artist_name=artist_name,\
@@ -1650,13 +2299,15 @@ cancel=cancel):
 
 	try:
 		# Searching for input Artist
-		df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+		df_cache = pd.read_sql(f"SELECT artists.ARTIST, {artist_db_name}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 		{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 		{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 		{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 		{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 		INNER JOIN {artist_db_name} \
 		ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
+
+		df_cache = df_cache.sort_values(by="PUBLISHED_STR",ascending=False).reset_index()
 
 	except:
 		print("Not found in database")
@@ -1703,13 +2354,15 @@ cancel=cancel):
 
 			artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
 
-			df_cache = pd.read_sql(f"SELECT artists.ARTIST, artists.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
+			df_cache = pd.read_sql(f"SELECT artists.ARTIST, {artist_db_name}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
 			{artist_db_name}.TITLE, {artist_db_name}.CATEGORY , {artist_db_name}.DURATION, {artist_db_name}.VIEWS, \
 			{artist_db_name}.LIKES, {artist_db_name}.DISLIKES, {artist_db_name}.PAID, {artist_db_name}.FAMILY_FRIENDLY, \
 			{artist_db_name}.URL, artists.ARTIST_IMAGE FROM artists \
 			INNER JOIN {artist_db_name} \
 			ON artists.ARTIST_CODE = {artist_db_name}.ARTIST_CODE", connection)
+
+			df_cache = df_cache.sort_values(by="PUBLISHED_STR",ascending=False).reset_index()
 
 			artist_name = df_cache.loc[0,"ARTIST"]
 			scrape_date = df_cache.loc[0,"SCRAPE_DATE"]

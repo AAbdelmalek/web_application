@@ -1043,6 +1043,18 @@ if (document.getElementById("hide-me").style.display !== "none"){
     document.getElementById("plot-resize").classList.add("mr-3");
 
     document.getElementById("expand").innerHTML =  "Collapse";
+
+    // Plotly.relayout('timeseries', {
+    //   width: 1015,
+    //   height: 450,
+    // });
+
+    // Plotly.restyle('timeseries', {
+    //   responsive:true,
+    // })
+
+    Plotly.relayout({responsive:true})
+
 }
 
 else{
@@ -1060,6 +1072,15 @@ else{
     document.getElementById("plot-resize").classList.add("mr-2");
 
     document.getElementById("expand").innerHTML =  "Expand";
+
+    // Plotly.relayout('timeseries', {
+    //   width: 780,
+    //   height: 450,
+    // })
+
+    // Plotly.restyle('timeseries', {
+    //   responsive:true,
+    // })
 
 }
 
@@ -1113,3 +1134,15 @@ function emptyBug() {
       return false;
   };
 }
+
+
+function resizeTimeseries(){
+
+  Plotly.relayout('timeseries', {
+
+  });
+
+}
+
+
+
