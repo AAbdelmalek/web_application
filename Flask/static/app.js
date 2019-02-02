@@ -36,7 +36,7 @@ search_loader.href = "#";
 if(document.getElementById("update-scrape-load") !==null){
 
 
-    document.getElementById("update-scrape-load").style.visibility = "hidden";
+    document.getElementById("update-scrape-load").style.display = "none";
 }
 
 if (progress_bar_2 !== null ){
@@ -837,8 +837,19 @@ function infiniteScroll(){
 function updateScrape(){
 
 
-document.getElementById("update-scrape-load").style.visibility = "visible";
+document.getElementById("update-scrape-load").style.display = "block";
+ok_button = document.getElementById("pull-href");
+// ok_button.innerHTML = "Please wait...";
+// ok_button.setAttribute("data-dismiss","");
+ok_button.style.visibility = "hidden";
 
+document.getElementById("modal-cancel-2").innerHTML += '<button type="button" class="btn btn-sm btn-secondary">Please wait...</button>'
+document.getElementById("modal-cancel-2").innerHTML += '<a class="btn btn-sm btn-danger" role="button" href="/cancel?page=3" class="link_color_2" id="new-scrape-cancel">Cancel</a>&nbsp;&nbsp;&nbsp;';
+
+ok_link = document.getElementById("update-cancel");
+ok_link.style.display = "none";
+
+document.getElementById("new-scrape-close-2").style.visibility = "hidden";
 
 
     updatePercentComplete();
