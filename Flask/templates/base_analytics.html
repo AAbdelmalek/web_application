@@ -40,6 +40,7 @@
                             <a class="nav-link" href="">About<span class="sr-only"></span></a>
                         </li>
                       </ul>
+                      
                       <button style="position:absolute;left:265px" type="button" class="navbar-btn btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Feedback</button>
 
                       <div class="form-inline my-2 my-lg-2">
@@ -58,7 +59,8 @@
                         <a class="navbar-brand data-header" href="#" id="channel-link" target="_blank">
     
                           <img style="position:absolute;top:12px;" src="{{artist_image}}" width="90" height="auto" class="d-inline" id="analytics-img" alt="">
-                                <span style="position:absolute;left:115px;top:17px" class="inline-block" id="profile-name">&nbsp;{{artist_name}}&nbsp;</span> 
+                                <span style="position:absolute;left:115px;top:17px" class="inline-block" id="profile-name">&nbsp;{{artist_name}}&nbsp;<span class="text-muted" style="font-size:8pt;position:relative;" id ="profile-scrape-date"></span></span> 
+                                
                         </a> 
                       <!-- <span class="text-muted">{{total_views}}</span>
                       <span class="text-muted">{{subscribers}}</span>
@@ -433,7 +435,7 @@
                         
                   <button id = "update-cancel" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
                   <!-- <button type="button" class="btn btn-sm btn-primary"><a href="#" class="link_color_2" id="pull-href" onclick="justLoad()">Pull</a></button> -->
-                  <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="pull-href" onclick="updateScrape()">OK</a>&nbsp;&nbsp;&nbsp;
+                  <a class="btn btn-sm btn-primary" role="button" href="/update?name={{artist_db_name}}" class="link_color_2" id="pull-href" onclick="updateScrape()">OK</a>&nbsp;&nbsp;&nbsp;
                 
                 </div>
                 
@@ -507,8 +509,9 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="modal-cancel">
-                    <button id = "new-scrape-ok-button" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>                    
-                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="resetURL()">OK</a>
+                    <button id = "new-scrape-ok-button" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>          
+                    <a id="new-scrape-cancel" class="btn btn-sm btn-danger" role="button" href="/cancel?name={{artist_db_name}}" class="link_color_2" >Cancel</a>         
+                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="resetURL()">OK</a>&nbsp;&nbsp;&nbsp; 
                 </div>
                 </div>
             </div>
@@ -532,10 +535,10 @@
                     </div>
                     <div class="modal-body">
                       <form action="{{ url_for('reportBug') }}?db={{content_creator}}&page=1" method="post" id="bug-report">
-                      <div class="form-group"> 
+                      <span class="form-group"> 
               
-                      <label for="recipient-name" class="col-form-label">Recipient:</label>
-                          <input type="text" class="form-control" id="recipient-name" readonly>
+                      <!-- <label for="recipient-name" class="col-form-label">Recipient:</label>
+                          <input type="text" class="form-control" id="recipient-name" readonly> -->
                         </div>
                         <div class="form-group">
                           <label for="message-text" class="col-form-label">Message (255 character limit):</label>
@@ -567,6 +570,6 @@
     <script>clearSearch()</script>
     <script>reportingRedirect()</script>
     <script>channelLink()</script>
-
+    <script>setCancelURL('{{artist_db_name}}')</script>
  
  </html>

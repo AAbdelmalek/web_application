@@ -99,7 +99,7 @@ def reportBug():
 	connection.execute(sql,date=date,msg=bug)
 	print(bug)
 	if page == "home":
-		return home()
+		return redirect("/?page=7")
 
 	else:
 		return search()
@@ -115,6 +115,8 @@ def end_program():
 
 	page_key = request.args.get("page")
 	page = '''{}'''.format(page_key)
+	name_key = request.args.get('name')
+	name = '''{}'''.format(name_key)
 	# analytics_key = request.args.get("page")
 	# analytics = '''{}'''.format(analytics_key)
 	print(f"page number is : {page}")
@@ -129,9 +131,12 @@ def end_program():
 	connection.execute("CREATE DATABASE IF NOT EXISTS web_app_dev")
 	connection.execute("USE web_app_dev")
 
-	artists_table = pd.read_sql("SELECT * FROM SEARCHES ORDER BY ID DESC LIMIT 1", connection) 
+	# artists_table = pd.read_sql("SELECT * FROM SEARCHES ORDER BY ID DESC LIMIT 1", connection) 
 
-	artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+	# artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+
+	artist_db_name = name
+
 	print(f"CANCEL VALUE IS {cancel}")
 	if page == "3":
 		
@@ -163,6 +168,7 @@ def shutdown():
 def newScrape():
 	global percent_complete
 	global cancel
+	cancel=0
 	# try:
 
 	# Start Clock, Set Variables
@@ -1418,9 +1424,9 @@ def newPull():
 		'{joined}', NULL,\
 		'{total_views}','{artist_image}', '{artist_code}')")
 
-		# connection.execute(f"INSERT INTO requests \
-		# (SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
-		# VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
+		connection.execute(f"INSERT INTO requests \
+		(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
+		VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
 
 	else:
 		connection.execute(f"INSERT INTO artists \
@@ -1428,9 +1434,9 @@ def newPull():
 		VALUES ('{scrape_date}','{search_name}', '{artist}', '{total_videos_all}',\
 		'{joined}', '{subscribers}', '{total_views}','{artist_image}','{artist_code}')")
 
-		# connection.execute(f"INSERT INTO requests \
-		# (SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
-		# VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
+		connection.execute(f"INSERT INTO requests \
+		(SCRAPE_DATE, SEARCH_NAME, ARTIST, ARTIST_CODE)\
+		VALUES ('{scrape_date}','{search_name}', '{artist}','{artist_code}')")
 
 
 	print("Inserted data into database successfully...")
@@ -2181,7 +2187,7 @@ cancel=cancel):
 		total_videos = total_videos_str,\
 		analytics_base_url=analytics_base_url, number_scraped=number_scraped,\
 		youtube_code = csv_filepath,
-		scrape_date = scrape_date_str, content_creator=artist_db_name)
+		scrape_date = scrape_date_str, content_creator=artist_db_name, artist_db_name=artist_db_name)
 
 	# Convert Date from Jan 1, 1999 format to datetime object
 	converted_date = ""
@@ -2368,9 +2374,12 @@ cancel=cancel):
 			# input_name = '''{}'''.format(name_key)
 			# artist_db_name = input_name
 
-			artists_table = pd.read_sql("SELECT * FROM SEARCHES ORDER BY ID DESC LIMIT 1", connection) 
+			# artists_table = pd.read_sql("SELECT * FROM SEARCHES ORDER BY ID DESC LIMIT 1", connection) 
 
-			artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+			# artist_db_name = artists_table.loc[0,"ARTIST_CODE"]
+
+			db_name = request.args.get('old')
+			artist_db_name =  '''{}'''.format(db_name)
 
 			df_cache = pd.read_sql(f"SELECT artists.ARTIST, {artist_db_name}.SCRAPE_DATE, artists.SEARCH_NAME, JOINED, SUBSCRIBERS, TOTAL_VIEWS, \
 			{artist_db_name}.PUBLISHED_STR, artists.TOTAL_VIDEOS, artists.ARTIST_CODE, \
@@ -2414,7 +2423,9 @@ cancel=cancel):
 			total_views_int_new_scrape=total_views_int_new_scrape,\
 			joined_convert_new_scrape=joined_convert_new_scrape,\
 			artist_image_new_scrape = artist_image_new_scrape,\
-			cancel=cancel, videos_to_get = videos_to_get, content_creator=artist_db_name)
+			cancel=cancel, videos_to_get = videos_to_get, content_creator=artist_db_name, artist_db_name=artist_db_name)
+
+			# return redirect(f'/query?name={artist_db_name}&analytics=base&page=1')
 
 		else:
 			return home(not_found_in_db, youtube_code_new_scrape,\

@@ -30,6 +30,8 @@ var infinite = document.getElementById("infinite_scroll");
 var not_found_in_db;
 var scroller = 0;
 var counter = 0;
+var artist_db_name;
+
 
 search_loader.href = "#";
 
@@ -352,13 +354,23 @@ function resetURL(){
     //     keyboard : false,
     //     backdrop : "static",
     //   });
-    
+    if (document.getElementById('new-scrape-cancel') !== null){
+        document.getElementById('new-scrape-cancel').style.display = "block";
+    }    
     progress_bar_2.style.visibility = "visible"; 
     ok_button = document.getElementById("new-scrape-ok-button");
     ok_button.innerHTML = "Please wait...";
     ok_button.setAttribute("data-dismiss","");
 
-    document.getElementById("modal-cancel").innerHTML += '<a class="btn btn-sm btn-danger" role="button" href="#" class="link_color_2" id="new-scrape-cancel" onclick="cancelRequest()">Cancel</a>';
+    // if (window.location.href.includes("page")){
+
+    //     // document.getElementById("modal-cancel").innerHTML += 
+    // }
+
+    // else{
+    //     // document.getElementById("modal-cancel").innerHTML += 
+        
+    //     }
 
 
     ok_link = document.getElementById("new-scrape-href");
@@ -371,21 +383,21 @@ function resetURL(){
 
 }
 
-function cancelRequest(){
+// function cancelRequest(){
 
-    $("#new-scrape").modal("hide");
-    $('#new-scrape').data('bs.modal',null); 
+//     $("#new-scrape").modal("hide");
+//     $('#new-scrape').data('bs.modal',null); 
 
-    if (window.location.href.includes("page")){
+//     if (window.location.href.includes("page")){
 
-        window.location.href = "/cancel?page=3&name=" + window.location.href.split("old=")[1].split("&page=1")[0];
-    }
+//         window.location.href = "/cancel?page=3&name=" + window.location.href.split("old=")[1].split("&page=1")[0];
+//     }
 
-    else{
-        window.location.href = "/cancel";}
+//     else{
+//         window.location.href = "/cancel";}
     
 
-}
+// }
 
 // if (window.location.href === "http://127.0.0.1:5000//cancel"){
 //     window.location.href = "/";
@@ -469,6 +481,7 @@ function moreInfo(){
 
 function updateData(id){
     console.log(`scrape date: ${id}`)
+    document.getElementById("profile-scrape-date").innerHTML += `&nbsp;&nbsp;${id}`;
     scrape_date = id;
     id = id.split("_")[1];
     
@@ -501,7 +514,7 @@ function getPullURL(update_url, days){
 
     // last_retrieved_link = document.getElementById(id_orig);
 
-    if (days < 7){
+    if (days < 0){
 
         document.getElementById("update-data").style.visibility = "hidden";
 
@@ -511,7 +524,7 @@ function getPullURL(update_url, days){
 
 
     else {
-       document.getElementById("update-data").innerHTML = '<button style="position:absolute;right:133px;top:14px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button>';
+       document.getElementById("update-data").innerHTML = '<button style="position:absolute;right:133px;top:14px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initialePull" onclick="showUpdateModal()">Update Data</button>';
     //    document.getElementById("update-data").parentElement.remove();
        //    var el = document.getElementById("update-data");
     //    var newEl = document.createElement('button');
@@ -524,7 +537,7 @@ function getPullURL(update_url, days){
     //    newEl.data-target = "#initiatePull"
     //    el.parentNode.replaceChild(newEl, el);
        //    document.getElementById("update-data").style.visibility = "visible";
-       document.getElementById("pull-href").href = update_url;
+    //    document.getElementById("pull-href").href = update_url;
 
        document.getElementById("modal-body-text").innerHTML
        += `The data for this content creator was retrieved ${days} 
@@ -588,26 +601,26 @@ function progressBar1(){
 
 function rating(views){
 
-    total_views = parseInt(views.split(" ")[0]);
-    console.log(total_views)
+    // total_views = parseInt(views.split(" ")[0]);
+    // console.log(total_views)
 
-    if (total_views > 1000000 && total_views < 10000000){
+    // if (total_views > 1000000 && total_views < 10000000){
 
-        document.getElementById("profile-name").innerHTML += "&nbsp;⭑";
+    //     document.getElementById("profile-name").innerHTML += "&nbsp;⭑";
 
-    }
+    // }
 
-    else if (total_views > 10000000 && total_views < 100000000){
+    // else if (total_views > 10000000 && total_views < 100000000){
 
-        document.getElementById("profile-name").innerHTML += "&nbsp;⭑&nbsp;⭑";
+    //     document.getElementById("profile-name").innerHTML += "&nbsp;⭑&nbsp;⭑";
 
-    }
+    // }
 
-    else if (total_views > 100000000){
+    // else if (total_views > 100000000){
 
-        document.getElementById("profile-name").innerHTML += "&nbsp;⭑&nbsp;⭑&nbsp;⭑";
+    //     document.getElementById("profile-name").innerHTML += "&nbsp;⭑&nbsp;⭑&nbsp;⭑";
 
-    }
+    // }
 
 
 }
@@ -833,9 +846,17 @@ function infiniteScroll(){
     }
  });
 
+function showUpdateModal(){
+
+
+    $('#initiatePull').modal({backdrop:'static',
+    keyboard: false,
+    });
+
+}
+
 
 function updateScrape(){
-
 
 document.getElementById("update-scrape-load").style.display = "block";
 ok_button = document.getElementById("pull-href");
@@ -844,7 +865,7 @@ ok_button = document.getElementById("pull-href");
 ok_button.style.visibility = "hidden";
 
 document.getElementById("modal-cancel-2").innerHTML += '<button type="button" class="btn btn-sm btn-secondary">Please wait...</button>'
-document.getElementById("modal-cancel-2").innerHTML += '<a class="btn btn-sm btn-danger" role="button" href="/cancel?page=3" class="link_color_2" id="new-scrape-cancel">Cancel</a>&nbsp;&nbsp;&nbsp;';
+document.getElementById("modal-cancel-2").innerHTML += `<a class="btn btn-sm btn-danger" role="button" href="/cancel?name=${artist_db_name}&page=3" class="link_color_2" id="new-scrape-cancel">Cancel</a>&nbsp;&nbsp;&nbsp;`;
 
 ok_link = document.getElementById("update-cancel");
 ok_link.style.display = "none";
@@ -900,3 +921,29 @@ async function percentComplete(){
 
 
   } 
+
+  function setCancelURL(youtube_code){
+    
+    artist_db_name = youtube_code;
+    console.log(youtube_code);
+
+    document.getElementById("new-scrape-cancel").href = "/cancel?name=" + youtube_code + "&page=3";
+
+    
+
+    
+  }
+
+  if (document.getElementById('new-scrape-cancel') !== null){
+    document.getElementById('new-scrape-cancel').style.display = "none";
+
+  }
+
+//   console.log(artist_db_name);
+
+// if (window.location.href.includes("page=7")){
+
+// document.getElementById('feedback-success').innerHTML = `<div class="alert alert-primary alert-dismissible fade show" role="alert">
+// Feedback submitted
+// </div>`
+// }

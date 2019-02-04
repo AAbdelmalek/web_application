@@ -38,20 +38,17 @@
 To DO 2:
 
 
-
 Front-end
 - fix feedback button when resizing navabar -- 
 - Set rangeslider to be 10 videos --
 - hover over image home page, bottom white with name is not clickable -- 
 - have scale auto change depending on data range -- 
 - expand button does not refresh size -- 
-- success alert submit feedback -- 
-- cancel red alert --
 - hover data point, show video link or video title -- 
 - make infinite scroll pretty -- 
 - about page
 - load bar not fixed to top home page when nav bar squeezes
-- make update modal static
+- update load-bar not transparent background
 
 Back-end
 - Get comment numbers -- 
@@ -91,10 +88,18 @@ Done:
    - make cancel button and running button - DONE
    - total vid, joined, subs, etc, not correct on new updated data - most likely getting this from artists table - Update all data, use pre-df not db query
    - update methodology incorrect, need to get all vids again as old ones may have more views/likes etc. -- DONE
+- !!! set cancel button hrefs to include name key -
+    - think of other things using db and use name key instead
+    - all redirects are messed up
+    - fixed for the most part
+- make update modal static -- Done
 
-OOS/Other Ideas
+OOS/Other Ideas/Next
 - build table to view raw data? -- next version?
 - dark mode --
+- static updaate modal bug - if you click keyboard while update happens it hangs at end of update -- 
+- success alert submit feedback -- 
+- cancel red alert --
 -->
 
  <head>
@@ -179,55 +184,42 @@ OOS/Other Ideas
          
 
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="top:0px">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                      <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-brand">
-                                                
-                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.png') }}" height="23" alt="Youtube DS" ></a>
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" id="navbar-1-analytics">
+                            <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                              <span class="navbar-toggler-icon"></span>
+                            </button> -->
+                            <div class="navbar-brand">
+                                    <div style="width:500px !important;position:absolute;left:550px;text-align:center" id = "feedback-success"></div>     
 
-                        <span class="header2"><a class="link_color" href="/">youtubedata<strong>.io</strong></a></span>
-                        <span class="header"><a class="link_color" id="DS" href="/"></a></span>
+                                <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.png') }}" height="23" alt="Youtube DS" ></a>
+        
+                                <span class="header2"><a class="link_color" href="/">youtubedata<strong>.io</strong></a></span>
+                                <span class="header"><a class="link_color" id="DS" href="/"></a></span>
+                            
                     
-            
-                </div>
-                  
-                    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <li class="nav-item disabled">
-                            <a class="nav-link" href="#">About<span class="sr-only"></span></a>
-                        </li>
-                 
-                            <!-- <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Report Bug<span class="sr-only"></span></a> -->
- 
-                        <!-- <li class="nav-item disabled">
-                            <a class="nav-link" href="#">Resources<span class="sr-only"></span></a>
-                        </li> -->
-                 
-                        <!-- <li class="nav-item">
-                          <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link disabled" href="#">Disabled</a>
-                        </li> -->
-                      </ul>
-                      <button style="position:absolute;left:265px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Feedback</button>
-
-                      <div class="form-inline my-2 my-lg-2">
-                        <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
-                        <span class="input-group-btn">
-                            <a onclick="progressBar1()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
-                    </span>
-                </div>
-                    </div>
-                  </nav>
+                        </div>
+        <!--                   
+                            <div class="collapse navbar-collapse" id="navbarTogglerDemo03"> -->
+                              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                <li class="nav-item disabled">
+                                    <a class="nav-link" href="">About<span class="sr-only"></span></a>
+                                </li>
+                              </ul>
+                              <button style="position:absolute;left:265px" type="button" class="navbar-btn btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Feedback</button>
+        
+                              <div class="form-inline my-2 my-lg-2">
+                                <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
+                                <span class="input-group-btn">
+                                    <a onclick="load_bar()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
+                                </div>
+                              </form>
+                            <!-- </div> -->
+                          </nav>
 
                   
-                  <br><br><br>
             <!-- Load Bar 1 -->
             <div id="load-bar" class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;text-align:center;"></div>
             </div> 
          
         <!-- <br> -->
@@ -246,6 +238,7 @@ OOS/Other Ideas
          </div> -->
          <!-- <div id=infinite_scroll> -->
              <!-- Deck 1 -->
+             
                     <div id="deck-2">
                         <div class="container-fluid">
       
@@ -702,8 +695,10 @@ OOS/Other Ideas
                     </div>
                 </div>
                 <div class="modal-footer" id="modal-cancel">
-                    <button id = "new-scrape-ok-button" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>                    
-                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="resetURL()">OK</a>
+                    
+                    <button id = "new-scrape-ok-button" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>        
+                    <a class="btn btn-sm btn-danger" role="button" href="/cancel?page=1" class="link_color_2" id="new-scrape-cancel">Cancel</a>            
+                    <a class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="resetURL()">OK</a>&nbsp;&nbsp;&nbsp; 
                 </div>
                 </div>
             </div>
@@ -722,11 +717,11 @@ OOS/Other Ideas
             </div>
             <div class="modal-body">
               <form action="{{ url_for('reportBug') }}?page=home" method="post" id="bug-report">
-              <div class="form-group"> 
+              <span class="form-group"> 
       
-              <label for="recipient-name" class="col-form-label">Recipient:</label>
-                  <input type="text" class="form-control" id="recipient-name" readonly>
-                </div>
+              <!-- <label for="recipient-name" class="col-form-label">Recipient:</label>
+                  <input type="text" class="form-control" id="recipient-name" readonly> -->
+              </span>
                 <div class="form-group">
                   <label for="message-text" class="col-form-label">Message (255 character limit):</label>
                   <textarea style="font-size:10pt;" maxlength="255" onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"
