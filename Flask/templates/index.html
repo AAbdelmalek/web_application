@@ -37,9 +37,8 @@
 
 To DO 2:
 
-
 Front-end
-- fix feedback button when resizing navabar -- 
+- fix min width weirdness re: about and resize small
 - Set rangeslider to be 10 videos --
 - hover over image home page, bottom white with name is not clickable -- 
 - have scale auto change depending on data range -- 
@@ -47,26 +46,33 @@ Front-end
 - hover data point, show video link or video title -- 
 - make infinite scroll pretty -- 
 - about page
-- load bar not fixed to top home page when nav bar squeezes
 - update load-bar not transparent background
 
 Back-end
-- Get comment numbers -- 
-- avicii "bug"?
-- revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
-            - this may be fixed, duplicate videos might be in other playlists, so now we dont append a duplicate url to the search list
+
 
  For Production
 - timeout if too long request time (or if >1000 videos?) -- lets timeout if videos over 500
 - change database name from web_app_dev and connection password etc --
 - Add exception error pages back to query and newPull -- 
 - make sure all reirects and references to urls work -- 
+- percent load for two or more requests - I think this is a gunicorn solution 
 
 
 
 
 
-
+OOS/Other Ideas/Next
+- build table to view raw data? -- next version?
+- dark mode --
+- static updaate modal bug - if you click keyboard while update happens it hangs at end of update -- 
+- success alert submit feedback -- 
+- cancel red alert --
+- Get comment numbers -- 
+- firefox/safari issues
+    - safari progress bar
+    - mozilla modal -- > OK
+- avicii "bug"?
 
 Done:
 - One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA -- Made this error out - no point if one video, nothing to analyze
@@ -93,13 +99,14 @@ Done:
     - all redirects are messed up
     - fixed for the most part
 - make update modal static -- Done
+- load bar not fixed to top home page when nav bar squeezes - set min width of body
+- fix feedback button when resizing navabar --  - set min width of body
+- revisit total_views and total_likes values -- this is an adele playlists problem/thing count of uploads views vs all playlist views --
+            SOL: - this may be fixed, duplicate videos might be in other playlists, so now we dont append a duplicate url to the search list
+                 - looks like we are always a little under the youtube view count, youtube may user more recent data for total views? not sure but wont fix
 
-OOS/Other Ideas/Next
-- build table to view raw data? -- next version?
-- dark mode --
-- static updaate modal bug - if you click keyboard while update happens it hangs at end of update -- 
-- success alert submit feedback -- 
-- cancel red alert --
+
+
 -->
 
  <head>
@@ -181,10 +188,12 @@ OOS/Other Ideas/Next
                         <br>
                         <br>
                         <br> -->
-         
+                        <br>
+                        <br>
+                        <br>
 
 
-                        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" id="navbar-1-analytics">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" id="navbar-1-analytics">
                             <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                               <span class="navbar-toggler-icon"></span>
                             </button> -->
@@ -228,7 +237,7 @@ OOS/Other Ideas/Next
          <!-- Load Alert -->
  
          <!-- <div class="row">
-         <div class="col">
+         <divclass="col">
                  <div class="alert alert-info" role="alert" id="loading">
                          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                          <span class="sr-only">Error:</span>
@@ -241,7 +250,6 @@ OOS/Other Ideas/Next
              
                     <div id="deck-2">
                         <div class="container-fluid">
-      
 
                             <div class="row">
                                 <div class="col-8 mx-auto" style="top:8px;margin: 0 auto;">
@@ -255,8 +263,8 @@ OOS/Other Ideas/Next
                                                        </a>
                                                </div>
 
-                                               <div class="card-body">
-                                                   <h5 class="card-title text-center">{{artist_name_0}}</h5>
+                                               <div class="card-body text-center">
+                                                   <h5 class="card-title">{{artist_name_0}}</h5>
                                                    <!-- <p class="card-text">
                                                        <h6 class="h6-font">{{total_videos_3}}</h6>
                                                        <h6 class="h6-font">{{subscribers_3}}</h6>
@@ -280,8 +288,8 @@ OOS/Other Ideas/Next
                                                        </a>
                                                </div>
 
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center">{{artist_name}}</h5>
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">{{artist_name}}</h5>
                                                    <!-- <p class="card-text">
                                                        <h6 class="h6-font">{{total_videos_4}}</h6>
                                                        <h6 class="h6-font">{{subscribers_4}}</h6>
@@ -306,8 +314,8 @@ OOS/Other Ideas/Next
                                                        </a>
                                                </div>
 
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center">{{artist_name_1}}</h5>
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">{{artist_name_1}}</h5>
                                                 <!-- <p class="card-text">
                                                     <h6 class="h6-font">{{total_videos_5}}</h6>
                                                     <h6 class="h6-font">{{subscribers_5}}</h6>
@@ -330,8 +338,8 @@ OOS/Other Ideas/Next
                                                        </a>
                                                </div>
 
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center">{{artist_name_2}}</h5>
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">{{artist_name_2}}</h5>
                                                 <!-- <p class="card-text">
                                                     <h6 class="h6-font">{{total_videos_6}}</h6>
                                                     <h6 class="h6-font">{{subscribers_6}}</h6>
@@ -371,8 +379,8 @@ OOS/Other Ideas/Next
                                                         </a>
                                                 </div>
 
-                                                <div class="card-body">
-                                                    <h5 class="card-title text-center">{{artist_name_3}}</h5>
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title">{{artist_name_3}}</h5>
                                                     <!-- <p class="card-text">
                                                         <h6 class="h6-font">{{total_videos_3}}</h6>
                                                         <h6 class="h6-font">{{subscribers_3}}</h6>
@@ -396,8 +404,8 @@ OOS/Other Ideas/Next
                                                         </a>
                                                 </div>
 
-                                             <div class="card-body">
-                                                 <h5 class="card-title text-center">{{artist_name_4}}</h5>
+                                             <div class="card-body text-center">
+                                                 <h5 class="card-title">{{artist_name_4}}</h5>
                                                     <!-- <p class="card-text">
                                                         <h6 class="h6-font">{{total_videos_4}}</h6>
                                                         <h6 class="h6-font">{{subscribers_4}}</h6>
@@ -422,8 +430,8 @@ OOS/Other Ideas/Next
                                                         </a>
                                                 </div>
 
-                                             <div class="card-body">
-                                                 <h5 class="card-title text-center">{{artist_name_5}}</h5>
+                                             <div class="card-body text-center">
+                                                 <h5 class="card-title">{{artist_name_5}}</h5>
                                                  <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_5}}</h6>
                                                      <h6 class="h6-font">{{subscribers_5}}</h6>
@@ -446,8 +454,8 @@ OOS/Other Ideas/Next
                                                         </a>
                                                 </div>
 
-                                             <div class="card-body">
-                                                 <h5 class="card-title text-center">{{artist_name_6}}</h5>
+                                             <div class="card-body text-center">
+                                                 <h5 class="card-title">{{artist_name_6}}</h5>
                                                  <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_6}}</h6>
                                                      <h6 class="h6-font">{{subscribers_6}}</h6>
@@ -511,8 +519,8 @@ OOS/Other Ideas/Next
                                                         </a>
                                                 </div>
 
-                                             <div class="card-body">
-                                                 <h5 class="card-title text-center">{{artist_name_8}}</h5>
+                                             <div class="card-body text-center">
+                                                 <h5 class="card-title">{{artist_name_8}}</h5>
                                                  <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_8}}</h6>
                                                      <h6 class="h6-font">{{subscribers_8}}</h6>
@@ -536,8 +544,8 @@ OOS/Other Ideas/Next
                                                         </a>
                                                 </div>
 
-                                             <div class="card-body">
-                                                 <h5 class="card-title text-center">{{artist_name_9}}</h5>
+                                             <div class="card-body text-center">
+                                                 <h5 class="card-title">{{artist_name_9}}</h5>
                                                  <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_9}}</h6>
                                                      <h6 class="h6-font">{{subscribers_9}}</h6>
@@ -560,8 +568,8 @@ OOS/Other Ideas/Next
                                                         </a>
                                                 </div>
 
-                                             <div class="card-body">
-                                                 <h5 class="card-title text-center">{{artist_name_10}}</h5>
+                                             <div class="card-body text-center">
+                                                 <h5 class="card-title">{{artist_name_10}}</h5>
                                                  <!-- <p class="card-text">
                                                      <h6 class="h6-font">{{total_videos_10}}</h6>
                                                      <h6 class="h6-font">{{subscribers_10}}</h6>

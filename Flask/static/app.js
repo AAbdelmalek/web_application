@@ -31,6 +31,7 @@ var not_found_in_db;
 var scroller = 0;
 var counter = 0;
 var artist_db_name;
+var days;
 
 
 search_loader.href = "#";
@@ -279,7 +280,7 @@ scrape_date_object = new Date(scrape_date + "Z");
 today_date_object = Date.now();
 
 staleness = (Math.abs(today_date_object - scrape_date_object))/(1000*60*60*24);
-days = Math.round(staleness);
+days = string(Math.round(staleness));
 
 // console.log(scrape_date_object);
 // console.log(today_date_object);
@@ -480,8 +481,8 @@ function moreInfo(){
 }
 
 function updateData(id){
-    console.log(`scrape date: ${id}`)
-    document.getElementById("profile-scrape-date").innerHTML += `&nbsp;&nbsp;${id}`;
+    // console.log(`scrape date: ${id}`)
+    // document.getElementById("profile-scrape-date").innerHTML += `&nbsp;&nbsp;${id}`;
     scrape_date = id;
     id = id.split("_")[1];
     
@@ -752,8 +753,8 @@ function infiniteScroll(){
                                                </a>
                                        </div>
 
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center">${artist_name_1}</h5>
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">${artist_name_1}</h5>
 
                                     </div>
                                     </div>
@@ -766,8 +767,8 @@ function infiniteScroll(){
                                                </a>
                                        </div>
 
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center">${artist_name_2}</h5>
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">${artist_name_2}</h5>
 
                                     </div>
 
@@ -780,8 +781,8 @@ function infiniteScroll(){
                                                </a>
                                        </div>
 
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center">${artist_name_3}</h5>
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">${artist_name_3}</h5>
 
                                     </div>
 
@@ -925,7 +926,7 @@ async function percentComplete(){
   function setCancelURL(youtube_code){
     
     artist_db_name = youtube_code;
-    console.log(youtube_code);
+    // console.log(youtube_code);
 
     document.getElementById("new-scrape-cancel").href = "/cancel?name=" + youtube_code + "&page=3";
 

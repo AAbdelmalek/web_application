@@ -77,6 +77,9 @@ def reportBug():
 	page_key = request.args.get('page')
 	page = 	input_name = '''{}'''.format(page_key)
 
+	name_key = request.args.get('name')
+	name = 	input_name = '''{}'''.format(name_key)
+
 	date = datetime.now().strftime("%Y-%m-%d")
 	# name = request.args["name"]
 	# Connect to Database Server
@@ -99,10 +102,10 @@ def reportBug():
 	connection.execute(sql,date=date,msg=bug)
 	print(bug)
 	if page == "home":
-		return redirect("/?page=7")
+		return redirect("/")
 
 	else:
-		return search()
+		return redirect(f"/query?name={name}&analytics=base")
 
 # Cancel Scrape Request
 @app.route("/cancel")

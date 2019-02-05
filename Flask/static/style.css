@@ -205,9 +205,10 @@ p {margin:auto;
 } */
 
 .card-body {
-  /* white-space: nowrap; */
-  /* font-size:10vw; */
-  /* overflow-wrap: inherit; */
+  white-space: nowrap; 
+  font-size:10vw;
+overflow-wrap: inherit;
+  /* padding:100px !important; */
 }
 
 .card-footer{
@@ -313,16 +314,28 @@ font-size: 11pt;
   height:7px;
 }
 
-body{
-  min-width:1000px;        /* Suppose you want minimum width of 1000px */
-  width: auto !important;  /* Firefox will set width as auto */
-  width:1000px;            /* As IE6 ignores !important it will set width as 1000px; */
+html{
+  min-width:995px !important;        /* Suppose you want minimum width of 1000px */
+  /* width: auto !important; 
+  width:995px !important;             */
 }
 
 .fix{
   text-decoration: none !important;
   color:black !important;
 
+
+
+}
+
+h5{
+
+  display: inline;
+}
+
+.navbar{
+
+min-width:995px !important;
 
 
 }
