@@ -38,7 +38,7 @@
 To DO 2:
 
 Front-end
-- fix min width weirdness re: about and resize small
+- fix min width weirdness regarding "About" and resize small
 - Set rangeslider to be 10 videos --
 - hover over image home page, bottom white with name is not clickable -- 
 - have scale auto change depending on data range -- 
@@ -57,6 +57,7 @@ Back-end
 - Add exception error pages back to query and newPull -- 
 - make sure all reirects and references to urls work -- 
 - percent load for two or more requests - I think this is a gunicorn solution 
+- infinite load will have same issue - gunicorn solution
 
 
 
@@ -597,7 +598,8 @@ Done:
                     <!-- <span id="loader-1"><img src="{{ url_for('static', filename='load.gif') }}" height="40" width="auto" style="display: block;margin-left: auto;margin-right: auto;"></span> -->
                     <div id="new-deck">
 
-                    </div>                   
+                    </div>   
+                    <h6 align="center">You've reached the end! Here's a cookie 🍪</h6>                
                      <br>
                      <br>
                      <!-- <button onclick="infiniteScroll()" type="button" class="btn btn-sm btn-light mx-auto">Load More</button> -->

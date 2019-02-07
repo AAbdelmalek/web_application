@@ -56,7 +56,7 @@ def sendCard():
 	# Get next 4 cards
 	artists_table = pd.read_sql(f"SELECT ARTISTS.ARTIST_CODE, ARTISTS.ARTIST, ARTISTS.ARTIST_IMAGE FROM ARTISTS \
 								  INNER JOIN REQUESTS ON REQUESTS.ARTIST_CODE = ARTISTS.ARTIST_CODE \
-								  ORDER BY REQUESTS.ID DESC LIMIT 4 OFFSET {infinite_counter};", connection) 
+								  ORDER BY REQUESTS.ID DESC LIMIT 12 OFFSET {infinite_counter};", connection) 
 
 	# artists_table = artists_table[["ARTIST","ARTIST_CODE"]]
 	# artist_0 = artists_table.loc[0,"ARTIST_CODE"]
@@ -66,7 +66,7 @@ def sendCard():
 
 	json_data = artists_table.to_json(orient="records")
 	
-	infinite_counter = infinite_counter + 4
+	infinite_counter = infinite_counter + 12
 
 	return json_data
 
@@ -2542,5 +2542,5 @@ cancel=cancel):
 # 			return home()
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(debug=True,threaded=True)
 

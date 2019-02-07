@@ -32,6 +32,7 @@ var scroller = 0;
 var counter = 0;
 var artist_db_name;
 var days;
+var scroller = 0.5;
 
 
 search_loader.href = "#";
@@ -703,9 +704,9 @@ $('#bugModal').on('show.bs.modal', function (event) {
 function infiniteScroll(){
     counter = counter + 1;
     // for(var i = 0;i<1*counter;i++){
-    d3.json("/infiniteScroll").then(async function(data) {
-        
+    d3.json("/infiniteScroll").then(function(data) {
         if (data[0] != undefined && data[1] != undefined && data[2] != undefined && data[3] != undefined){ 
+        //First Set
         var analytics_base_url_0 = "/query?name=" + data[0]["ARTIST_CODE"] + "&analytics=base";
         var analytics_base_url_1 = "/query?name=" + data[1]["ARTIST_CODE"] + "&analytics=base";
         var analytics_base_url_2 = "/query?name=" + data[2]["ARTIST_CODE"] + "&analytics=base";
@@ -720,6 +721,38 @@ function infiniteScroll(){
         var artist_image_1 = data[1]["ARTIST_IMAGE"];
         var artist_image_2 = data[2]["ARTIST_IMAGE"];
         var artist_image_3 = data[3]["ARTIST_IMAGE"];
+
+        //Second Set
+        var analytics_base_url_4 = "/query?name=" + data[4]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_5 = "/query?name=" + data[5]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_6 = "/query?name=" + data[6]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_7 = "/query?name=" + data[7]["ARTIST_CODE"] + "&analytics=base";
+
+        var artist_name_4 = data[4]["ARTIST"];
+        var artist_name_5 = data[5]["ARTIST"];
+        var artist_name_6 = data[6]["ARTIST"];
+        var artist_name_7 = data[7]["ARTIST"];
+
+        var artist_image_4 = data[4]["ARTIST_IMAGE"];
+        var artist_image_5 = data[5]["ARTIST_IMAGE"];
+        var artist_image_6 = data[6]["ARTIST_IMAGE"];
+        var artist_image_7 = data[7]["ARTIST_IMAGE"];
+
+        //Third Set
+        var analytics_base_url_8 = "/query?name=" + data[8]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_9 = "/query?name=" + data[9]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_10 = "/query?name=" + data[10]["ARTIST_CODE"] + "&analytics=base";
+        var analytics_base_url_11 = "/query?name=" + data[11]["ARTIST_CODE"] + "&analytics=base";
+
+        var artist_name_8 = data[8]["ARTIST"];
+        var artist_name_9 = data[9]["ARTIST"];
+        var artist_name_10 = data[10]["ARTIST"];
+        var artist_name_11 = data[11]["ARTIST"];
+
+        var artist_image_8 = data[8]["ARTIST_IMAGE"];
+        var artist_image_9 = data[9]["ARTIST_IMAGE"];
+        var artist_image_10 = data[10]["ARTIST_IMAGE"];
+        var artist_image_11 = data[11]["ARTIST_IMAGE"];        
 
     
         var new_deck = `
@@ -794,7 +827,149 @@ function infiniteScroll(){
                     </div>
                 </div>
 
-                `
+                <div class="container-fluid">
+                         
+
+                <div class="row">
+                    <div class="col-8 mx-auto">
+
+                        <!-- Card 1 -->
+                        <div class="card-deck">
+                            <div class="card shadow ml-3 mb-5">
+                                <div class="zoom">
+                                        <a href="${analytics_base_url_4}">
+                                        <img class="card-img-top image" src="${artist_image_4}" alt="Card image cap">
+                                        </a>
+                                </div>
+
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">${artist_name_4}</h5>
+                                </div>
+
+                            </div>
+
+
+                    <!-- Card 2 -->
+                    <div class="card shadow ml-3 mb-5">
+                           <div class="zoom">
+                                   <a href="${analytics_base_url_5}">
+                                   <img class="card-img-top image" src="${artist_image_5}" alt="Card image cap">
+                                   </a>
+                           </div>
+
+                        <div class="card-body text-center">
+                            <h5 class="card-title">${artist_name_5}</h5>
+
+                        </div>
+                        </div>
+
+                    <!-- Card 3 -->
+                    <div class="card shadow ml-3 mb-5">
+                           <div class="zoom">
+                                   <a href="${analytics_base_url_6}">
+                                   <img class="card-img-top image" src="${artist_image_6}" alt="Card image cap">
+                                   </a>
+                           </div>
+
+                        <div class="card-body text-center">
+                            <h5 class="card-title">${artist_name_6}</h5>
+
+                        </div>
+
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="card shadow ml-3 mb-5">
+                           <div class="zoom">
+                                   <a href="${analytics_base_url_7}">
+                                   <img class="card-img-top image" src="${artist_image_7}" alt="Card image cap">
+                                   </a>
+                           </div>
+
+                        <div class="card-body text-center">
+                            <h5 class="card-title">${artist_name_7}</h5>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="container-fluid">
+                         
+
+    <div class="row">
+        <div class="col-8 mx-auto">
+
+            <!-- Card 1 -->
+            <div class="card-deck">
+                <div class="card shadow ml-3 mb-5">
+                    <div class="zoom">
+                            <a href="${analytics_base_url_8}">
+                            <img class="card-img-top image" src="${artist_image_8}" alt="Card image cap">
+                            </a>
+                    </div>
+
+                    <div class="card-body text-center">
+                        <h5 class="card-title">${artist_name_8}</h5>
+                    </div>
+
+                </div>
+
+
+        <!-- Card 2 -->
+        <div class="card shadow ml-3 mb-5">
+               <div class="zoom">
+                       <a href="${analytics_base_url_9}">
+                       <img class="card-img-top image" src="${artist_image_9}" alt="Card image cap">
+                       </a>
+               </div>
+
+            <div class="card-body text-center">
+                <h5 class="card-title">${artist_name_9}</h5>
+
+            </div>
+            </div>
+
+        <!-- Card 3 -->
+        <div class="card shadow ml-3 mb-5">
+               <div class="zoom">
+                       <a href="${analytics_base_url_10}">
+                       <img class="card-img-top image" src="${artist_image_10}" alt="Card image cap">
+                       </a>
+               </div>
+
+            <div class="card-body text-center">
+                <h5 class="card-title">${artist_name_10}</h5>
+
+            </div>
+
+        </div>
+        <!-- Card 4 -->
+        <div class="card shadow ml-3 mb-5">
+               <div class="zoom">
+                       <a href="${analytics_base_url_11}">
+                       <img class="card-img-top image" src="${artist_image_11}" alt="Card image cap">
+                       </a>
+               </div>
+
+            <div class="card-body text-center">
+                <h5 class="card-title">${artist_name_11}</h5>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+ 
+    `
                 //<span id="loader-${counter+1}"><img src="/static/load.gif" height="40" width="auto" style="display: block;margin-left: auto;margin-right: auto;"></span>
 
 
@@ -841,8 +1016,9 @@ function infiniteScroll(){
 //   });
 
   $(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() > $(document).height()-10) {
-        
+    if($(window).scrollTop() + $(window).height() > $(document).height()-250*scroller) {
+        scroller++;
+        console.log(scroller);
         infiniteScroll();
     }
  });
