@@ -17,9 +17,14 @@ var normalize_ordered = [];
 var perf_views = [];
 var perf_ratio = []; 
 var list = [];
+var video_title = [];
+var video_url = [];
+var video_info = [];
 var which_data = "Views Time Series";
 var x = [];
 var y = [];
+var number_videos;
+var x_range;
 
 function getData(data) {
 
@@ -31,7 +36,10 @@ function getData(data) {
     }
 
   for (var i = 0; i<scrape_data.length; i++){
-
+    var current_video_url = scrape_data[i]['URL'];
+    video_info.push(scrape_data[i]["TITLE"] + "<br>" + current_video_url);
+    video_url.push(scrape_data[i]["URL"]);
+    video_title.push(scrape_data[i]["TITLE"]);
     normalize_ordered.push(i);
     normalize.push(scrape_data.length-i);
     published.push(scrape_data[i]["PUBLISHED_STR"]);
@@ -87,6 +95,7 @@ document.getElementById("likes-per-view").innerHTML = `${likes_per_view_round}`;
 document.getElementById("avg-views").innerHTML += `${views_avg}`;
 
 data = [{
+    text: video_info,
     x: normalize,
     y: views ,
     mode: 'lines+markers',
@@ -120,13 +129,26 @@ data = [{
 //       // yanchor: 'top'
 //   }
 // ]
+number_videos = normalize.length;
+if (number_videos < 50){
+
+  x_range = number_videos;
+}
+
+else{
+
+  x_range = 50;
+
+}
 
 var layout = {
   title: 'Views Time Series',
   // updatemenus:updatemenus,
   xaxis: {
+        text: video_info,
     title: 'Time',
-    autorange: true,
+    range:[1,x_range],
+    // autorange: true,
     // range: [0,normalize.length],
     // rangeselector: {buttons: [
     //     {
@@ -155,6 +177,8 @@ var layout = {
     // range: [Math.min(...views),Math.max(...views)],
     type: 'linear'
   }
+
+  
 };
 
   likeViewRatio(views,likeview_ratio);
@@ -217,6 +241,7 @@ function switch_data(data) {
   switch (data) {
   case "Views vs Time":
   data=[{
+    text: video_info,
     x : normalize,
     y : views,
     mode: 'lines+markers',
@@ -235,7 +260,7 @@ function switch_data(data) {
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Time',
-        autorange: true,
+        range:[1,x_range],
         // range: [0,normalize.length],
         // rangeselector: {buttons: [
         //     {
@@ -269,6 +294,7 @@ function switch_data(data) {
     break;
   case "Duration Time Series":
   data=[{
+    text: video_info,
     x : normalize,
     y : duration,
     mode: 'lines+markers',
@@ -286,7 +312,7 @@ function switch_data(data) {
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Time',
-        autorange: true,
+        range:[1,x_range],
         // range: [0,normalize.length],
         // rangeselector: {buttons: [
         //     {
@@ -320,6 +346,7 @@ function switch_data(data) {
     break;
   case "Likes Time Series":
   data=[{
+    text: video_info,
     x : normalize,
     y : likes,
     mode: 'lines+markers',
@@ -338,7 +365,7 @@ function switch_data(data) {
     // updatemenus:updatemenus,
     xaxis: {
       title: 'Time',
-      autorange: true,
+      range:[1,x_range],
       // range: [0,normalize.length],
       // rangeselector: {buttons: [
       //     {
@@ -371,6 +398,7 @@ function switch_data(data) {
     break;
     case "Bubble":
     data = [{
+      text: video_info,
       x: normalize,
       y: views ,
       mode: 'markers',
@@ -392,7 +420,7 @@ function switch_data(data) {
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Time',
-        autorange: true,
+        range:[1,x_range],
         // range: [0,normalize.length],
         // rangeselector: {buttons: [
         //     {
@@ -462,7 +490,9 @@ function switch_data(data) {
   //   }
     // break;
     case "Likes/View Ratio":
-    data=[{x :normalize_ordered,
+    data=[{
+    text: video_info,  
+    x :normalize_ordered,
     y : perf_ratio,
     mode: 'lines+markers',
     type: 'scatter',
@@ -479,7 +509,7 @@ function switch_data(data) {
     // updatemenus:updatemenus,
     xaxis: {
       title: 'Views',
-      autorange: true,
+      range:[1,x_range],
       // range: [0,normalize.length],
       // rangeselector: {buttons: [
       //     {
@@ -514,6 +544,7 @@ function switch_data(data) {
     break;
   default:
   data=[{
+    text: video_info,
     x : normalize,
     y : views,
     mode: 'lines+markers',
@@ -533,7 +564,7 @@ function switch_data(data) {
     // updatemenus:updatemenus,
     xaxis: {
       title: 'Time',
-      autorange: true,
+      range:[1,x_range],
       // range: [0,normalize.length],
       // rangeselector: {buttons: [
       //     {
@@ -703,6 +734,7 @@ function getPerformanceData(views, likeview_ratio) {
 
 
   data = [{
+    text: video_info,
     x: views,
     y: likeview_ratio*1000,
     mode: 'markers',
@@ -815,6 +847,7 @@ function switch_data_performance(data) {
   // Fill the x and y arrays as a function of the selected dataset
   switch (data) {
   case "Views vs Views/Likes":
+  
     x = views;
     y = likeview_ratio;
     var layout = {
@@ -888,6 +921,7 @@ function getBubbleData(published,views,likes, duration, total_likes) {
   size = total_likes/10000;
   
     data = [{
+      text: video_info,
       x: published,
       y: views ,
       mode: 'markers',
