@@ -365,3 +365,9 @@ height:10px !important;
 
   height:7px ! important;
 }
+
+#padding-fix{
+
+  padding-left:18px;
+  padding-right:18px;
+}

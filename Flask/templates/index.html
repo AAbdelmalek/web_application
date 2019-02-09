@@ -38,8 +38,9 @@
 To DO 2:
 
 Front-end
+- make scroll function async delay with load message at end of page -- 
 - like/view ratio is missing last value (or first?), or some value -- 
-- fix min width weirdness regarding "About" and resize small
+- fix min width weirdness regarding "About" button and resize small
 - Set rangeslider to be 10 videos --
     => set to be 50 videos or max, need to fix it with dates/denormalize though
 - hover over image home page, bottom white with name is not clickable -- 
@@ -76,6 +77,7 @@ OOS/Other Ideas/Next
     - safari progress bar
     - mozilla modal -- > OK
 - avicii "bug"?
+- make scroll to last position when return from analytics page? -- 
 
 Done:
 - One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA -- Made this error out - no point if one video, nothing to analyze
@@ -251,7 +253,7 @@ Done:
          </div> -->
          <!-- <div id=infinite_scroll> -->
              <!-- Deck 1 -->
-             
+
                     <div id="deck-2">
                         <div class="container-fluid">
 
@@ -602,7 +604,10 @@ Done:
                     <div id="new-deck">
 
                     </div>   
-                    <h6 align="center">You've reached the end! Here's a cookie 🍪</h6>                
+                    <h6 id="end" align="center">You've reached the end! Here's a cookie 🍪</h6>                
+                    
+                    <h6 id="loading-total" style="position:relative;text-align:center">Loading<span id="load-ellipsis">...</span></h6>
+                     <br>
                      <br>
                      <br>
                      <!-- <button onclick="infiniteScroll()" type="button" class="btn btn-sm btn-light mx-auto">Load More</button> -->
@@ -728,7 +733,7 @@ Done:
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">
+            <div id="padding-fix">
               <form action="{{ url_for('reportBug') }}?page=home" method="post" id="bug-report">
               <span class="form-group"> 
       
@@ -738,7 +743,7 @@ Done:
                 <div class="form-group">
                   <label for="message-text" class="col-form-label">Message (255 character limit):</label>
                   <textarea style="font-size:10pt;" maxlength="255" onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"
-                  placeholder="Send us feature requests, issues, etc..."></textarea>
+                  placeholder="Send feature requests, issues, etc..."></textarea>
                 </div> 
       
             </div>
@@ -763,5 +768,6 @@ Done:
      <script>newScrape("{{not_found_in_db}}","{{youtube_code_new_scrape}}")</script>
      <!-- <script>cancelFix()</script> -->
      <script>reportingRedirect()</script>
+     <script>ellipsisLoad()</script>
  
  </html>

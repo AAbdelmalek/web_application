@@ -112,6 +112,10 @@ def reportBug():
 	if page == "home":
 		return redirect("/")
 
+	elif page == "about":
+
+		return redirect("/about")
+
 	else:
 		return redirect(f"/query?name={name}&analytics=base")
 

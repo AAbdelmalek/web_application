@@ -33,6 +33,7 @@ var counter = 0;
 var artist_db_name;
 var days;
 var scroller = 0.5;
+var sleeper;
 
 
 if (search_loader !== null){
@@ -703,10 +704,10 @@ $('#bugModal').on('show.bs.modal', function (event) {
   }
 
 function infiniteScroll(){
-    counter = counter + 1;
     // for(var i = 0;i<1*counter;i++){
     d3.json("/infiniteScroll").then(function(data) {
-        if (data[0] != undefined && data[1] != undefined && data[2] != undefined && data[3] != undefined){ 
+        counter = counter + 1;
+        if (data[0] != undefined && data[1] != undefined && data[2] != undefined && data[3] != undefined && data[4] != undefined && data[5] != undefined && data[6] != undefined && data[7] != undefined && data[8] != undefined && data[9] != undefined && data[10] != undefined && data[11] != undefined){ 
         //First Set
         var analytics_base_url_0 = "/query?name=" + data[0]["ARTIST_CODE"] + "&analytics=base";
         var analytics_base_url_1 = "/query?name=" + data[1]["ARTIST_CODE"] + "&analytics=base";
@@ -974,7 +975,7 @@ function infiniteScroll(){
                 //<span id="loader-${counter+1}"><img src="/static/load.gif" height="40" width="auto" style="display: block;margin-left: auto;margin-right: auto;"></span>
 
 
-                // await sleep(2000);
+            // scrollDelay(new_deck);
                 // console.log(counter);
                 // document.getElementById(`loader-${counter}`).style.display = "none";        
                 if(document.getElementById('new-deck') != null){
@@ -983,11 +984,49 @@ function infiniteScroll(){
         }     
 
       });
-    
+    //   var end = document.getElementById("end");
+    //   var ellipsis = document.getElementById("loading-total");
+    //   end.style.display = "block";
+    //   ellipsis.style.display = "none";
     // }
   }
 
+// async function scrollDelay(new_deck){
+//     await sleep(1000);
+//     if(document.getElementById('new-deck') != null){
+//         document.getElementById('new-deck').innerHTML += new_deck; }
+//     console.log("sleeping");
+ 
 
+// }
+
+async function ellipsisLoad(){ 
+    var total = document.getElementById("loading-total");
+    total.style.display = "none";
+    var ellipsis;
+    while(1){
+        await sleep_2(300);
+
+        ellipsis = document.getElementById("load-ellipsis");
+
+        // await(100);
+        if(ellipsis.innerHTML === "..."){
+
+            ellipsis.innerHTML = ".";
+            
+        }
+
+        else if(ellipsis.innerHMTL = "."){
+
+            ellipsis.innerHTML += ".";
+        }
+
+        else if(ellipsis.innerHTML === ".."){
+
+            ellipsis.innerHTML += ".";
+        }
+    }
+}
 //   $(window).scroll(function(){
 //     var scroll_ratio = (window.pageYOffset/document.documentElement.scrollHeight);
 
@@ -1016,13 +1055,37 @@ function infiniteScroll(){
   
 //   });
 
-  $(window).scroll(function() {
+
+
+  $(window).scroll(async function() {
     if($(window).scrollTop() + $(window).height() > $(document).height()-250*scroller) {
         scroller++;
+        
+
         console.log(scroller);
+        console.log("im calling infinite scroll and there is nothing you can do about it")
+        var ellipsis = document.getElementById("loading-total");
+        var end = document.getElementById("end");
+        ellipsis.style.display = "block";
+        end.style.display = "none";
+        // await sleep(500);
         infiniteScroll();
+
+
     }
  });
+
+ $(window).scroll(function() {
+    if($(window).scrollTop() + $(window).height() > $(document).height()-25) {
+        console.log("reached very end")
+        var ellipsis = document.getElementById("loading-total");
+        var end = document.getElementById("end");
+        ellipsis.style.display = "none";
+        end.style.display = "block";
+        
+    } 
+ });
+ 
 
 function showUpdateModal(){
 
@@ -1055,6 +1118,9 @@ document.getElementById("new-scrape-close-2").style.visibility = "hidden";
 }
 
 
+function sleep_2(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
