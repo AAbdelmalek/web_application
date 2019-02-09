@@ -35,7 +35,8 @@ var days;
 var scroller = 0.5;
 
 
-search_loader.href = "#";
+if (search_loader !== null){
+    search_loader.href = "#";}
 
 if(document.getElementById("update-scrape-load") !==null){
 
@@ -1124,3 +1125,7 @@ async function percentComplete(){
 // Feedback submitted
 // </div>`
 // }
+
+function hideSearch(){
+    document.getElementById("search-hide").style.visibility = "hidden";
+}

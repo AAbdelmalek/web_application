@@ -34,6 +34,14 @@ percent_complete = 100
 # Initialize Flask
 app = Flask(__name__)
 
+# About Page
+@app.route("/about")
+def aboutPage():
+
+
+	return render_template("about.html")
+
+
 # Load Progress
 @app.route("/loading")
 def percent():

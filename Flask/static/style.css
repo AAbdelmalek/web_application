@@ -241,7 +241,8 @@ overflow-wrap: inherit;
 }
 
 .card:hover{
-  opacity : 0.75; 
+  /* opacity : 0.75;  */
+  opacity:1;
   box-shadow: 0px 0px 10px 5px #87AFC7 !important;
   border : solid;
   /* border-width: 10px !important; */
@@ -314,7 +315,7 @@ font-size: 11pt;
   height:7px;
 }
 
-html{
+.min-width{
   min-width:995px !important;        /* Suppose you want minimum width of 1000px */
   /* width: auto !important; 
   width:995px !important;             */
@@ -338,4 +339,29 @@ h5{
 min-width:995px !important;
 
 
+}
+
+.about-text{
+
+/* width:100%;
+height: 50%; */
+background-color: white !important;
+font-weight:100 !important;
+padding: 10px;
+}
+
+/* h6 {
+  display: inline-block;
+} */
+
+/* 
+#about-nav{
+height:10px !important;
+
+
+} */
+
+.update-scrape-load-2{
+
+  height:7px ! important;
 }
