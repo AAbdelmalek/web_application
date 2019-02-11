@@ -25,6 +25,9 @@ var x = [];
 var y = [];
 var number_videos;
 var x_range;
+var x_publish_range_max;
+var x_publish_range_min;
+
 
 function getData(data) {
 
@@ -131,13 +134,27 @@ data = [{
 // ]
 number_videos = normalize.length;
 if (number_videos < 50){
+// Max
+  x_range_min = 1;
+}
+// 50 vids
+else {
 
-  x_range = number_videos;
+  x_range_min = number_videos-50;
+
+}
+
+if (number_videos < 50){
+// Max
+  x_publish_range_max = published[published.length-50];
+  x_publish_range_min = published[published.length-1];
 }
 
 else{
+// 50 vids
+x_publish_range_max = published[0];
+x_publish_range_min = published[49];
 
-  x_range = 50;
 
 }
 
@@ -146,8 +163,8 @@ var layout = {
   // updatemenus:updatemenus,
   xaxis: {
         text: video_info,
-    title: 'Time',
-    range:[1,x_range],
+    title: 'Upload #',
+    range:[x_range_min,number_videos],
     // autorange: true,
     // range: [0,normalize.length],
     // rangeselector: {buttons: [
@@ -165,7 +182,7 @@ var layout = {
     //     },
     //     {step: 'all'}
     //   ]},
-    rangeslider: {range: [normalize.length, normalize.length-10]},
+    rangeslider: {range: [1, normalize.length]},
     type: 'linear',
 
 
@@ -260,7 +277,7 @@ function switch_data(data) {
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Time',
-        range:[1,x_range],
+        range:[x_range_min,number_videos],
         // range: [0,normalize.length],
         // rangeselector: {buttons: [
         //     {
@@ -277,7 +294,7 @@ function switch_data(data) {
         //     },
         //     {step: 'all'}
         //   ]},
-        rangeslider: {range: [normalize.length, normalize.length-10]},
+        rangeslider: {range: [1, normalize.length]},
         type: 'linear',
     
     
@@ -312,7 +329,7 @@ function switch_data(data) {
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Time',
-        range:[1,x_range],
+        range:[x_range_min,number_videos],
         // range: [0,normalize.length],
         // rangeselector: {buttons: [
         //     {
@@ -329,7 +346,7 @@ function switch_data(data) {
         //     },
         //     {step: 'all'}
         //   ]},
-        rangeslider: {range: [normalize.length, normalize.length-10]},
+        rangeslider: {range: [1, normalize.length]},
         type: 'linear',
     
     
@@ -365,7 +382,7 @@ function switch_data(data) {
     // updatemenus:updatemenus,
     xaxis: {
       title: 'Time',
-      range:[1,x_range],
+      range:[x_range_min,number_videos],
       // range: [0,normalize.length],
       // rangeselector: {buttons: [
       //     {
@@ -382,7 +399,7 @@ function switch_data(data) {
       //     },
       //     {step: 'all'}
       //   ]},
-      rangeslider: {range: [normalize.length, normalize.length-10]},
+      rangeslider: {range: [1, normalize.length]},
       type: 'linear',
   
   
@@ -420,7 +437,7 @@ function switch_data(data) {
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Time',
-        range:[1,x_range],
+        range:[x_range_min,number_videos],
         // range: [0,normalize.length],
         // rangeselector: {buttons: [
         //     {
@@ -437,7 +454,7 @@ function switch_data(data) {
         //     },
         //     {step: 'all'}
         //   ]},
-        rangeslider: {range: [normalize.length, normalize.length-10]},
+        rangeslider: {range: [1, normalize.length]},
         type: 'linear',
     
     
@@ -509,7 +526,7 @@ function switch_data(data) {
     // updatemenus:updatemenus,
     xaxis: {
       title: 'Views',
-      range:[1,x_range],
+      range:[x_range_min,number_videos],
       // range: [0,normalize.length],
       // rangeselector: {buttons: [
       //     {
@@ -563,8 +580,8 @@ function switch_data(data) {
     title: 'Views Time Series',
     // updatemenus:updatemenus,
     xaxis: {
-      title: 'Time',
-      range:[1,x_range],
+      title: 'Upload #',
+      range:[x_range_min,number_videos],
       // range: [0,normalize.length],
       // rangeselector: {buttons: [
       //     {
@@ -581,7 +598,7 @@ function switch_data(data) {
       //     },
       //     {step: 'all'}
       //   ]},
-      rangeslider: {range: [normalize.length, normalize.length-10]},
+      rangeslider: {range: [1, normalize.length]},
       type: 'linear',
   
   
@@ -1001,9 +1018,18 @@ function normalize_data(){
 // console.log(which_data);
   if(which_data !== "Likes/View Ratio"){
 
-    if (document.getElementById("normalize").innerHTML === "Denormalize"){
 
+    if (document.getElementById("normalize").innerHTML === "Denormalize"){
+    update = {
+      'xaxis.range': [x_publish_range_min,x_publish_range_max], 
+      'xaxis.rangeslider': {range: [published[0], published[published.length]]},
+      'xaxis.title' :    {text: 'Date'},
+ 
+    };
+    
     Plotly.restyle("timeseries", "x", [published], { responsive: true });
+
+    Plotly.relayout("timeseries", update);
 
     document.getElementById("normalize").innerHTML = "Normalize";
 
@@ -1011,7 +1037,16 @@ function normalize_data(){
 
     else if (document.getElementById("normalize").innerHTML === "Normalize"){
 
+      update = {
+        'xaxis.range': [x_range_min,number_videos], 
+        'xaxis.rangeslider': {range: [x_publish_range_min, x_publish_range_max]},
+        'xaxis.title' :    {text: 'Upload #'},
+  
+      };
+
       Plotly.restyle("timeseries", "x", [normalize], { responsive: true });
+
+      Plotly.relayout("timeseries", update);
 
       document.getElementById("normalize").innerHTML = "Denormalize";
 
@@ -1086,8 +1121,12 @@ if (document.getElementById("hide-me").style.display !== "none"){
     // Plotly.restyle('timeseries', {
     //   responsive:true,
     // })
+    update = {
+      responsive: true,
 
-    Plotly.relayout({responsive:true})
+    };
+
+    Plotly.relayout("timeseries", update);
 
 }
 
@@ -1115,6 +1154,13 @@ else{
     // Plotly.restyle('timeseries', {
     //   responsive:true,
     // })
+
+    update = {
+      responsive: true,
+
+    };
+
+    Plotly.relayout("timeseries", update);
 
 }
 
