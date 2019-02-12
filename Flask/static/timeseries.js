@@ -27,6 +27,9 @@ var number_videos;
 var x_range;
 var x_publish_range_max;
 var x_publish_range_min;
+var x_perf_min;
+var current_graph;
+var rangeslider = 1;
 
 
 function getData(data) {
@@ -43,13 +46,13 @@ function getData(data) {
     video_info.push(scrape_data[i]["TITLE"] + "<br>" + current_video_url);
     video_url.push(scrape_data[i]["URL"]);
     video_title.push(scrape_data[i]["TITLE"]);
-    normalize_ordered.push(i);
+    normalize_ordered.push(i+1);
     normalize.push(scrape_data.length-i);
     published.push(scrape_data[i]["PUBLISHED_STR"]);
     views.push(scrape_data[i]["VIEWS"]);
     duration.push(scrape_data[i]["DURATION"]);
     likes.push(scrape_data[i]["LIKES"]);
-    likeview_ratio.push(likes[i]/views[i]);
+    likeview_ratio.push((likes[i]*1000)/views[i]);
     total_likes = total_likes + likes[i];
     total_likes_str = total_likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     total_views = total_views + parseInt(views[i]);
@@ -146,14 +149,18 @@ else {
 
 if (number_videos < 50){
 // Max
-  x_publish_range_max = published[published.length-50];
+  x_publish_range_max = published[0];
+  console.log(`x max date: ${x_publish_range_max}`);
   x_publish_range_min = published[published.length-1];
+  console.log(`x min date: ${x_publish_range_min}`);
 }
 
 else{
 // 50 vids
 x_publish_range_max = published[0];
+console.log(`x max date: ${x_publish_range_max}`);
 x_publish_range_min = published[49];
+console.log(`x min date: ${x_publish_range_min}`);
 
 
 }
@@ -195,14 +202,14 @@ var layout = {
     type: 'linear'
   }
 
-  
 };
 
   likeViewRatio(views,likeview_ratio);
 
   Plotly.plot("timeseries", data, layout, { responsive: true });
 
-
+  current_graph = "views_timeseries";
+  rangeslider = 1;
   getPerformanceData(views, likeview_ratio);
   getBubbleData(published,views,likes,duration, total_likes);
 }
@@ -306,9 +313,12 @@ function switch_data(data) {
         // range: [Math.min(...views),Math.max(...views)],
         type: 'linear'
       }
+
     };
-    
+      current_graph = "views_timeseries";
+      rangeslider = 1;
     break;
+
   case "Duration Time Series":
   data=[{
     text: video_info,
@@ -359,7 +369,8 @@ function switch_data(data) {
         type: 'linear'
       }
     };
-    
+      current_graph = "duration_timeseries";
+      rangeslider = 1;
     break;
   case "Likes Time Series":
   data=[{
@@ -412,6 +423,9 @@ function switch_data(data) {
       type: 'linear'
     }
   };
+  current_graph = "likes_timeseries";
+  rangeslider = 1;
+
     break;
     case "Bubble":
     data = [{
@@ -467,6 +481,8 @@ function switch_data(data) {
         type: 'linear'
       }
     };
+    current_graph = "bubble";
+    rangeslider = 1;
     break;
   // case "Views vs Views/Likes":
   //   x = views;
@@ -521,11 +537,13 @@ function switch_data(data) {
       line:{color:'blue',
       opacity:0.7},
   },}]
+  console.log(x_range_min);
+  console.log(number_videos);
   var layout = {
     title: 'Likes/View Ratio vs Views',
     // updatemenus:updatemenus,
     xaxis: {
-      title: 'Views',
+      title: 'Views (Increasing)',
       range:[x_range_min,number_videos],
       // range: [0,normalize.length],
       // rangeselector: {buttons: [
@@ -543,14 +561,14 @@ function switch_data(data) {
       //     },
       //     {step: 'all'}
       //   ]},
-      rangeslider: {range: [normalize.length, normalize.length-10]},
+      rangeslider: {range: [1, normalize.length]},
       type: 'linear',
   
   
     },
   
     yaxis: {
-      title: 'Likes/View',
+      title: 'Likes/1,000 Views',
       autorange: true,
       // range: [Math.min(...views),Math.max(...views)],
       type: 'linear'
@@ -558,6 +576,8 @@ function switch_data(data) {
     
 
   };
+  current_graph = "likeview_ratio";
+  rangeslider = 1;
     break;
   default:
   data=[{
@@ -611,6 +631,7 @@ function switch_data(data) {
       type: 'linear'
     }
   };
+  current_graph = "views_timeseries";
     break;
   }
 
@@ -776,7 +797,7 @@ function getPerformanceData(views, likeview_ratio) {
       },
       xaxis: {
         title: {
-          text: 'Views',
+          text: 'Views (Increasing Scale)',
           // font: {
           //   family: 'Courier New, monospace',
           //   size: 18,
@@ -1057,16 +1078,41 @@ function normalize_data(){
   else{
 
     if (document.getElementById("normalize").innerHTML === "Denormalize"){
+      if (perf_views.length < 50){
+
+        x_perf_min = perf_views[0]
+        console.log(`perf min ${x_perf_min}`);
+      }
+      else{
+        x_perf_min = perf_views[perf_views.length-50]
+        console.log(`perf min ${x_perf_min}`);
+      }
+      
+      update = {
+        'xaxis.range': [perf_views[0],perf_views[perf_views.length-1]], 
+        'xaxis.rangeslider': {range: [x_perf_min, perf_views[perf_views.length-1]]},
+        'xaxis.title' :    {text: 'Views (Count)'},
+  
+      };
 
       Plotly.restyle("timeseries", "x", [perf_views], { responsive: true });
+
+      Plotly.relayout("timeseries", update);
   
       document.getElementById("normalize").innerHTML = "Normalize";
   
       }
-  
+
       else if (document.getElementById("normalize").innerHTML === "Normalize"){
-  
+        update = {
+          'xaxis.range': [x_range_min,number_videos], 
+          'xaxis.rangeslider': {range: [1, normalize.length]},
+          'xaxis.title' :    {text: 'Views (Increasing)'},
+    
+        };
         Plotly.restyle("timeseries", "x", [normalize_ordered], { responsive: true });
+
+        Plotly.relayout("timeseries", update);
   
         document.getElementById("normalize").innerHTML = "Denormalize";
   
@@ -1218,11 +1264,394 @@ function emptyBug() {
 
 function resizeTimeseries(){
 
-  Plotly.relayout('timeseries', {
+  update = {
+    responsive: true,
 
-  });
+  };
+
+  Plotly.relayout("timeseries", update);
 
 }
+
+
+function removeRangeslider(){
+
+  if (current_graph === "views_timeseries" && rangeslider === 1 && document.getElementById("normalize").innerHTML === "Denormalize"){
+    layout = {
+      title: 'Views Time Series',
+
+      xaxis: {
+            text: video_info,
+        title: 'Upload #',
+        range:[x_range_min,number_videos],
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Views',
+        autorange: true,
+        type: 'linear'
+      }
+    
+    };
+  Plotly.relayout("timeseries", layout);
+  rangeslider = 0;}
+
+  else if (current_graph === "views_timeseries" && rangeslider === 0 && document.getElementById("normalize").innerHTML === "Denormalize"){
+    layout = {
+      title: 'Views Time Series',
+
+      xaxis: {
+            text: video_info,
+        title: 'Upload #',
+        range:[x_range_min,number_videos],
+        rangeslider: {range: [1, normalize.length]},
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Views',
+        autorange: true,
+        type: 'linear'
+      }
+    
+    };
+    rangeslider = 1;
+  Plotly.relayout("timeseries", layout);}
+
+  else if (current_graph === "duration_timeseries" && rangeslider === 1 && document.getElementById("normalize").innerHTML === "Denormalize"){
+
+    layout = {
+      title: 'Duration Time Series',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Time',
+        range:[x_range_min,number_videos],
+        // range: [0,normalize.length],
+        // rangeselector: {buttons: [
+        //     {
+        //       count: 1,
+        //       label: '1m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {
+        //       count: 6,
+        //       label: '6m',
+        //       step: 'month',
+        //       stepmode: 'backward'
+        //     },
+        //     {step: 'all'}
+        //   ]},
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Duration (mins)',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
+      }
+    };
+  rangeslider = 0;
+  Plotly.relayout("timeseries", layout);
+   }
+
+   else if (current_graph === "duration_timeseries" && rangeslider === 0 && document.getElementById("normalize").innerHTML === "Denormalize"){
+
+      layout = {
+        title: 'Duration Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+          // range: [0,normalize.length],
+          // rangeselector: {buttons: [
+          //     {
+          //       count: 1,
+          //       label: '1m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {
+          //       count: 6,
+          //       label: '6m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {step: 'all'}
+          //   ]},
+          rangeslider: {range: [1, normalize.length]},
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Duration (mins)',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+      };
+    rangeslider = 1;
+    Plotly.relayout("timeseries", layout);}
+
+    else if (current_graph === "likes_timeseries" && rangeslider === 1 && document.getElementById("normalize").innerHTML === "Denormalize"){
+      layout = {
+        title: 'Likes Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+          // range: [0,normalize.length],
+          // rangeselector: {buttons: [
+          //     {
+          //       count: 1,
+          //       label: '1m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {
+          //       count: 6,
+          //       label: '6m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {step: 'all'}
+          //   ]},
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Likes',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+      };
+    rangeslider = 0;
+    Plotly.relayout("timeseries", layout);
+    }
+
+
+    else if (current_graph === "likes_timeseries" && rangeslider === 0 && document.getElementById("normalize").innerHTML === "Denormalize"){
+      layout = {
+        title: 'Likes Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+          // range: [0,normalize.length],
+          // rangeselector: {buttons: [
+          //     {
+          //       count: 1,
+          //       label: '1m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {
+          //       count: 6,
+          //       label: '6m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {step: 'all'}
+          //   ]},
+          rangeslider: {range: [1, normalize.length]},
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Likes',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+      };
+    rangeslider = 1;
+    Plotly.relayout("timeseries", layout);
+    }
+
+    else if (current_graph === "bubble" && rangeslider === 1 && document.getElementById("normalize").innerHTML === "Denormalize"){
+
+      layout = {
+        title: 'Views Time Series with Likes',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+          // range: [0,normalize.length],
+          // rangeselector: {buttons: [
+          //     {
+          //       count: 1,
+          //       label: '1m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {
+          //       count: 6,
+          //       label: '6m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {step: 'all'}
+          //   ]},
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Views',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+      };
+      rangeslider = 0;
+      Plotly.relayout("timeseries", layout);
+
+    } 
+       else if (current_graph === "bubble" && rangeslider === 0 && document.getElementById("normalize").innerHTML === "Denormalize"){
+
+      layout = {
+        title: 'Views Time Series with Likes',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+          // range: [0,normalize.length],
+          // rangeselector: {buttons: [
+          //     {
+          //       count: 1,
+          //       label: '1m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {
+          //       count: 6,
+          //       label: '6m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {step: 'all'}
+          //   ]},
+          rangeslider: {range: [1, normalize.length]},
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Views',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+      };
+      rangeslider = 1;
+      Plotly.relayout("timeseries", layout);
+
+    } 
+    else if (current_graph === "likeview_ratio" && rangeslider === 1 && document.getElementById("normalize").innerHTML === "Denormalize"){
+      layout = {
+        title: 'Likes/View Ratio vs Views',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Views (Increasing)',
+          range:[x_range_min,number_videos],
+          // range: [0,normalize.length],
+          // rangeselector: {buttons: [
+          //     {
+          //       count: 1,
+          //       label: '1m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {
+          //       count: 6,
+          //       label: '6m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {step: 'all'}
+          //   ]},
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Likes/1,000 Views',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+        
+    
+      };
+      rangeslider = 0;
+      Plotly.relayout("timeseries", layout);
+
+    }
+    else if (current_graph === "likeview_ratio" && rangeslider === 0 && document.getElementById("normalize").innerHTML === "Denormalize"){
+      layout = {
+        title: 'Likes/View Ratio vs Views',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Views (Increasing)',
+          range:[x_range_min,number_videos],
+          // range: [0,normalize.length],
+          // rangeselector: {buttons: [
+          //     {
+          //       count: 1,
+          //       label: '1m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {
+          //       count: 6,
+          //       label: '6m',
+          //       step: 'month',
+          //       stepmode: 'backward'
+          //     },
+          //     {step: 'all'}
+          //   ]},
+          rangeslider: {range: [1, normalize.length]},
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Likes/1,000 Views',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+        
+    
+      };
+      rangeslider = 1;
+      Plotly.relayout("timeseries", layout);
+
+    }
+  }
+
+
+
+ 
 
 
 

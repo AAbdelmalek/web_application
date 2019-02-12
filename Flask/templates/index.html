@@ -38,14 +38,14 @@
 To DO 2:
 
 Front-end
-- like/view ratio -> fix xrange and range slider, like others
-- like/view ratio is missing last value (or first?), or some value -- 
+- like/view ratio -> fix xrange and range slider for denormalization
 - expand/collapse -> works more now, continue to fix
-      -  breaks when expanded and switching graph
-      - breaks when first expand/collapse wihtout resizing window
+    - breaks when first expand/collapse wihtout resizing window
+- range slider
+    - build out denormalized version
 - fix min width weirdness regarding "About" button and resize small
-- have scale auto change depending on data range -- 
 - update load-bar not transparent background -- this is some BS
+
 
 Back-end
 
@@ -79,7 +79,8 @@ OOS/Other Ideas/Next
 - avicii "bug"?
 - make scroll to last position when return from analytics page? -- 
 - make scroll function async delay with load message at end of page -- 
-- hover over image home page, bottom white with name is not clickable -- 
+- hover over image home page, bottom white with name is not clickable --
+- have y-scale auto change depending on data range --  
 
 Done:
 - One video bug -- /pull?name=UC6ExEo3eNL55yggpB5AIMAA -- Made this error out - no point if one video, nothing to analyze
@@ -116,6 +117,9 @@ Done:
 - make infinite scroll pretty -- DONE
 - Set rangeslider to be 10 videos --
     => set to be 50 videos or max, need to fix it with dates/denormalize though -- DONE
+- like/view ratio is missing last value (or first?), or some value -- Not missing anything, the x range starts at 0 NOT 1 which accounts for the discrepancy
+
+
 -->
 
  <head>

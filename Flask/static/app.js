@@ -34,6 +34,7 @@ var artist_db_name;
 var days;
 var scroller = 0.5;
 var sleeper;
+var end_page = 0;
 
 
 if (search_loader !== null){
@@ -972,6 +973,7 @@ function infiniteScroll(){
 </div>
  
     `
+    
                 //<span id="loader-${counter+1}"><img src="/static/load.gif" height="40" width="auto" style="display: block;margin-left: auto;margin-right: auto;"></span>
 
 
@@ -981,9 +983,28 @@ function infiniteScroll(){
                 if(document.getElementById('new-deck') != null){
                 document.getElementById('new-deck').innerHTML += new_deck; }
 
-        }     
 
-      });
+
+    
+
+                    }     
+                    else{
+
+                        console.log("you have reached the end of the database!!!");
+                        end_page = 1;
+                        var ellipsis = document.getElementById("loading-total");
+                        var end = document.getElementById("end");
+                        ellipsis.style.display = "none";
+                        end.style.display = "block";
+                
+                    }
+      }
+      
+      
+      
+      );
+
+    
     //   var end = document.getElementById("end");
     //   var ellipsis = document.getElementById("loading-total");
     //   end.style.display = "block";
@@ -1058,7 +1079,8 @@ async function ellipsisLoad(){
 
 
   $(window).scroll(async function() {
-    if($(window).scrollTop() + $(window).height() > $(document).height()-250*scroller) {
+  // if($(window).scrollTop() + $(window).height() > $(document).height()-250*scroller) {
+     if($(window).scrollTop() + $(window).height() > $(document).height()-250*scroller && end_page === 0) {     
         scroller++;
         
 
@@ -1075,16 +1097,16 @@ async function ellipsisLoad(){
     }
  });
 
- $(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() > $(document).height()-25) {
-        console.log("reached very end")
-        var ellipsis = document.getElementById("loading-total");
-        var end = document.getElementById("end");
-        ellipsis.style.display = "none";
-        end.style.display = "block";
+//  $(window).scroll(function() {
+//     if($(window).scrollTop() + $(window).height() > $(document).height()-25) {
+//         console.log("reached very end")
+//         var ellipsis = document.getElementById("loading-total");
+//         var end = document.getElementById("end");
+//         ellipsis.style.display = "none";
+//         end.style.display = "block";
         
-    } 
- });
+//     } 
+//  });
  
 
 function showUpdateModal(){
