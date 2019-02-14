@@ -30,6 +30,7 @@ var x_publish_range_min;
 var x_perf_min;
 var current_graph;
 var rangeslider = 1;
+var is_denorm = 0;
 
 
 function getData(data) {
@@ -278,29 +279,14 @@ function switch_data(data) {
       line:{color:'blue',
       opacity:0.7},
   },}]
-
+if (rangeslider === 1){
     layout = {
       title: 'Views Time Series',
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Time',
         range:[x_range_min,number_videos],
-        // range: [0,normalize.length],
-        // rangeselector: {buttons: [
-        //     {
-        //       count: 1,
-        //       label: '1m',
-        //       step: 'month',
-        //       stepmode: 'backward'
-        //     },
-        //     {
-        //       count: 6,
-        //       label: '6m',
-        //       step: 'month',
-        //       stepmode: 'backward'
-        //     },
-        //     {step: 'all'}
-        //   ]},
+
         rangeslider: {range: [1, normalize.length]},
         type: 'linear',
     
@@ -314,9 +300,32 @@ function switch_data(data) {
         type: 'linear'
       }
 
-    };
+    };}
+
+    else if (rangeslider === 0){
+      layout = {
+        title: 'Views Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Views',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+  
+      };
+    }
       current_graph = "views_timeseries";
-      rangeslider = 1;
+
     break;
 
   case "Duration Time Series":
@@ -334,28 +343,13 @@ function switch_data(data) {
       line:{color:'blue',
       opacity:0.7},
   },}]
+  if (rangeslider === 1){
     layout = {
       title: 'Duration Time Series',
-      // updatemenus:updatemenus,
+
       xaxis: {
         title: 'Time',
         range:[x_range_min,number_videos],
-        // range: [0,normalize.length],
-        // rangeselector: {buttons: [
-        //     {
-        //       count: 1,
-        //       label: '1m',
-        //       step: 'month',
-        //       stepmode: 'backward'
-        //     },
-        //     {
-        //       count: 6,
-        //       label: '6m',
-        //       step: 'month',
-        //       stepmode: 'backward'
-        //     },
-        //     {step: 'all'}
-        //   ]},
         rangeslider: {range: [1, normalize.length]},
         type: 'linear',
     
@@ -368,10 +362,31 @@ function switch_data(data) {
         // range: [Math.min(...views),Math.max(...views)],
         type: 'linear'
       }
-    };
+    };}
+
+    else if (rangeslider === 0){
+      layout = {
+        title: 'Duration Time Series',
+  
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Duration (mins)',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+      };}
       current_graph = "duration_timeseries";
-      rangeslider = 1;
+      // rangeslider = 1;
     break;
+
   case "Likes Time Series":
   data=[{
     text: video_info,
@@ -379,7 +394,7 @@ function switch_data(data) {
     y : likes,
     mode: 'lines+markers',
     type: 'scatter',
-    // opacity: 0.6,
+
     marker: {
       size: 8,
       opacity: 0.3,
@@ -387,29 +402,14 @@ function switch_data(data) {
       line:{color:'blue',
       opacity:0.7},
   },}]
-
+  if (rangeslider === 1){
   var layout = {
     title: 'Likes Time Series',
-    // updatemenus:updatemenus,
+
     xaxis: {
       title: 'Time',
       range:[x_range_min,number_videos],
-      // range: [0,normalize.length],
-      // rangeselector: {buttons: [
-      //     {
-      //       count: 1,
-      //       label: '1m',
-      //       step: 'month',
-      //       stepmode: 'backward'
-      //     },
-      //     {
-      //       count: 6,
-      //       label: '6m',
-      //       step: 'month',
-      //       stepmode: 'backward'
-      //     },
-      //     {step: 'all'}
-      //   ]},
+
       rangeslider: {range: [1, normalize.length]},
       type: 'linear',
   
@@ -419,12 +419,38 @@ function switch_data(data) {
     yaxis: {
       title: 'Likes',
       autorange: true,
-      // range: [Math.min(...views),Math.max(...views)],
+
       type: 'linear'
     }
-  };
+  };}
+
+  else{
+    var layout = {
+      title: 'Likes Time Series',
+  
+      xaxis: {
+        title: 'Time',
+        range:[x_range_min,number_videos],
+  
+
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Likes',
+        autorange: true,
+  
+        type: 'linear'
+      }
+    };
+
+
+
+  }
   current_graph = "likes_timeseries";
-  rangeslider = 1;
+  // rangeslider = 1;
 
     break;
     case "Bubble":
@@ -436,8 +462,7 @@ function switch_data(data) {
       marker: {
         size: likes,
         sizemode: 'area',
-        // color:'#0099CC',
-        // color:"#2AD341",
+
         color:'blue',
         sizeref: size,
         },
@@ -446,28 +471,14 @@ function switch_data(data) {
 
     }];
   
+    if(rangeslider === 1){
     var layout = {
       title: 'Views Time Series with Likes',
-      // updatemenus:updatemenus,
+
       xaxis: {
         title: 'Time',
         range:[x_range_min,number_videos],
-        // range: [0,normalize.length],
-        // rangeselector: {buttons: [
-        //     {
-        //       count: 1,
-        //       label: '1m',
-        //       step: 'month',
-        //       stepmode: 'backward'
-        //     },
-        //     {
-        //       count: 6,
-        //       label: '6m',
-        //       step: 'month',
-        //       stepmode: 'backward'
-        //     },
-        //     {step: 'all'}
-        //   ]},
+
         rangeslider: {range: [1, normalize.length]},
         type: 'linear',
     
@@ -477,51 +488,39 @@ function switch_data(data) {
       yaxis: {
         title: 'Views',
         autorange: true,
-        // range: [Math.min(...views),Math.max(...views)],
+
         type: 'linear'
       }
-    };
+    };}
+    else{
+      var layout = {
+        title: 'Views Time Series with Likes',
+  
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+  
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Views',
+          autorange: true,
+  
+          type: 'linear'
+        }
+      };
+
+
+
+    }
+
     current_graph = "bubble";
-    rangeslider = 1;
+    // rangeslider = 1;
     break;
-  // case "Views vs Views/Likes":
-  //   x = views;
-  //   y = likeview_ratio;
-  //   var layout = {showlegend: true,
-  //     legend: {
-  //       x: 1,
-  //       y: 1},
-  //     title: {
-  //       text:'Views vs Views/Likes',
-  //       // font: {
-  //       //   family: 'Courier New, monospace',
-  //       //   size: 24
-  //       // },
-  //       xref: 'paper',
-  //       x: 0.5,
-  //     },
-  //     xaxis: {
-  //       title: {
-  //         text: 'Test',
-  //         font: {
-  //           family: 'Courier New, monospace',
-  //           size: 18,
-  //           color: '#7f7f7f'
-  //         }
-  //       },
-  //     },
-  //     yaxis: {
-  //       title: {
-  //         text: 'Test',
-  //         font: {
-  //           family: 'Courier New, monospace',
-  //           size: 18,
-  //           color: '#7f7f7f'
-  //         }
-  //       }
-  //     }
-  //   }
-    // break;
+
     case "Likes/View Ratio":
     data=[{
     text: video_info,  
@@ -539,28 +538,15 @@ function switch_data(data) {
   },}]
   console.log(x_range_min);
   console.log(number_videos);
-  var layout = {
+  if (rangeslider === 1){
+    
+    var layout = {
     title: 'Likes/View Ratio vs Views',
     // updatemenus:updatemenus,
     xaxis: {
       title: 'Views (Increasing)',
       range:[x_range_min,number_videos],
-      // range: [0,normalize.length],
-      // rangeselector: {buttons: [
-      //     {
-      //       count: 1,
-      //       label: '1m',
-      //       step: 'month',
-      //       stepmode: 'backward'
-      //     },
-      //     {
-      //       count: 6,
-      //       label: '6m',
-      //       step: 'month',
-      //       stepmode: 'backward'
-      //     },
-      //     {step: 'all'}
-      //   ]},
+ 
       rangeslider: {range: [1, normalize.length]},
       type: 'linear',
   
@@ -575,9 +561,38 @@ function switch_data(data) {
     }
     
 
-  };
+  };}
+
+  else{
+    var layout = {
+      title: 'Likes/View Ratio vs Views',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Views (Increasing)',
+        range:[x_range_min,number_videos],
+  
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Likes/1,000 Views',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
+      }
+      
+  
+    };
+
+
+  }
+
+
+
   current_graph = "likeview_ratio";
-  rangeslider = 1;
+  // rangeslider = 1;
     break;
   default:
   data=[{
@@ -596,41 +611,51 @@ function switch_data(data) {
   },
   }]
 
-  var layout = {
-    title: 'Views Time Series',
-    // updatemenus:updatemenus,
-    xaxis: {
-      title: 'Upload #',
-      range:[x_range_min,number_videos],
-      // range: [0,normalize.length],
-      // rangeselector: {buttons: [
-      //     {
-      //       count: 1,
-      //       label: '1m',
-      //       step: 'month',
-      //       stepmode: 'backward'
-      //     },
-      //     {
-      //       count: 6,
-      //       label: '6m',
-      //       step: 'month',
-      //       stepmode: 'backward'
-      //     },
-      //     {step: 'all'}
-      //   ]},
-      rangeslider: {range: [1, normalize.length]},
-      type: 'linear',
+  if (rangeslider === 1){
+    layout = {
+      title: 'Views Time Series',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Time',
+        range:[x_range_min,number_videos],
+
+        rangeslider: {range: [1, normalize.length]},
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Views',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
+      }
+
+    };}
+
+    else if (rangeslider === 0){
+      layout = {
+        title: 'Views Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Time',
+          range:[x_range_min,number_videos],
+
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Views',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
   
-  
-    },
-  
-    yaxis: {
-      title: 'Views',
-      autorange: true,
-      // range: [Math.min(...views),Math.max(...views)],
-      type: 'linear'
+      };
     }
-  };
   current_graph = "views_timeseries";
     break;
   }
@@ -1298,6 +1323,31 @@ function removeRangeslider(){
     };
   Plotly.relayout("timeseries", layout);
   rangeslider = 0;}
+
+  else if (current_graph === "views_timeseries" && rangeslider === 1 && document.getElementById("normalize").innerHTML === "Normalize"){
+    layout = {
+      title: 'Views Time Series',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Time',
+        range: [published[0], published[published.length]],
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Views',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
+      }
+
+    };
+    rangeslider = 0;
+  Plotly.relayout("timeseries", layout);}
+
+  
 
   else if (current_graph === "views_timeseries" && rangeslider === 0 && document.getElementById("normalize").innerHTML === "Denormalize"){
     layout = {

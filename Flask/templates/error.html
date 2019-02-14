@@ -63,69 +63,19 @@
             <div class="container">
                     
                     <div class="row">
-                        <div class="col-5 mx-auto shadow about-text card">
-                            <h6>What is youtubedata.<strong>io</strong>?</h6> 
-                              
-                              This is an on-demand YouTube web scraper. Unlike most web scrapers, users are able to
-                              initiate scrape requests at any time. Each request retrieves basic YouTube data,
-                              without the use of an API, and presents five graph types for visualization.
-                              Additionally, stale data can be overwritten via update requests. This way, once a request to get a content
-                              creator's data is fulfilled, it won't be stale forever. 
-                            
-                            </div>
-       
-                            <div class="col-5 mx-auto shadow about-text card">
-                                <h6>What inspired youtubedata.<strong>io</strong>?</h6> 
-                                This project was initially conceived to be a portal for users to retrieve gross income by content creator.
-                                However, other sites like this already exists, and estimates vary significantly. It is not possible to accurately provide any
-                                financial models through scraping publically available YouTube data. After a pivot, the site became
-                                a repository for the data that was originally intended to create the gross income estimates.        
-                            </div>
+                        <div class="col-6 mx-auto shadow text-center white-bg">
+                          <br>
+                            <h4>Something went wrong...click <a href="/">here</a> to go back.</h4> 
+                            <h6>Reason: {{reason}}</h6> 
+                            <img src="{{ url_for('static', filename='error.png') }}" height="280">
+                            <br>
+                            <br>
+                        </div>
 
                     </div>
             </div>
             <br>
-            <div class="container">
-                    
-                    <div class="row">
-                        <div class="col-5 mx-auto shadow about-text card">
-                            <h6>How was youtubedata.<strong>io</strong> created?</h6> 
-                              <!-- This web application was created using: -->
-                              <div class="row">
-                              <div class="col-6">
-                              <ul>
-                                <li><a href="http://flask.pocoo.org/" target="_blank">Flask</a></li>
-                                <li><a href="https://plot.ly/javascript/" target="_blank">plotly.js</a></li>
-                                <li><a href="https://d3js.org/" target="_blank">D3</a></li>
-                            </ul> 
-                            </div>
-
-                            <div class="col-6">
-                                    <ul>
-                                    <li><a href="https://pandas.pydata.org/" target="_blank">Pandas</a></li>
-                                    <li><a href="https://www.crummy.com/software/BeautifulSoup/" target="_blank">Beautiful Soup</a></li>
-                                    <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></li>
-
-                                
-                                </ul> 
-                            </div>
-                        </div>
-                        </div>
-       
-                            <div class="col-5 mx-auto shadow about-text card">
-                                <h6>Contact Information:</h6> 
-                                <ul>
-                                        <li><a href="https://www.github.com/aabdelmalek" target="_blank">GitHub</a></li>
-                                        <li><a href="https://www.linkedin.com/in/aliabdelmalek/" target="_blank">LinkedIn</a></li>
-                                        <li><a href="mailto:ali.abdelmalek@gmail.com" target="_top">Email</a></li>
-    
-                                    </ul>      
-                            </div>
-
-                    </div>
-            </div>
-            <br>
-            <br>
+            
         </div>
           
 <!-- Report Bug Modal -->

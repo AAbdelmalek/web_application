@@ -123,11 +123,11 @@ function search_progress_bar(){
 
 function load_bar(){
   if (window.location.href.includes("old") == false && window.location.href.includes("analytics")== false){
-
+        if(document.getElementById("button").value.trim() != ""){
             progress_bar.style.visibility = "visible"; 
             // loading_warning.style.visibility = "visible";
             document.getElementById("DS").href = "#";
-            window.location.href = url;
+            window.location.href = url;}
   }   
 
 
@@ -139,7 +139,7 @@ function load_bar(){
 
   else {
 
-
+    if(document.getElementById("button").value.trim() != ""){
     progress_bar_3.style.visibility = "visible"; 
 
     var first_search = window.location.href.split("name=")[1].split("&")[0]
@@ -157,7 +157,7 @@ function load_bar(){
 
     }
 
-
+}
 
 
 
