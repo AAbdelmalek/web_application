@@ -1179,7 +1179,7 @@ async function percentComplete(){
         var percent_complete = percent["PERCENT_COMPLETE"];
         // console.log(percent);
 
-        document.getElementById("update-scrape-load").style.cssText = `width : ${percent_complete}%;height:7px`;
+        document.getElementById("update-scrape-fix").style.cssText = `width : ${percent_complete}%;height:7px`;
 
 
     })}
