@@ -236,7 +236,7 @@ var layout = {
 // }
 
 function updatePlotly(data, layout) {
-  document.getElementById("normalize").innerHTML = "Denormalize";
+  // document.getElementById("normalize").innerHTML = "Denormalize";
 
   // Note the extra brackets around 'newx' and 'newy'
   Plotly.newPlot("timeseries", data, layout, { responsive: true });
@@ -267,8 +267,6 @@ function switch_data(data) {
   switch (data) {
   case "Views vs Time":
   
-  if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
-
     data=[{
       text: video_info,
       x : normalize,
@@ -305,325 +303,342 @@ function switch_data(data) {
       }
 
     }
-  }
   
-
-  else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){{
-    data=[{
-      text: video_info,
-      x : normalize,
-      y : views,
-      mode: 'lines+markers',
-      type: 'scatter',
-      // opacity: 0.6,
-      marker: {
-        size: 8,
-        opacity: 0.3,
-        color:'blue',
-        line:{color:'blue',
-        opacity:0.7},
-    },}]
-
-    layout = {
-      title: 'Views Time Series',
-      // updatemenus:updatemenus,
-      xaxis: {
-        title: 'Upload #',
-        range:[x_range_min,number_videos],
-        type: 'linear',
-    
-    
-      },
-    
-      yaxis: {
-        title: 'Views',
-        autorange: true,
-        // range: [Math.min(...views),Math.max(...views)],
-        type: 'linear'
-      }
-
-    }
-  }
-
-
-    
-  }
-
-// if (rangeslider === 1){
-//     layout = {
-//       title: 'Views Time Series',
-//       // updatemenus:updatemenus,
-//       xaxis: {
-//         title: 'Upload #',
-//         range:[x_range_min,number_videos],
-
-//         rangeslider: {range: [1, normalize.length]},
-//         type: 'linear',
-    
-    
-//       },
-    
-//       yaxis: {
-//         title: 'Views',
-//         autorange: true,
-//         // range: [Math.min(...views),Math.max(...views)],
-//         type: 'linear'
-//       }
-
-//     };}
-
-    else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
-      layout = {
-        title: 'Views Time Series',
-        // updatemenus:updatemenus,
-        xaxis: {
-          title: 'Date',
-          range:[x_publish_range_min,x_publish_range_max],
-
-          type: 'linear',
-      
-      
-        },
-      
-        yaxis: {
-          title: 'Views',
-          autorange: true,
-          // range: [Math.min(...views),Math.max(...views)],
-          type: 'linear'
-        }
-  
-      };
-
-      // range:[x_publish_range_min,x_publish_range_max],
-      // rangeslider: {range: [published[0], published[published.length]]},
-
-      data=[{
-        text: video_info,
-        x : published,
-        y : views,
-        mode: 'lines+markers',
-        type: 'scatter',
-        // opacity: 0.6,
-        marker: {
-          size: 8,
-          opacity: 0.3,
-          color:'blue',
-          line:{color:'blue',
-          opacity:0.7},
-      },}]
-      
-    }
-
-        else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
-      layout = {
-        title: 'Views Time Series',
-        // updatemenus:updatemenus,
-        xaxis: {
-          title: 'Date',
-          range:[x_publish_range_min,x_publish_range_max],
-
-          type: 'linear',
-      
-      
-        },
-      
-        yaxis: {
-          title: 'Views',
-          autorange: true,
-          // range: [Math.min(...views),Math.max(...views)],
-          type: 'linear'
-        }
-  
-      };
-
-      // range:[x_publish_range_min,x_publish_range_max],
-      // rangeslider: {range: [published[0], published[published.length]]},
-
-      data=[{
-        text: video_info,
-        x : published,
-        y : views,
-        mode: 'lines+markers',
-        type: 'scatter',
-        // opacity: 0.6,
-        marker: {
-          size: 8,
-          opacity: 0.3,
-          color:'blue',
-          line:{color:'blue',
-          opacity:0.7},
-      },}]
-      
-    }
-    else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
-      layout = {
-        title: 'Views Time Series',
-        // updatemenus:updatemenus,
-        xaxis: {
-          title: 'Date',
-          range:[x_publish_range_min,x_publish_range_max],
-          rangeslider: {range: [published[0], published[published.length]]},
-          type: 'linear',
-      
-      
-        },
-      
-        yaxis: {
-          title: 'Views',
-          autorange: true,
-          // range: [Math.min(...views),Math.max(...views)],
-          type: 'linear'
-        }
-  
-      };
-
-      // range:[x_publish_range_min,x_publish_range_max],
-      // rangeslider: {range: [published[0], published[published.length]]},
-
-      data=[{
-        text: video_info,
-        x : published,
-        y : views,
-        mode: 'lines+markers',
-        type: 'scatter',
-        // opacity: 0.6,
-        marker: {
-          size: 8,
-          opacity: 0.3,
-          color:'blue',
-          line:{color:'blue',
-          opacity:0.7},
-      },}]
-      
-    }
       current_graph = "views_timeseries";
 
     break;
 
   case "Duration Time Series":
-  data=[{
-    text: video_info,
-    x : normalize,
-    y : duration,
-    mode: 'lines+markers',
-    type: 'scatter',
-    // opacity: 0.6,
-    marker: {
-      size: 8,
-      opacity: 0.3,
-      color:'blue',
-      line:{color:'blue',
-      opacity:0.7},
-  },}]
-  if (rangeslider === 1){
+  if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
+    console.log("normalize no rangeslider");
+    data=[{
+      text: video_info,
+      x : normalize,
+      y : duration,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
+
     layout = {
       title: 'Duration Time Series',
-
+      // updatemenus:updatemenus,
       xaxis: {
         title: 'Upload #',
         range:[x_range_min,number_videos],
-        rangeslider: {range: [1, normalize.length]},
-        type: 'linear',
+
+       
+
     
     
       },
     
       yaxis: {
-        title: 'Duration (mins)',
-        autorange: true,
-        // range: [Math.min(...views),Math.max(...views)],
-        type: 'linear'
-      }
-    };}
+        title: 'Duration',
 
-    else if (rangeslider === 0){
+      }
+
+    }
+  }
+  
+
+  else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 1){
+    console.log("normalize yes rangeslider");
+    data=[{
+      text: video_info,
+      x : normalize,
+      y : duration,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
+
+    layout = {
+      title: 'Duration Time Series',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Upload #',
+        range:[x_range_min,number_videos],
+        rangeslider: {range: [1, normalize.length]},
+
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Duration',
+
+      }
+
+    }
+  
+
+
+    
+  }
+
+    else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
+      console.log("denormalize no rangeslider");
       layout = {
         title: 'Duration Time Series',
-  
+        // updatemenus:updatemenus,
         xaxis: {
-          title: 'Upload #',
-          range:[x_range_min,number_videos],
-          type: 'linear',
+          
+          range:[x_publish_range_min,x_publish_range_max],
+          title: 'Date',
+      
+      
+      
+        },
+        yaxis: {
+          title: 'Duration',
+
+        }
+  
+      };
+
+      // range:[x_publish_range_min,x_publish_range_max],
+      // rangeslider: {range: [published[0], published[published.length]]},
+
+      data=[{
+        text: video_info,
+        x : published,
+        y : duration,
+        mode: 'lines+markers',
+        type: 'scatter',
+        // opacity: 0.6,
+        marker: {
+          size: 8,
+          opacity: 0.3,
+          color:'blue',
+          line:{color:'blue',
+          opacity:0.7},
+      },}]
+      
+    }
+
+        else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){
+          console.log("denormalize yes rangeslider");
+      layout = {
+        title: 'Duration Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Date',
+          range:[x_publish_range_min,x_publish_range_max],
+          rangeslider: {range: [published[0], published[published.length]]},
+
+
       
       
         },
       
         yaxis: {
-          title: 'Duration (mins)',
-          autorange: true,
-          // range: [Math.min(...views),Math.max(...views)],
-          type: 'linear'
+          title: 'Duration',
+
         }
-      };}
+  
+      };
+
+      // range:[x_publish_range_min,x_publish_range_max],
+      // rangeslider: {range: [published[0], published[published.length]]},
+
+      data=[{
+        text: video_info,
+        x : published,
+        y : duration,
+        mode: 'lines+markers',
+        type: 'scatter',
+        // opacity: 0.6,
+        marker: {
+          size: 8,
+          opacity: 0.3,
+          color:'blue',
+          line:{color:'blue',
+          opacity:0.7},
+      },}]
+      
+    }
+
       current_graph = "duration_timeseries";
       // rangeslider = 1;
     break;
 
   case "Likes Time Series":
-  data=[{
-    text: video_info,
-    x : normalize,
-    y : likes,
-    mode: 'lines+markers',
-    type: 'scatter',
+  if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
+    console.log("normalize no rangeslider");
+    data=[{
+      text: video_info,
+      x : normalize,
+      y : likes,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
 
-    marker: {
-      size: 8,
-      opacity: 0.3,
-      color:'blue',
-      line:{color:'blue',
-      opacity:0.7},
-  },}]
-  if (rangeslider === 1){
-  var layout = {
-    title: 'Likes Time Series',
-
-    xaxis: {
-      title: 'Upload #',
-      range:[x_range_min,number_videos],
-
-      rangeslider: {range: [1, normalize.length]},
-      type: 'linear',
-  
-  
-    },
-  
-    yaxis: {
-      title: 'Likes',
-      autorange: true,
-
-      type: 'linear'
-    }
-  };}
-
-  else{
-    var layout = {
+    layout = {
       title: 'Likes Time Series',
-  
+      // updatemenus:updatemenus,
       xaxis: {
-        title: 'Time',
+        title: 'Upload #',
         range:[x_range_min,number_videos],
-  
 
-        type: 'linear',
+       
+
     
     
       },
     
       yaxis: {
         title: 'Likes',
-        autorange: true,
-  
-        type: 'linear'
+
       }
-    };
 
-
-
+    }
   }
+  
+
+  else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 1){
+    console.log("normalize yes rangeslider");
+    data=[{
+      text: video_info,
+      x : normalize,
+      y : likes,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
+
+    layout = {
+      title: 'Likes Time Series',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Upload #',
+        range:[x_range_min,number_videos],
+        rangeslider: {range: [1, normalize.length]},
+
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Likes',
+
+      }
+
+    }
+  
+
+
+    
+  }
+
+    else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
+      console.log("denormalize no rangeslider");
+      layout = {
+        title: 'Likes Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          
+          range:[x_publish_range_min,x_publish_range_max],
+          title: 'Date',
+      
+      
+      
+        },
+        yaxis: {
+          title: 'Likes',
+
+        }
+  
+      };
+
+      // range:[x_publish_range_min,x_publish_range_max],
+      // rangeslider: {range: [published[0], published[published.length]]},
+
+      data=[{
+        text: video_info,
+        x : published,
+        y : likes,
+        mode: 'lines+markers',
+        type: 'scatter',
+        // opacity: 0.6,
+        marker: {
+          size: 8,
+          opacity: 0.3,
+          color:'blue',
+          line:{color:'blue',
+          opacity:0.7},
+      },}]
+      
+    }
+
+        else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){
+          console.log("denormalize yes rangeslider");
+      layout = {
+        title: 'Likes Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Date',
+          range:[x_publish_range_min,x_publish_range_max],
+          rangeslider: {range: [published[0], published[published.length]]},
+
+
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Likes',
+
+        }
+  
+      };
+
+      // range:[x_publish_range_min,x_publish_range_max],
+      // rangeslider: {range: [published[0], published[published.length]]},
+
+      data=[{
+        text: video_info,
+        x : published,
+        y : likes,
+        mode: 'lines+markers',
+        type: 'scatter',
+        // opacity: 0.6,
+        marker: {
+          size: 8,
+          opacity: 0.3,
+          color:'blue',
+          line:{color:'blue',
+          opacity:0.7},
+      },}]
+      
+    }
   current_graph = "likes_timeseries";
   // rangeslider = 1;
-
     break;
     case "Bubble":
     data = [{
@@ -639,110 +654,210 @@ function switch_data(data) {
         sizeref: size,
         },
       type: 'scatter',
-      opacity: 0.6,
+      opacity: 0.7,
 
     }];
+    if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
+      console.log("normalize no rangeslider");
+      data=[{
+        text: video_info,
+        x : normalize,
+        y : views,
+        mode: 'markers',
+        marker: {
+          size: likes,
+          sizemode: 'area',
   
-    if(rangeslider === 1){
-    var layout = {
-      title: 'Views Time Series with Likes',
-
-      xaxis: {
-        title: 'Upload #',
-        range:[x_range_min,number_videos],
-
-        rangeslider: {range: [1, normalize.length]},
-        type: 'linear',
-    
-    
-      },
-    
-      yaxis: {
-        title: 'Views',
-        autorange: true,
-
-        type: 'linear'
-      }
-    };}
-    else{
-      var layout = {
+          color:'blue',
+          sizeref: size,
+          },
+        type: 'scatter',
+        opacity: 0.7,
+  
+      }];
+  
+      layout = {
         title: 'Views Time Series with Likes',
-  
+        // updatemenus:updatemenus,
         xaxis: {
           title: 'Upload #',
           range:[x_range_min,number_videos],
   
-          type: 'linear',
+         
+  
       
       
         },
       
         yaxis: {
           title: 'Views',
-          autorange: true,
   
-          type: 'linear'
         }
-      };
-
-
-
+  
+      }
     }
+    
+  
+    else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 1){
+      console.log("normalize yes rangeslider");
+      data=[{
+        text: video_info,
+        x : normalize,
+        y : views,
+        mode: 'markers',
+        marker: {
+          size: likes,
+          sizemode: 'area',
+  
+          color:'blue',
+          sizeref: size,
+          },
+        type: 'scatter',
+        opacity: 0.7,
+  
+      }];
+  
+      layout = {
+        title: 'Views Time Series with Likes',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Upload #',
+          range:[x_range_min,number_videos],
+          rangeslider: {range: [1, normalize.length]},
+  
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Views',
+  
+        }
+  
+      }
+    
+  
+  
+      
+    }
+  
+      else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
+        console.log("denormalize no rangeslider");
+        layout = {
+          title: 'Views Time Series with Likes',
+          // updatemenus:updatemenus,
+          xaxis: {
+            
+            range:[x_publish_range_min,x_publish_range_max],
+            title: 'Date',
+        
+        
+        
+          },
+          yaxis: {
+            title: 'Views',
+  
+          }
+    
+        };
+  
+        // range:[x_publish_range_min,x_publish_range_max],
+        // rangeslider: {range: [published[0], published[published.length]]},
+  
+        data=[{
+          text: video_info,
+          x : published,
+          y : views,
+          mode: 'markers',
+          marker: {
+            size: likes,
+            sizemode: 'area',
+    
+            color:'blue',
+            sizeref: size,
+            },
+          type: 'scatter',
+          opacity: 0.7,
+    
+        }];
+        
+      }
+  
+          else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){
+            console.log("denormalize yes rangeslider");
+        layout = {
+          title: 'Views Time Series with Likes',
+          // updatemenus:updatemenus,
+          xaxis: {
+            title: 'Date',
+            range:[x_publish_range_min,x_publish_range_max],
+            rangeslider: {range: [published[0], published[published.length]]},
+  
+  
+        
+        
+          },
+        
+          yaxis: {
+            title: 'Views',
+  
+          }
+    
+        };
+  
+        // range:[x_publish_range_min,x_publish_range_max],
+        // rangeslider: {range: [published[0], published[published.length]]},
+  
+        data=[{
+          text: video_info,
+          x : published,
+          y : views,
+          mode: 'markers',
+          marker: {
+            size: likes,
+            sizemode: 'area',
+    
+            color:'blue',
+            sizeref: size,
+            },
+          type: 'scatter',
+          opacity: 0.7,
+    
+        }];
+        
+      }
+  
 
     current_graph = "bubble";
     // rangeslider = 1;
     break;
 
     case "Likes/View Ratio":
+
+  
+  if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
+    console.log("normalize no rangeslider");
     data=[{
-    text: video_info,  
-    x :normalize_ordered,
-    y : perf_ratio,
-    mode: 'lines+markers',
-    type: 'scatter',
-    // opacity: 0.6,
-    marker: {
-      size: 8,
-      opacity: 0.3,
-      color:'blue',
-      line:{color:'blue',
-      opacity:0.7},
-  },}]
-  console.log(x_range_min);
-  console.log(number_videos);
-  if (rangeslider === 1){
-    
-    var layout = {
-    title: 'Likes/View Ratio vs Views',
-    // updatemenus:updatemenus,
-    xaxis: {
-      title: 'Views (Increasing)',
-      range:[x_range_min,number_videos],
- 
-      rangeslider: {range: [1, normalize.length]},
-      type: 'linear',
-  
-  
-    },
-  
-    yaxis: {
-      title: 'Likes/1,000 Views',
-      autorange: true,
-      // range: [Math.min(...views),Math.max(...views)],
-      type: 'linear'
-    }
-    
+      text: video_info,
+      x : normalize_ordered,
+      y : perf_ratio,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
 
-  };}
-
-  else{
-    var layout = {
+    layout = {
       title: 'Likes/View Ratio vs Views',
       // updatemenus:updatemenus,
       xaxis: {
         title: 'Views (Increasing)',
         range:[x_range_min,number_videos],
-  
         type: 'linear',
     
     
@@ -757,33 +872,173 @@ function switch_data(data) {
       
   
     };
-
-
   }
+  
 
+  else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 1){
+    
+    data=[{
+      text: video_info,
+      x : normalize_ordered,
+      y : perf_ratio,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
 
+    layout = {
+      title: 'Likes/View Ratio vs Views',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Views (Increasing)',
+        range:[x_range_min,number_videos],
+   
+        rangeslider: {range: [x_perf_min, perf_views[perf_views.length-1]]},
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Likes/1,000 Views',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
+      }
+      
+  
+    };
+  }
+  
+
+    else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
+      if (perf_views.length < 50){
+
+        x_perf_min = perf_views[0]
+        console.log(`perf min ${x_perf_min}`);
+      }
+      else{
+        x_perf_min = perf_views[perf_views.length-50]
+        console.log(`perf min ${x_perf_min}`);
+      }
+
+      console.log("denormalize no rangeslider");
+      data=[{
+        text: video_info,
+        x : perf_views,
+        y : perf_ratio,
+        mode: 'lines+markers',
+        type: 'scatter',
+        // opacity: 0.6,
+        marker: {
+          size: 8,
+          opacity: 0.3,
+          color:'blue',
+          line:{color:'blue',
+          opacity:0.7},
+      },}]
+  
+      layout = {
+        title: 'Likes/View Ratio vs Views',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Views (Count)',
+          range:[x_perf_min,perf_views[perf_views.length-1]], 
+          type: 'linear',
+      
+      
+        },
+      
+        yaxis: {
+          title: 'Likes/1,000 Views',
+          autorange: true,
+          // range: [Math.min(...views),Math.max(...views)],
+          type: 'linear'
+        }
+        
+    
+      };
+      
+    }
+
+        else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){
+          if (perf_views.length < 50){
+
+            x_perf_min = perf_views[0]
+            console.log(`perf min ${x_perf_min}`);
+          }
+          else{
+            x_perf_min = perf_views[perf_views.length-50]
+            console.log(`perf min ${x_perf_min}`);
+          }
+          console.log("denormalize yes rangeslider");
+          data=[{
+            text: video_info,
+            x : perf_views,
+            y : perf_ratio,
+            mode: 'lines+markers',
+            type: 'scatter',
+            // opacity: 0.6,
+            marker: {
+              size: 8,
+              opacity: 0.3,
+              color:'blue',
+              line:{color:'blue',
+              opacity:0.7},
+          },}]
+      
+          layout = {
+            title: 'Likes/View Ratio vs Views',
+            // updatemenus:updatemenus,
+            xaxis: {
+              title: 'Views (Count)',
+              range:[x_perf_min,perf_views[perf_views.length-1]], 
+         
+              rangeslider: {range: [1, normalize.length]},
+              type: 'linear',
+          
+          
+            },
+          
+            yaxis: {
+              title: 'Likes/1,000 Views',
+              autorange: true,
+              // range: [Math.min(...views),Math.max(...views)],
+              type: 'linear'
+            }
+            
+        
+          };
+      
+    }
 
   current_graph = "likeview_ratio";
   // rangeslider = 1;
     break;
   default:
-  data=[{
-    text: video_info,
-    x : normalize,
-    y : views,
-    mode: 'lines+markers',
-    type: 'scatter',
-    // opacity: 0.6,
-    marker: {
-      size: 8,
-      opacity: 0.3,
-      color:'blue',
-      line:{color:'blue',
-      opacity:0.7},
-  },
-  }]
+  if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 0){
+    console.log("normalize no rangeslider");
+    data=[{
+      text: video_info,
+      x : normalize,
+      y : views,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
 
-  if (rangeslider === 1){
     layout = {
       title: 'Views Time Series',
       // updatemenus:updatemenus,
@@ -791,6 +1046,46 @@ function switch_data(data) {
         title: 'Upload #',
         range:[x_range_min,number_videos],
 
+       
+        type: 'linear',
+    
+    
+      },
+    
+      yaxis: {
+        title: 'Views',
+        autorange: true,
+        // range: [Math.min(...views),Math.max(...views)],
+        type: 'linear'
+      }
+
+    }
+  }
+  
+
+  else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider === 1){
+    console.log("normalize yes rangeslider");
+    data=[{
+      text: video_info,
+      x : normalize,
+      y : views,
+      mode: 'lines+markers',
+      type: 'scatter',
+      // opacity: 0.6,
+      marker: {
+        size: 8,
+        opacity: 0.3,
+        color:'blue',
+        line:{color:'blue',
+        opacity:0.7},
+    },}]
+
+    layout = {
+      title: 'Views Time Series',
+      // updatemenus:updatemenus,
+      xaxis: {
+        title: 'Upload #',
+        range:[x_range_min,number_videos],
         rangeslider: {range: [1, normalize.length]},
         type: 'linear',
     
@@ -804,30 +1099,95 @@ function switch_data(data) {
         type: 'linear'
       }
 
-    };}
+    }
+  
 
-    else if (rangeslider === 0){
+
+    
+  }
+
+    else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
+      console.log("denormalize no rangeslider");
       layout = {
         title: 'Views Time Series',
         // updatemenus:updatemenus,
         xaxis: {
-          title: 'Upload #',
-          range:[x_range_min,number_videos],
+          
+          range:[x_publish_range_min,x_publish_range_max],
+          title: 'Date',
+      
+      
+      
+        },
+        yaxis: {
+          title: 'Views',
 
-          type: 'linear',
+        }
+  
+      };
+
+      // range:[x_publish_range_min,x_publish_range_max],
+      // rangeslider: {range: [published[0], published[published.length]]},
+
+      data=[{
+        text: video_info,
+        x : published,
+        y : views,
+        mode: 'lines+markers',
+        type: 'scatter',
+        // opacity: 0.6,
+        marker: {
+          size: 8,
+          opacity: 0.3,
+          color:'blue',
+          line:{color:'blue',
+          opacity:0.7},
+      },}]
+      
+    }
+
+        else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){
+          console.log("denormalize yes rangeslider");
+      layout = {
+        title: 'Views Time Series',
+        // updatemenus:updatemenus,
+        xaxis: {
+          title: 'Date',
+          range:[x_publish_range_min,x_publish_range_max],
+          rangeslider: {range: [published[0], published[published.length]]},
+
+
       
       
         },
       
         yaxis: {
           title: 'Views',
-          autorange: true,
-          // range: [Math.min(...views),Math.max(...views)],
-          type: 'linear'
+
         }
   
       };
+
+      // range:[x_publish_range_min,x_publish_range_max],
+      // rangeslider: {range: [published[0], published[published.length]]},
+
+      data=[{
+        text: video_info,
+        x : published,
+        y : views,
+        mode: 'lines+markers',
+        type: 'scatter',
+        // opacity: 0.6,
+        marker: {
+          size: 8,
+          opacity: 0.3,
+          color:'blue',
+          line:{color:'blue',
+          opacity:0.7},
+      },}]
+      
     }
+
   current_graph = "views_timeseries";
     break;
   }
@@ -1334,13 +1694,14 @@ function normalize_data(){
   else{
 
     if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider == 1){
+      console.log("this is broken");
       if (perf_views.length < 50){
 
-        x_perf_min = perf_views[0]
+        var x_perf_min = perf_views[0]
         console.log(`perf min ${x_perf_min}`);
       }
       else{
-        x_perf_min = perf_views[perf_views.length-50]
+        var x_perf_min = perf_views[perf_views.length-50]
         console.log(`perf min ${x_perf_min}`);
       }
       
@@ -1360,6 +1721,7 @@ function normalize_data(){
       }
 
       else if (document.getElementById("normalize").innerHTML === "Denormalize" && rangeslider == 0 ){
+      console.log("rangeslider is fucked");
         if (perf_views.length < 50){
   
           x_perf_min = perf_views[0]
@@ -1390,12 +1752,14 @@ function normalize_data(){
         }   
 
       else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
+        console.log("normalize no rangeslider");
         // update = {
         //   'xaxis.range': [x_range_min,number_videos], 
         //   'xaxis.rangeslider': {range: [1, normalize.length]},
         //   'xaxis.title' :    {text: 'Views (Increasing)'},
     
         // };
+        
 
         layout = {
 
@@ -1417,6 +1781,7 @@ function normalize_data(){
       }
 
       else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){
+        
         update = {
           'xaxis.range': [x_range_min,number_videos], 
           'xaxis.rangeslider': {range: [1, normalize.length]},
@@ -1996,7 +2361,7 @@ else if (current_graph === "views_timeseries" && rangeslider === 0 && document.g
         },
       
         yaxis: {
-          title: 'Views',
+          title: 'Views (Count)',
           autorange: true,
           // range: [Math.min(...views),Math.max(...views)],
           type: 'linear'
@@ -2012,7 +2377,7 @@ else if (current_graph === "views_timeseries" && rangeslider === 0 && document.g
       layout = {
     
         xaxis: {
-          title: 'Likes (Count)',
+          title: 'Views (Count)',
           range: [perf_views[0],perf_views[perf_views.length-1]]
     
         },

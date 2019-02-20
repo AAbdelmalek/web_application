@@ -693,7 +693,7 @@ def newScrape():
 		"URL","ARTIST_CODE"]].set_index("ARTIST")
 
 		static_path = join(dirname(realpath(__file__)), 'static')
-		df_csv.to_csv(f"{static_path}/{input_name.replace('_replaced_','-')}_scrape.csv", encoding="utf-8")
+		df_csv.to_csv(f"{static_path}/{artist_name}.csv", encoding="utf-8")
 
 		# Saving to JSON
 		json_data = df.to_json(orient="records")
@@ -1395,7 +1395,7 @@ def newPull():
 		"URL","ARTIST_CODE"]].set_index("ARTIST")
 
 		static_path = join(dirname(realpath(__file__)), 'static')
-		df_csv.to_csv(f"{static_path}/{input_name}_scrape.csv", encoding="utf-8")
+		df_csv.to_csv(f"{static_path}/{artist_name}.csv", encoding="utf-8")
 
 		# Saving to JSON
 		json_data = df.to_json(orient="records")
