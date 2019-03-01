@@ -1848,7 +1848,8 @@ if (document.getElementById("hide-me").style.display !== "none"){
 
     };
 
-    Plotly.relayout("timeseries", update);
+    // Plotly.relayout("timeseries", update);
+    switch_data(which_data);
 
 }
 
@@ -1882,7 +1883,8 @@ else{
 
     };
 
-    Plotly.relayout("timeseries", update);
+    //Plotly.relayout("timeseries", update);
+    switch_data(which_data);
 
 }
 

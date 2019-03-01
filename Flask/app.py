@@ -2563,6 +2563,11 @@ cancel=cancel):
 			ARTIST VARCHAR(255) CHARACTER SET UTF8MB4,\
 			ARTIST_CODE VARCHAR(255) CHARACTER SET UTF8MB4 NOT NULL\
 			)")
+			
+			# Dropping Duplicates
+			print("dropping duplicates...")
+			connection.execute(f"DELETE FROM requests \
+			WHERE ARTIST_CODE = '{artist_db_name}'")			
 
 			# Insert Into Searches Table
 			connection.execute(f"INSERT INTO searches \
@@ -2587,9 +2592,9 @@ cancel=cancel):
 		# youtube_code = csv_filepath,
 		# scrape_date = scrape_date_str, not_found_in_db=0, content_creator=artist_db_name)
 
-	except:
+	except Exception as e:
 		# Creating Bad Requests Table
-
+		print(f"something went wrong!!! {e}")
 		site = "query"
 		connection.execute("\
 		CREATE TABLE IF NOT EXISTS bad_requests(\
