@@ -377,3 +377,16 @@ height:10px !important;
 background: white;
 
 }
+
+/* .about{
+
+  position: fixed !important;
+  top: 20px;
+  left: 200px;
+
+} */
+
+.img-fluid{
+
+  max-height: 280px;
+}

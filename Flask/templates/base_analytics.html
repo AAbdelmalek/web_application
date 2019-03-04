@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="min-width">
  <head>
      <meta charset="utf-8" />
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,12 +43,18 @@
                       
                       <button style="position:absolute;left:265px" type="button" class="navbar-btn btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Feedback</button>
 
-                      <div class="form-inline my-2 my-lg-2" id="search-hide">
-                        <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
-                        <span class="input-group-btn">
-                            <a onclick="load_bar()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
+                      <div class="form-inline my-2 my-lg-2">
+                                <div class="input-group-prepend">
+                            <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
+                            <div class="input-group-append">
+                            <span class="input-group-btn">
+                                <a onclick="load_bar()" class="btn button btn-outline-danger" href="#" role="button" id="loader_search">Search</a>
+                            </span>
                         </div>
-                      </form>
+                
+                        </div>
+                            </div>
+                          </form>
                     <!-- </div> -->
                   </nav>
                   
@@ -209,7 +215,7 @@
                                                                     <option value="Duration Time Series">Duration Time Series</option>
                                                                     <option value="Likes Time Series">Likes Time Series</option>
                                                                     <option value="Likes/View Ratio">Likes/View Ratio</option>
-                                                                    <option value="Bubble">Views Time Series with Likes</option>
+                                                                    <option value="Bubble">Views Time Series w/ Likes</option>
 
                                                                     <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
                                                             </select>
@@ -436,7 +442,7 @@
                         
                   <button id = "update-cancel" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
                   <!-- <button type="button" class="btn btn-sm btn-primary"><a href="#" class="link_color_2" id="pull-href" onclick="justLoad()">Pull</a></button> -->
-                  <a class="btn btn-sm btn-primary" role="button" href="/update?name={{artist_db_name}}" class="link_color_2" id="pull-href" onclick="updateScrape()">OK</a>&nbsp;&nbsp;&nbsp;
+                  <button class="btn btn-sm btn-primary" role="button" class="link_color_2" id="pull-href" onclick="updateScrape()">OK</button>&nbsp;&nbsp;&nbsp;
                 
                 </div>
                 

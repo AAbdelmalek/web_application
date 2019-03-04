@@ -35,6 +35,8 @@ var days;
 var scroller = 0.5;
 var sleeper;
 var end_page = 0;
+var global_youtube_code = "";
+var global_update_code = "";
 
 
 if (search_loader !== null){
@@ -321,13 +323,14 @@ days ago. Do you want to initiate an update request?`
 // }
 
 function justLoad(){
-
-    progress_bar.style.visibility = "visible"; 
+    progress_bar.style.visibility = "visible";
+   
 
 }
 
 function newScrape(not_found_in_db, youtube_code){
-
+    global_youtube_code = youtube_code;
+    console.log(`youtube code: ${global_youtube_code}`);
     if ((not_found_in_db === "0" || not_found_in_db === "")){
         $("#new-scrape").modal("hide");
         $('#new-scrape').data('bs.modal',null); 
@@ -343,7 +346,7 @@ function newScrape(not_found_in_db, youtube_code){
             keyboard : false,
             backdrop : "static",
           });
-        document.getElementById("new-scrape-href").href = "/pull?name=" + youtube_code;
+        //document.getElementById("new-scrape-href").href = "/pull?name=" + youtube_code;
 
 
     }
@@ -383,7 +386,28 @@ function resetURL(){
 
     document.getElementById("new-scrape-close").style.visibility = "hidden";
 
+    console.log(`youtube code: ${global_youtube_code}`);
+    //progress_bar.style.visibility = "visible"; 
+
     percentComplete();
+
+    d3.json("/pull?name=" + global_youtube_code).then(function(data){
+        console.log(data);
+        //percentComplete();
+        completeness = data["PERCENT_COMPLETE"]
+        error = data["ERROR"];
+        console.log(`completeness: ${completeness}`);
+
+        if (error === 0){
+            window.location.href = `/query?name=${global_youtube_code.replace("-","_replaced_")}&analytics=base`}
+        else{
+            window.location.href = "/error";
+        }
+
+        //window.location.hostname + 
+
+    })
+
 
 
 }
@@ -484,7 +508,7 @@ function moreInfo(){
 
 }
 
-function updateData(id){
+function updateData(id,){
     // console.log(`scrape date: ${id}`)
     // document.getElementById("profile-scrape-date").innerHTML += `&nbsp;&nbsp;${id}`;
     scrape_date = id;
@@ -1119,7 +1143,7 @@ function showUpdateModal(){
 }
 
 
-function updateScrape(){
+function updateScrape(youtube_code){
 
 document.getElementById("update-scrape-load").style.display = "block";
 ok_button = document.getElementById("pull-href");
@@ -1137,6 +1161,16 @@ document.getElementById("new-scrape-close-2").style.visibility = "hidden";
 
 
     updatePercentComplete();
+
+d3.json(`/update?name=${global_update_code}`).then(function(data){
+    console.log(data);
+    query_url = window.location.hostname + `/query?name=${global_update_code.replace("-","_replaced_")}&analytics=base`;
+    console.log(`query url : ${query_url}`);
+    window.location.href = `/query?name=${global_update_code.replace("-","_replaced_")}&analytics=base`;
+
+
+})
+
 }
 
 
@@ -1189,8 +1223,10 @@ async function percentComplete(){
   } 
 
   function setCancelURL(youtube_code){
-    
+    global_update_code = youtube_code;
+    console.log(`update code: ${global_update_code}`)
     artist_db_name = youtube_code;
+
     // console.log(youtube_code);
 
     document.getElementById("new-scrape-cancel").href = "/cancel?name=" + youtube_code + "&page=3";
@@ -1215,5 +1251,5 @@ async function percentComplete(){
 // }
 
 function hideSearch(){
-    document.getElementById("search-hide").style.visibility = "hidden";
+    //document.getElementById("search-hide").style.visibility = "hidden";
 }

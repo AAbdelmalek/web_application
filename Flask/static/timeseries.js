@@ -677,7 +677,7 @@ function switch_data(data) {
       }];
   
       layout = {
-        title: 'Views Time Series with Likes',
+        title: 'Views Time Series w/ Likes',
         // updatemenus:updatemenus,
         xaxis: {
           title: 'Upload #',
@@ -718,7 +718,7 @@ function switch_data(data) {
       }];
   
       layout = {
-        title: 'Views Time Series with Likes',
+        title: 'Views Time Series w/ Likes',
         // updatemenus:updatemenus,
         xaxis: {
           title: 'Upload #',
@@ -744,7 +744,7 @@ function switch_data(data) {
       else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 0){
         console.log("denormalize no rangeslider");
         layout = {
-          title: 'Views Time Series with Likes',
+          title: 'Views Time Series w/ Likes',
           // updatemenus:updatemenus,
           xaxis: {
             
@@ -786,7 +786,7 @@ function switch_data(data) {
           else if (document.getElementById("normalize").innerHTML === "Normalize" && rangeslider === 1){
             console.log("denormalize yes rangeslider");
         layout = {
-          title: 'Views Time Series with Likes',
+          title: 'Views Time Series w/ Likes',
           // updatemenus:updatemenus,
           xaxis: {
             title: 'Date',
@@ -2261,7 +2261,7 @@ else if (current_graph === "views_timeseries" && rangeslider === 0 && document.g
     else if (current_graph === "bubble" && rangeslider === 1 && document.getElementById("normalize").innerHTML === "Denormalize"){
 
       layout = {
-        title: 'Views Time Series with Likes',
+        title: 'Views Time Series w/ Likes',
         // updatemenus:updatemenus,
         xaxis: {
           title: 'Upload #',
@@ -2393,7 +2393,7 @@ else if (current_graph === "views_timeseries" && rangeslider === 0 && document.g
       layout = {
     
         xaxis: {
-          title: 'Likes (Count)',
+          title: 'Views (Count)',
           range: [perf_views[0],perf_views[perf_views.length-1]],
           rangeslider: {range: [x_perf_min, perf_views[perf_views.length-1]]},
     
