@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" class="min-width">
+ <head>
+     <meta charset="utf-8" />
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <title>youtubedata.io</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='style.css') }}" />
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+     <script src="https://d3js.org/d3.v5.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}" />
+     <script src="{{ url_for('static', filename='plotly-latest.min.js') }}"></script>
+
+ </head>
+
+<body class="min-width" id="bg" onresize="resizeTimeseries()">
+    <div id="js-fix" style="display:none">  
+                
+
+                <!-- Nav Bar -->
+                <nav class="navbar navbar-expand-sm navbar-light bg-light shadow-sm" id="navbar-1-analytics">
+                    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button> -->
+                    <div class="navbar-brand">
+                                                
+                        <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.png') }}" height="23" alt="Youtube DS" ></a>
+
+                        <span class="header2"><a class="link_color" href="/">youtubedata<strong>.io</strong></a></span>
+                        <span class="header"><a class="link_color" id="DS" href="/"></a></span>
+                    
+            
+                </div>
+                
+                        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item disabled">
+                            <a class="nav-link" href="/about" style="font-weight: 100">About<span class="sr-only"></span></a>
+                        </li>
+                        <li class="nav-item disabled">
+                                        <a class="nav-link about" href="/developer" style="font-weight: 100">Developer</a>
+                                    </li>
+                      </ul>
+                      
+                      <button style="position:absolute;left:350px;font-weight:100" type="button" class="navbar-btn btn btn-sm btn-primary" data-toggle="modal" data-target="#bugModal" data-whatever="support@youtubedata.io">Feedback</button>
+                      <!-- <a href="/api_docs"><button style="position:absolute;left:370px;top: 20px;" type="button" class="navbar-btn btn btn-sm btn-primary">Developer</button></a> -->
+
+                </div>
+                      <div class="form-inline my-2 my-lg-2">
+                                <div class="input-group-prepend">
+                            <input id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search" style="font-weight: 100">
+                            <div class="input-group-append">
+                            <span class="input-group-btn">
+                                        <button onclick="load_bar()" class="btn button btn-outline-danger" type="button" id="loader_search" style="font-weight: 100">Search</button>
+                                </span>
+                        </div>
+                
+                        </div>
+                            </div>
+                          </form>
+                    <!-- </div> -->
+                  </nav>
+                  
+               
+                  <!-- Header Info -->
+                  <nav class="navbar navbar-light bg-light shadow-sm" id="header-content">
+                    
+                        <a class="navbar-brand data-header" href="#" id="channel-link" target="_blank">
+    
+                          <img style="position:absolute;top:12px;" src="{{artist_image}}" width="90" height="auto" class="d-inline" id="analytics-img" alt="">
+                                <span style="position:absolute;left:115px;top:17px" class="inline-block" id="profile-name">&nbsp;{{artist_name}}&nbsp;<span class="text-muted" style="font-size:8pt;position:relative;" id ="profile-scrape-date"></span></span> 
+                                
+                        </a> 
+                      <!-- <span class="text-muted">{{total_views}}</span>
+                      <span class="text-muted">{{subscribers}}</span>
+                      <span class="text-muted">{{total_views}}</span>
+                      <span class="text-muted">{{total_views}}</span> -->
+                
+               
+                    <!-- <span class="text-muted text-right">Last retrieved {{scrape_date}}</span> -->
+
+                    <!-- Update Data -->
+                    <a id="update-data"></a>     
+                    <!-- <button style="position: absolute; right:132px;" type="button" id="update-data" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#initiatePull">Update Data</button> -->
+                       
+                    <!-- Export to CSV -->
+                    <!-- <a href="/static/{{youtube_code}}"> -->
+                        <a href="#">
+                        <button style="background-color:'red';font-weight:100" type="button" class="btn btn-sm btn-primary analytics_load_button navbar-right">Export to CSV</button>
+                        </a>
+                        
+                  </nav>
+     <!-- Load Bar 1 -->
+     <div id="load-bar-3" class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+        </div> 
+       
+
+
+                  <div id="sticky-header-fix"></div>
+
+          
+      
+                  <br><br>
+                  <!-- <iframe src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=13&l=ez&f=ifr&linkID=72f82deed40e406a4b2de8cb0ad7e337&t=youtubedata-20&tracking_id=youtubedata-20" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;position:absolute;top:150px;left:33%;" frameborder="0"></iframe> -->
+                  <!-- <iframe src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=13&l=ez&f=ifr&linkID=72f82deed40e406a4b2de8cb0ad7e337&t=youtubedata-20&tracking_id=youtubedata-20" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;position:absolute;top:141px;left:15%;" frameborder="0"></iframe> -->
+
+            <!-- Row 1 -->
+        <div class="container-fluid mt-2">
+            <div class="row">
+                        <div class="col-2 ml-5 mr-2 mb-3" id="hide-me">
+                                <!-- <div class="card shadow">
+                                        <div class="card-header">
+                                         Type
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                          <li class="list-group-item">Time Series</li>
+                                          <li class="list-group-item">Performance</li>
+                                          <li class="list-group-item">3D</li>                                        
+                                        </ul>
+              
+                                </div>
+                                <br> -->
+
+                        <div class="card shadow-sm card-bg mx-auto" id="profile">
+                                        <div class="card-header">
+                                                Profile
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                                <li class="list-group-item"><span id="total-views"></span><span class="text-muted"> Views</span></li>
+                                                <!-- <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Avg Views</span></li> -->
+
+                                                <li class="list-group-item"><span id="total-likes"></span><span class="text-muted"> Likes</span></li>
+                                                <li class="list-group-item" id="subscribers-tab"><span id="subscribers">{{subscribers}}</span><span class="text-muted"> Subscribers</span></li>
+                                                <!-- <li class="list-group-item"><span id="subscribers">{{joined}}</span><span class="text-muted"> Joined</span></li> -->
+                                        </ul>
+                                </div>
+
+                                <br>
+
+                                <div class="card shadow-sm card-bg mx-auto" id="statistics">
+                                        <div class="card-header">
+                                         Statistics (x̅)
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                          <li class="list-group-item"><span id="avg-views"></span><span class="text-muted"> Views/Video</span></li>
+                                          <li class="list-group-item"><span id="likes-per-view"></span><span class="text-muted"> Likes/1,000 Views</span></li>
+                                          <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li> -->
+                                          <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
+                                        </ul>
+                                        <!-- <script src="{{ url_for('static', filename='plots.js') }}"></script> -->
+                                </div>
+                            <!-- Time Series -->
+                                <!-- <div class="card shadow">
+                                        <a href="#" class="card-link" onclick="showTimeseries()" id="time-series">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='data-1r.png')}}" alt="Card image cap">
+                                    
+                                          <p class="card-title text-center data-header" id="info-btn">Time Series</p>
+                                        </a>
+                                      </div>
+                                    <br> -->
+                            <!-- Performance -->
+                                <!-- <div class="card shadow">
+                                    <a href="#" class="card-link" onclick='showPerformance()' id="regression">
+                                    <img class="card-img-top" src="{{ url_for('static', filename='data-2r.jpg')}}" alt="Card image cap">
+                                
+                                        <p class="card-title text-center data-header" id="info-btn">Performance</p>
+                                    </a>
+                                    </div>                                      
+                                    <br> -->
+                            <!-- Bubble Charts -->
+                                <!-- <div class="card shadow">
+                                    <a href="#" class="card-link" onclick="showBubble()" id="bubble">
+                                    <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
+                                
+                                        <p class="card-title text-center data-header" id="info-btn">3D</p>
+                                    </a>
+                                    </div>
+                                    <br> -->
+
+                            <!-- Extraneous -->
+                                <!-- <div class="card shadow">
+                                        <a href="#" class="card-link" onclick="showExtraneous()" id="bubble">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='data-3.jpg')}}" alt="Card image cap">
+                                    
+                                            <p class="card-title text-center data-header" id="info-btn">Extraneous</p>
+                                        </a>
+                                        </div>
+                                        <br> -->
+
+
+
+                        </div>
+
+                        <!-- Plots -->
+                            <div class="col-7 mr-2" id="plot-resize">
+                                    <!-- <div class="shadow" id = "plot-1"></div>
+                                    <div class="shadow" id = "plot-2"></div>
+                                    <div class="shadow" id = "plot-3"></div> -->
+                                    <div class="shadow mx-auto card" style="border:none !important;" id="timeseries"></div>
+                            </div>
+
+
+                    
+
+                 
+
+
+                     <!-- Legend -->
+                            <div class="col-2">
+                                 
+                                    <div id="select-plot-data"> 
+                                            <div class="card shadow-sm card-bg mx-auto">
+                                                    <div class="card-header">
+                                                            Graphs
+                                                           </div>
+                                                    <div class="card-body">
+                                         
+                                                            <select class="form-control form-control-sm" id="selDataset" onchange="switch_data(this.value)">
+                                                                    <option value="Views Time Series">Views Time Series</option>
+                                                                    <option value="Duration Time Series">Duration Time Series</option>
+                                                                    <option value="Likes Time Series">Likes Time Series</option>
+                                                                    <option value="Likes/View Ratio">Likes/View Ratio</option>
+                                                                    <option value="Bubble">Views Time Series w/ Likes</option>
+
+                                                                    <!-- <option value="Views vs Views/Likes">Views vs Views/Likes</option> -->
+                                                            </select>
+                                                    </div>
+                                            </div>       
+                                        
+                                    </div>  
+
+                                    <br>
+
+                                    <div class="card shadow-sm card-bg mx-auto">
+                                                <div class="card-header">
+                                                 Tools
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                  <li class="list-group-item"><button id="normalize" style="min-width:100px" onclick=normalize_data() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Denormalize</button></li>
+                                                  <li class="list-group-item"><button id="expand" style="min-width:100px" onclick=expand() type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto">Expand</button></li>
+                                                  <li class="list-group-item"><button id="rangelsider" style="min-width:100px" type="button" class="btn btn-sm btn-block btn-outline-dark mx-auto" onclick="removeRangeslider()">Rangeslider</button></li>
+
+                                                  <!-- <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li> -->
+                                                </ul>
+                                                <!-- <script src="{{ url_for('static', filename='plots.js') }}"></script> -->
+                                        </div>
+
+                                <br>
+                                
+                                <!-- <div class="card shadow mx-auto">
+                                                <div class="card-header">
+                                                        Standard Deviation
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item"><span id="variance"></span><span class="text-muted"> σ²</span></li> 
+                                                        <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> σ</span></li>
+                                                </ul>
+                                        </div> -->
+                                
+                                    <!-- <div id="select-plot-data-2">
+                                        <div class="card shadow mx-auto">
+                                                <div class="card-header">
+                                                        Graph
+                                                       </div>
+                                                <div class="card-body">
+                                                      
+                                     
+                                                        <select class="form-control" id="selDataset" onchange="switch_data(this.value)">
+                                                                <option value="Views Time Series">Views vs Likes/1,000 Views</option>
+                                                                <option value="Duration Time Series">Other</option>
+                                                                <option value="Likes Time Series">Other</option>
+                                                        </select>
+                                                </div>
+                                        </div>                                                 
+                                    
+                                </div>   -->
+
+                                <!-- <div id="select-plot-data-3">
+                                        <div class="card shadow mx-auto">
+                                                <div class="card-header">
+                                                        Graph
+                                                        </div>
+                                                <div class="card-body">
+                                                        
+                                        
+                                                        <select class="form-control" id="selDataset" onchange="switch_data(this.value)">
+                                                                <option value="Views Time Series">Views vs Time vs Likes</option>
+                                                                <option value="Duration Time Series">Other</option>
+                                                                <option value="Likes Time Series">Other</option>
+                                                        </select>
+                                                </div>
+                                        </div> 
+                                        
+                                </div> -->
+                                <br>
+                                    <!-- <div class="card shadow">
+                                            <div class="card-body">
+                                        
+                                        <div id="more-info">
+                                                <div id="total-views"></div>
+                                                <div id="total-likes"></div>
+                                                <div id="likes-per-view"></div>
+                                                <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                            </div>
+                                        </div>       
+                                        
+                                    </div>     -->
+
+                                    <!-- <div class="card shadow mx-auto">
+                                            <div class="card-header">
+                                             Profile
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                              <li class="list-group-item"><span id="total-views"></span><span class="text-muted"> Views</span></li>
+
+                                              <li class="list-group-item"><span id="total-likes"></span><span class="text-muted"> Likes</span></li>
+                                              <li class="list-group-item"><span id="subscribers">{{subscribers}}</span><span class="text-muted"> Subscribers</span></li>
+                                              <li class="list-group-item"><span id="subscribers">{{joined}}</span><span class="text-muted"> Joined</span></li>
+                                            </ul>
+                                </div>
+
+                                <br> -->
+                                
+                                <!-- Statistics -->
+                                <!-- <div class="card shadow">
+                                        <div class="card-header">
+                                         Statistics
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                          <li class="list-group-item"><span id="variance"></span><span class="text-muted"> Variance</span></li>
+                                          <li class="list-group-item"><span id="stdev"></span><span class="text-muted"> Standard Deviation</span></li>
+                                        </ul>
+                                        <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                </div> -->
+
+
+                                                
+                                    </div>   
+                     
+
+                   
+
+                                                
+                                           
+            </div>  
+
+        </div>
+ 
+            <br><br>
+
+            <!-- Plots -->
+
+ 
+
+            <!-- <div class="container-fluid">
+                    <div class="row">
+                            <div class="col-10 mx-auto">
+                                    <div class="shadow" id = "plot-1"></div>
+                         
+                            </div>
+                        <div class="row">
+                            <div class="col-2 mx=auto">
+                                    <div id="select-plot-data">
+                                            <div class="card" style="width: 18rem;">
+                                                    <div class="card-body">
+                                                            <div id="total-views"></div>
+                                                            <div id="total-likes"></div>
+                                                            <div id="likes-per-view"></div>
+                                                            <script src="{{ url_for('static', filename='plots.js') }}"></script>
+                                                
+                                                            <select id="selDataset" onchange="switch_data(this.value)">
+                                                                    <option value="Views Time Series">Views Time Series</option>
+                                                                    <option value="Duration Time Series">Duration Time Series</option>
+                                                                    <option value="Likes Time Series">Likes Time Series</option>
+                                                                    <option value="Views vs Views/Likes">Views vs Views/Likes</option>
+                                                            </select>
+                                                    </div>
+                                            </div>       
+                                        
+                                    </div>           
+                                
+                                            
+                                                
+                            </div>   
+                         
+
+                        </div>
+
+                    </div>
+            </div> -->
+
+</div>
+</div>
+
+    
+       
+
+          <!-- Modal Last Retrieved -->
+          <div class="modal fade" id="initiatePull" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Initiate Update Request</h5>
+                  <button id = "new-scrape-close-2" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                                <div class="container">
+                                        <div class="row">
+                                                <div class="col" id="modal-body-text">
+
+
+
+
+
+                                                </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+
+                                                <div class="col">
+
+                                  <!-- Load Bar 2 -->
+                                  <div id="update-scrape-load" class="progress" style="height:7px">
+                                                <div id="update-scrape-fix" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;height:7px"></div>
+                                              
+                                        </div>
+
+
+                                                </div>
+
+
+                                        </div>
+
+
+
+                                        
+
+                                        
+                                </div>
+                      
+                   
+                </div>
+            
+                <div class="modal-footer" id="modal-cancel-2">
+                        
+                  <button id = "update-cancel" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                  <button class="btn btn-sm btn-primary" role="button" class="link_color_2" id="pull-href" onclick="updateScrape()">OK</button>&nbsp;&nbsp;&nbsp;
+                
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+
+ <!-- Modal New Scrape -->
+ <div class="modal fade" id="new-scrape" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+    
+    
+    
+                        <h5 class="modal-title" id="exampleModalLabel">Initiate New Request</h5>
+                        <button id = "new-scrape-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-body-text">
+                    
+    
+                        <div class="container-fluid">
+                                <div class="row"> 
+                                    <div class="col">   
+                                The content creator was not found in the database. Do you want
+                                to initiate a new request?
+                                    </div>
+                                </div>
+                        
+    
+                                <div class="row">
+                                    <div class="col">
+                                    <br>
+                                    </div>
+                                </div>
+    
+                                <div class="row">
+                                    
+                                    <div class="col-3">
+                                            <div class="text-center">
+                                            <img id="image-url-new" src="#" alt="New Scrape Request" height="90">
+                                            </div>
+                                    </div>
+                                    <div class="col-9">
+                                        
+                                            <h6 id="artist-new"></h6>
+                                            <span id="subscribers-new"></span>
+                                            <br>
+                                            <span id="total_views_new"></span>
+                                            <!-- <br>
+                                            {{videos_to_get}} Uploads -->
+                                            <br>
+                                            <span id="joined-new"></span>
+                                                          
+                                    
+                                    </div>
+                                </div>
+                                <div class="row">
+                                        <div class="col">
+                                        <br>
+                                        </div>
+                                    </div>
+    
+                                      <!-- Load Bar 2 -->
+                                      <div id="load-bar-2" class="progress">
+                                        <div id="scrape-load-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                                      </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="modal-cancel">
+                        
+                        <button id = "new-scrape-ok-button" type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>        
+                        <button onclick="killNewJob()" class="btn btn-sm btn-danger" type="button" class="link_color_2" id="new-scrape-cancel" data-dismiss="modal">Cancel</button>            
+                        <button class="btn btn-sm btn-primary" role="button" href="#" class="link_color_2" id="new-scrape-href" onclick="resetURL()">OK</button>&nbsp;&nbsp;&nbsp; 
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+            <!-- <footer class="footer">
+                    <div class="container-fluid">
+                      <span class="text-muted"></span>
+                    </div>
+                  </footer> -->
+
+<!-- Report Bug Modal -->
+<div class="modal fade" id="bugModal" tabindex="-1" role="dialog" aria-labelledby="bugModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="bugModalLabel">Feedback</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div id="padding-fix">
+                      <form action="{{ url_for('reportBug') }}?name={{artist_db_name}}&page=1" method="post" id="bug-report">
+                      <span class="form-group"> 
+              
+                      <!-- <label for="recipient-name" class="col-form-label">Recipient:</label>
+                          <input type="text" class="form-control" id="recipient-name" readonly> -->
+                      </span>
+                        <div class="form-group">
+                          <label for="message-text" class="col-form-label">Message (255 character limit):</label>
+                          <textarea style="font-size:10pt;" maxlength="255" onkeydown="preventEnter(event)" name="reportedbug" class="form-control" id="message-text" form="bug-report"
+                          placeholder="Send feature requests, issues, etc..."></textarea>
+                        </div> 
+              
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                      <button onclick="return emptyBug()" type="submit" formmethod="post" class="btn btn-sm btn-primary">Send</button>
+                  </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+    </body>
+
+    <!-- No JavaScript -->
+    <noscript>
+                <br><br><br><br>
+                <div>  
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" id="nav-about">
+                            <div class="navbar-brand">
+                                    <div style="width:500px !important;position:absolute;left:550px;text-align:center" id = "feedback-success"></div>     
+    
+                                <a href="/" class="link_color"><img class="pic" src="{{ url_for('static', filename='favicon.png') }}" height="23" alt="Youtube DS" ></a>
+        
+                                <span class="header2"><a class="link_color" href="/">youtubedata<strong>.io</strong></a></span>
+                                <span class="header"><a class="link_color" id="DS" href="/"></a></span>
+                            
+                    
+                            </div>
+      
+                              <div class="form-inline my-2 my-lg-2">
+                                  <div class="input-group-prepend">
+                              <input style="visibility: hidden" id="button" class="form-control mr-sm-2" type="search" placeholder="Content Creator" aria-label="Search">
+                              <div class="input-group-append">
+                              <span class="input-group-btn">
+                              </span>
+                          </div>
+                  
+                          </div>
+                              </div>
+                            </form>
+    
+                          </nav>
+                          </nav>
+    
+    
+                <div id="no-js-2" class="text-center"><br><br><br><br><h6>youtubedata.<strong>io</strong> requires JavaScript. Please enable it in your <a href="https://www.enable-javascript.com/" target="_blank">browser settings.</a></h6></div>
+    
+            
+        </div>
+        </noscript>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+    <script>checkJS()</script>
+    <script src="{{ url_for('static', filename='timeseries.js') }}"></script>
+    <script>getData({{data|tojson}})</script>
+    <script>updateData("{{scrape_date}}","{{days_since_scraped}}")</script>
+    <script>redirect("{{analytics_base_url}}")</script>
+    <script>newScrape("{{not_found_in_db}}","{{youtube_code_new_scrape}}")</script>
+    <script>rating("{{total_views}}")</script>
+    <script>subscribers("{{subscribers}}")</script>
+    <script>clearSearch()</script>
+    <script>reportingRedirect()</script>
+    <script>setCancelURL('{{artist_db_name}}')</script>
+    <script>channelLink('{{artist_db_name}}')</script>
+ 
+ </html>
